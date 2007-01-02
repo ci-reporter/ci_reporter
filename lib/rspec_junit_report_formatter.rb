@@ -1,13 +1,3 @@
-begin
-  require 'builder'
-rescue LoadError
-  begin
-    require_gem 'activesupport'
-    require 'active_support'
-  rescue
-    raise LoadError, "XML Builder is required for the JUnitReportFormatter"
-  end
-end  
 require 'fileutils'
 
 module RSpec
@@ -30,8 +20,22 @@ module RSpec
         self.errors = testcases.select {|tc| tc.error? }.size
       end
 
+      def create_builder
+        begin
+          require 'builder'
+        rescue LoadError
+          begin
+            require_gem 'activesupport'
+            require 'active_support'
+          rescue
+            raise LoadError, "XML Builder is required for the JUnitReportFormatter"
+          end
+        end unless defined?(Builder::XmlMarkup)
+        Builder::XmlMarkup.new(:indent => 2)
+      end
+
       def to_xml
-        builder = Builder::XmlMarkup.new(:indent => 2)
+        builder = create_builder
         builder.instruct!
         attrs = {}
         each_pair {|k,v| attrs[k] = v.to_s }
@@ -78,7 +82,7 @@ module RSpec
 
     def initialize(output, dry_run=false, colour=false)
       super
-      @basedir = File.expand_path(File.dirname(__FILE__) + "/../spec/reports")
+      @basedir = File.expand_path("#{Dir.getwd}/spec/reports")
       @basename = "#{@basedir}/SPEC"
       FileUtils.mkdir_p(@basedir)
       @context = nil
