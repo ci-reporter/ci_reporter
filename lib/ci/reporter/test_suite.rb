@@ -69,9 +69,8 @@ module CI
         each_pair {|k,v| attrs[k] = v.to_s }
         builder.testcase(attrs) do
           if failure
-            exception = failure.exception
-            builder.failure(:type => exception.class.name, :message => exception.message) do
-              builder.text!(exception.backtrace.join("\n"))
+            builder.failure(:type => failure.name, :message => failure.message) do
+              builder.text!(failure.location)
             end
           end
         end

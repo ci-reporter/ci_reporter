@@ -3,21 +3,32 @@ require 'test/unit/ui/console/testrunner'
 
 module CI
   module Reporter
+    class Failure
+      def self.new(fault)
+        fault.kind_of?(Test::Unit::Failure) ? TestUnitFailure.new(fault) : TestUnitError.new(fault)
+      end
+    end
+
+    class TestUnitError
+      def initialize(fault)
+        @fault = fault
+      end
+      def failure?() false end
+      def error?() true end
+      def name() @fault.exception.class.name end
+      def message() @fault.exception.message end
+      def location() @fault.exception.backtrace.join("\n") end
+    end
+
     class TestUnitFailure
       def initialize(fault)
         @fault = fault
       end
-      def failure?
-        @fault.kind_of? Test::Unit::Failure
-      end
-
-      def error?
-        @fault.kind_of? Test::Unit::Error
-      end
-
-      def exception
-        @fault.exception
-      end
+      def failure?() true end
+      def error?() false end
+      def name() @fault.exception.class.name end
+      def message() @fault.message end
+      def location() @fault.location end
     end
 
     class TestUnit < Test::Unit::UI::TestRunnerMediator
@@ -32,13 +43,13 @@ module CI
       end
 
       def started(result)
-        @suite = nil
+        @current_suite = nil
         @unknown_count = 0
       end
 
       def test_started(name)
         test_name, suite_name = extract_names(name)
-        unless @suite && @suite.name == suite_name
+        unless @current_suite && @current_suite.name == suite_name
           finish_suite
           start_suite(suite_name)
         end
@@ -69,27 +80,27 @@ module CI
       end
 
       def start_suite(suite_name)
-        @suite = TestSuite.new(suite_name)
-        @suite.start
+        @current_suite = TestSuite.new(suite_name)
+        @current_suite.start
       end
 
       def finish_suite
-        if @suite
-          @suite.finish 
-          @report_manager.write_report(@suite)
+        if @current_suite
+          @current_suite.finish 
+          @report_manager.write_report(@current_suite)
         end
       end
 
       def start_test(test_name)
         tc = TestCase.new(test_name)
         tc.start
-        @suite.testcases << tc
+        @current_suite.testcases << tc
       end
 
       def finish_test(failure = nil)
-        tc = @suite.testcases.last
+        tc = @current_suite.testcases.last
         tc.finish
-        tc.failure = TestUnitFailure.new(failure) if failure
+        tc.failure = Failure.new(failure) if failure
       end
     end
   end

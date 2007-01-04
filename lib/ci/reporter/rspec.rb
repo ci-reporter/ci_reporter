@@ -6,18 +6,18 @@ module CI
       def initialize(failure)
         @failure = failure
       end
-      
+
       def failure?
         @failure.expectation_not_met?
       end
-      
+
       def error?
         !@failure.expectation_not_met?
       end
-      
-      def exception
-        @failure.exception
-      end
+
+      def name() @failure.exception.class.name end
+      def message() @failure.exception.message end
+      def location() @failure.exception.backtrace.join("\n") end
     end
 
     class RSpec < Spec::Runner::Formatter::ProgressBarFormatter

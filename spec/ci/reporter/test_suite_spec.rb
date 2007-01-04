@@ -56,12 +56,16 @@ context "TestSuite xml" do
     failure = mock("failure")
     failure.stub!(:failure?).and_return true
     failure.stub!(:error?).and_return false
-    failure.stub!(:exception).and_return @exception
+    failure.stub!(:name).and_return "failure"
+    failure.stub!(:message).and_return "There was a failure"
+    failure.stub!(:location).and_return @exception.backtrace.join("\n")
 
     error = mock("error")
     error.stub!(:failure?).and_return false
     error.stub!(:error?).and_return true
-    error.stub!(:exception).and_return @exception
+    error.stub!(:name).and_return "error"
+    error.stub!(:message).and_return "There was a error"
+    error.stub!(:location).and_return @exception.backtrace.join("\n")
 
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
