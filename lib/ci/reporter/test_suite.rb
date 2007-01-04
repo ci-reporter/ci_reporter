@@ -34,9 +34,12 @@ module CI
 
       def to_xml
         builder = create_builder
+        def builder.escape_attribute!(txt)
+          _escape(txt.gsub(/\n.*/m, '...'))
+        end
         builder.instruct!
         attrs = {}
-        each_pair {|k,v| attrs[k] = v.to_s }
+        each_pair {|k,v| attrs[k] = builder.escape_attribute!(v.to_s) }
         builder.testsuite(attrs) do
           @testcases.each do |tc|
             tc.to_xml(builder)
@@ -66,10 +69,10 @@ module CI
 
       def to_xml(builder)
         attrs = {}
-        each_pair {|k,v| attrs[k] = v.to_s }
+        each_pair {|k,v| attrs[k] = builder.escape_attribute!(v.to_s) }
         builder.testcase(attrs) do
           if failure
-            builder.failure(:type => failure.name, :message => failure.message) do
+            builder.failure(:type => builder.escape_attribute!(failure.name), :message => builder.escape_attribute!(failure.message)) do
               builder.text!(failure.location)
             end
           end

@@ -84,6 +84,23 @@ context "TestSuite xml" do
     testcases = testsuite.elements.to_a('testcase')
     testcases.length.should == 3
   end
+  
+  specify "should filter attributes properly for invalid characters" do
+    failure = mock("failure")
+    failure.stub!(:failure?).and_return true
+    failure.stub!(:error?).and_return false
+    failure.stub!(:name).and_return "failure"
+    failure.stub!(:message).and_return "There was a <failure>\nReason: blah"
+    failure.stub!(:location).and_return @exception.backtrace.join("\n")
+
+    @suite.start
+    @suite.testcases << CI::Reporter::TestCase.new("failure test")
+    @suite.testcases.last.failure = failure
+    @suite.finish
+
+    xml = @suite.to_xml
+    xml.should_match %r/message="There was a &lt;failure&gt;\.\.\."/
+  end
 end
 
 context "A TestCase" do
