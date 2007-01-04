@@ -3,7 +3,7 @@ require 'fileutils'
 module CI
   module Reporter
     class ReportManager
-      def initialize(prefix="test")
+      def initialize(prefix)
         @basedir = ENV['CI_REPORTS'] || File.expand_path("#{Dir.getwd}/#{prefix.downcase}/reports")
         @basename = "#{@basedir}/#{prefix.upcase}"
         FileUtils.mkdir_p(@basedir)
