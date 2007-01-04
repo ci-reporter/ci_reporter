@@ -26,9 +26,9 @@ module CI
       end
       def failure?() true end
       def error?() false end
-      def name() @fault.exception.class.name end
+      def name() Test::Unit::AssertionFailedError.name end
       def message() @fault.message end
-      def location() @fault.location end
+      def location() @fault.location.join("\n") end
     end
 
     class TestUnit < Test::Unit::UI::TestRunnerMediator
