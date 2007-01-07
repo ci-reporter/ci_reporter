@@ -1,3 +1,4 @@
+require 'ci/reporter/core'
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
