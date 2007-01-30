@@ -1,4 +1,6 @@
 require 'ci/reporter/core'
+gem 'rspec'
+require 'spec'
 
 module CI
   module Reporter

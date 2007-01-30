@@ -1,5 +1,5 @@
 require 'rubygems'
-require_gem 'rspec'
+gem 'rspec'
 require 'spec'
 $: << File.dirname(__FILE__) + "/../lib"
 require 'ci/reporter/core'
