@@ -4,6 +4,7 @@ require 'spec'
 
 module CI
   module Reporter
+    # Wrapper around a <code>RSpec</code> error or failure to be used by the test suite to interpret results.
     class RSpecFailure
       def initialize(failure)
         @failure = failure
@@ -22,6 +23,7 @@ module CI
       def location() @failure.exception.backtrace.join("\n") end
     end
 
+    # Custom +RSpec+ formatter used to hook into the spec runs and capture results.
     class RSpec < Spec::Runner::Formatter::ProgressBarFormatter
       def initialize(output, dry_run=false, colour=false, report_mgr=nil)
         super(output, dry_run, colour)

@@ -4,12 +4,15 @@ require 'test/unit/ui/console/testrunner'
 
 module CI
   module Reporter
+    # Factory for constructing either a CI::Reporter::TestUnitFailure or CI::Reporter::TestUnitError depending on the result
+    # of the test.
     class Failure
       def self.new(fault)
         fault.kind_of?(Test::Unit::Failure) ? TestUnitFailure.new(fault) : TestUnitError.new(fault)
       end
     end
 
+    # Wrapper around a <code>Test::Unit</code> error to be used by the test suite to interpret results.
     class TestUnitError
       def initialize(fault)
         @fault = fault
@@ -21,6 +24,7 @@ module CI
       def location() @fault.exception.backtrace.join("\n") end
     end
 
+    # Wrapper around a <code>Test::Unit</code> failure to be used by the test suite to interpret results.
     class TestUnitFailure
       def initialize(fault)
         @fault = fault
@@ -32,6 +36,7 @@ module CI
       def location() @fault.location.join("\n") end
     end
 
+    # Replacement Mediator that adds listeners to capture the results of the <code>Test::Unit</code> runs.
     class TestUnit < Test::Unit::UI::TestRunnerMediator
       def initialize(suite, report_mgr = nil)
         super(suite)

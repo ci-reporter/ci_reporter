@@ -1,5 +1,6 @@
 module CI
   module Reporter
+    # Basic structure representing the running of a test suite.  Used to time tests and store results.
     class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors)
       attr_accessor :testcases
       def initialize(name)
@@ -7,10 +8,12 @@ module CI
         @testcases = []
       end
 
+      # Starts timing the test suite.
       def start
         @start = Time.now
       end
 
+      # Finishes timing the test suite.
       def finish
         self.tests = testcases.size
         self.time = Time.now - @start
@@ -18,10 +21,12 @@ module CI
         self.errors = testcases.select {|tc| tc.error? }.size
       end
 
+      # Creates the xml builder instance used to create the report xml document.
       def create_builder
         begin
+          gem 'builder'
           require 'builder'
-        rescue LoadError
+        rescue
           begin
             gem 'activesupport'
             require 'active_support'
@@ -33,6 +38,7 @@ module CI
         Builder::XmlMarkup.new(:indent => 2, :escape_attrs => true)
       end
 
+      # Creates an xml string containing the test suite results.
       def to_xml
         builder = create_builder
         # more recent version of Builder doesn't need the escaping
@@ -56,25 +62,31 @@ module CI
       end
     end
 
+    # Structure used to represent an individual test case.  Used to time the test and store the result.
     class TestCase < Struct.new(:name, :time)
       attr_accessor :failure
 
+      # Starts timing the test.
       def start
         @start = Time.now
       end
 
+      # Finishes timing the test.
       def finish
         self.time = Time.now - @start
       end
 
+      # Returns non-nil if the test failed.
       def failure?
         failure && failure.failure?
       end
 
+      # Returns non-nil if the test had an error.
       def error?
         failure && failure.error?
       end
 
+      # Writes xml representing the test result to the provided builder.
       def to_xml(builder)
         attrs = {}
         each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) }

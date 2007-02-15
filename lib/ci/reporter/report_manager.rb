@@ -1,7 +1,7 @@
 require 'fileutils'
 
-module CI
-  module Reporter
+module CI #:nodoc:
+  module Reporter #:nodoc:
     class ReportManager
       def initialize(prefix)
         @basedir = ENV['CI_REPORTS'] || File.expand_path("#{Dir.getwd}/#{prefix.downcase}/reports")
