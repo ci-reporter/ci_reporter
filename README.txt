@@ -4,6 +4,10 @@ a continuous integration system that understands Ant's JUnit report XML
 format, thus allowing your CI system to track test/spec successes and
 failures.
 
+== Dependencies
+
+CI::Reporter has one required dependency on Builder, but since many will have a viable version of Builder via Rails' ActiveSupport gem, Builder is not a direct dependency of the project at the moment.  Instead, ensure that you have either the +builder+ or +activesupport+ gem installed before continuing.
+
 == Installation
 
 CI::Reporter is available as a gem. To install the gem, use the usual gem command: 
