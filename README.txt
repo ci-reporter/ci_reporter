@@ -33,9 +33,11 @@ CI::Reporter works best with projects that use a +Rakefile+ along with the stand
 
     rake ci:setup:testunit test
 
+Report files are written, by default, to the <code>test/reports</code> or <code>spec/reports</code> subdirectory of your project.  If you wish to customize the location, simply set the environment variable CI_REPORTS (either in the environment, on the Rake command line, or in your Rakefile) to the location where they should go.
+
 == Advanced Usage
 
-If for some reason you can't use the above technique to inject CI::Reporter, you'll have to do one of these:
+If for some reason you can't use the above technique to inject CI::Reporter (e.g., you're not using Rake), you'll have to do one of these:
 
 1. If you're using <code>Test::Unit</code>, ensure the <code>ci/reporter/rake/test_unit_loader.rb</code> file is loaded or required at some point before the tests are run.
 2. If you're using +RSpec+, you'll need to pass the following arguments to the +spec+ command:
