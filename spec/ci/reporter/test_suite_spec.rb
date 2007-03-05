@@ -45,6 +45,7 @@ end
 context "TestSuite xml" do
   setup do
     @suite = CI::Reporter::TestSuite.new("example suite")
+    @suite.assertions = 11
     begin
       raise StandardError, "an exception occurred"
     rescue => e
@@ -77,11 +78,13 @@ context "TestSuite xml" do
 
     xml = @suite.to_xml
     doc = REXML::Document.new(xml)
-    testsuite = doc.root.elements.to_a('/testsuite')
+    testsuite = doc.root.elements.to_a("/testsuite")
     testsuite.length.should == 1
     testsuite = testsuite.first
+    testsuite.attributes["name"].should == "example suite"
+    testsuite.attributes["assertions"].should == "11"
 
-    testcases = testsuite.elements.to_a('testcase')
+    testcases = testsuite.elements.to_a("testcase")
     testcases.length.should == 3
   end
   

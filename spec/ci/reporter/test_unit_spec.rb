@@ -4,13 +4,15 @@ context "The TestUnit reporter" do
   setup do
     @report_mgr = mock("report manager")
     @testunit = CI::Reporter::TestUnit.new(nil, @report_mgr)
+    @result = mock("result")
+    @result.stub!(:assertion_count).and_return(7)
   end
 
   specify "should build suites based on adjacent tests with the same class name" do
     @suite = nil
     @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
 
-    @testunit.started(mock("result"))
+    @testunit.started(@result)
     @testunit.test_started("test_one(TestCaseClass)")
     @testunit.test_finished("test_one(TestCaseClass)")
     @testunit.test_started("test_two(TestCaseClass)")
@@ -31,7 +33,7 @@ context "The TestUnit reporter" do
     @suites = []
     @report_mgr.should_receive(:write_report).twice.and_return {|suite| @suites << suite }
 
-    @testunit.started(mock("result"))
+    @testunit.started(@result)
     @testunit.test_started("test_one(TestCaseClass)")
     @testunit.test_finished("test_one(TestCaseClass)")
     @testunit.test_started("test_two(AnotherTestCaseClass)")
@@ -46,6 +48,18 @@ context "The TestUnit reporter" do
     @suites.last.testcases.first.name.should == "test_two"
   end
   
+  specify "should record assertion counts during test run" do
+    @suite = nil
+    @report_mgr.should_receive(:write_report).and_return {|suite| @suite = suite }
+
+    @testunit.started(@result)
+    @testunit.test_started("test_one(TestCaseClass)")
+    @testunit.test_finished("test_one(TestCaseClass)")
+    @testunit.finished(10)
+
+    @suite.assertions.should == 7
+  end
+  
   specify "should add failures to testcases when encountering a fault" do
     begin
       raise StandardError, "error"
@@ -56,7 +70,7 @@ context "The TestUnit reporter" do
     @suite = nil
     @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
 
-    @testunit.started(mock("result"))
+    @testunit.started(@result)
     @testunit.test_started("test_one(TestCaseClass)")
     @testunit.test_finished("test_one(TestCaseClass)")
     @testunit.test_started("test_two(TestCaseClass)")

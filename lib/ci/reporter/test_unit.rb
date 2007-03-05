@@ -49,6 +49,8 @@ module CI
       end
 
       def started(result)
+        @suite_result = result
+        @last_assertion_count = 0
         @current_suite = nil
         @unknown_count = 0
       end
@@ -93,6 +95,8 @@ module CI
       def finish_suite
         if @current_suite
           @current_suite.finish 
+          @current_suite.assertions = @suite_result.assertion_count - @last_assertion_count
+          @last_assertion_count = @suite_result.assertion_count
           @report_manager.write_report(@current_suite)
         end
       end

@@ -1,7 +1,7 @@
 module CI
   module Reporter
     # Basic structure representing the running of a test suite.  Used to time tests and store results.
-    class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors)
+    class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors, :assertions)
       attr_accessor :testcases
       def initialize(name)
         super
@@ -53,7 +53,7 @@ module CI
         end
         builder.instruct!
         attrs = {}
-        each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) }
+        each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) unless v.nil? || v.to_s.empty? }
         builder.testsuite(attrs) do
           @testcases.each do |tc|
             tc.to_xml(builder)
