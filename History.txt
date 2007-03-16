@@ -1,3 +1,5 @@
+== 1.2
+
 == 1.1
 
 - Add +assertions+ attribute to the +testsuite+ element that will contain per-suite assertion counts when used with Test::Unit.  Not useful with applications that read Ant/JUnit XML, but custom applications may wish to access it.
