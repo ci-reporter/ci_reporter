@@ -1,3 +1,7 @@
+# (c) Copyright 2006-2007 Nick Sieger <nicksieger@gmail.com>
+# See the file LICENSE.txt included with the distribution for
+# software license details.
+
 require File.dirname(__FILE__) + "/../../spec_helper.rb"
 
 context "The TestUnit reporter" do

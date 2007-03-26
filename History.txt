@@ -1,3 +1,7 @@
+== 1.2.1
+
+- Add license and copyright information (finally)
+
 == 1.2
 
 - Capture standard output and standard error during each individual test suite and include in the XML file in system-out and system-err elements, respectively (Tracker#9054[http://rubyforge.org/tracker/index.php?func=detail&aid=9054&group_id=2857&atid=11007])
