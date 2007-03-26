@@ -1,8 +1,40 @@
+require 'delegate'
+require 'stringio'
+
 module CI
   module Reporter
+    # Emulates/delegates IO to $stdout or $stderr in order to capture output to report in the XML file.
+    class OutputCapture < DelegateClass(IO)
+      # Start capturing IO, using the given block to assign self to the proper IO global.
+      def initialize(io, &assign)
+        super
+        @delegate_io = io
+        @captured_io = StringIO.new
+        @assign_block = assign
+        @assign_block.call self
+      end
+
+      # Finalize the capture and reset to the original IO object.
+      def finish
+        @assign_block.call @delegate_io
+        @captured_io.string
+      end
+
+      # setup tee methods
+      %w(<< print printf putc puts write).each do |m|
+        module_eval(<<-EOS, __FILE__, __LINE__)
+          def #{m}(*args, &block)
+            @delegate_io.send(:#{m}, *args, &block)
+            @captured_io.send(:#{m}, *args, &block)
+          end
+        EOS
+      end
+    end
+
     # Basic structure representing the running of a test suite.  Used to time tests and store results.
     class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors, :assertions)
       attr_accessor :testcases
+      attr_accessor :stdout, :stderr
       def initialize(name)
         super
         @testcases = []
@@ -11,6 +43,8 @@ module CI
       # Starts timing the test suite.
       def start
         @start = Time.now
+        @capture_out = OutputCapture.new($stdout) {|io| $stdout = io }
+        @capture_err = OutputCapture.new($stderr) {|io| $stderr = io }
       end
 
       # Finishes timing the test suite.
@@ -19,6 +53,8 @@ module CI
         self.time = Time.now - @start
         self.failures = testcases.select {|tc| tc.failure? }.size
         self.errors = testcases.select {|tc| tc.error? }.size
+        self.stdout = @capture_out.finish
+        self.stderr = @capture_err.finish
       end
 
       # Creates the xml builder instance used to create the report xml document.
@@ -57,6 +93,12 @@ module CI
         builder.testsuite(attrs) do
           @testcases.each do |tc|
             tc.to_xml(builder)
+          end
+          builder.tag! "system-out" do
+            builder.cdata! self.stdout
+          end
+          builder.tag! "system-err" do
+            builder.cdata! self.stderr
           end
         end
       end

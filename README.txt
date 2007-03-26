@@ -1,8 +1,4 @@
-CI::Reporter is an add-on to Test::Unit and RSpec that allows you to generate
-XML reports of your test and/or spec runs. The resulting files can be read by
-a continuous integration system that understands Ant's JUnit report XML
-format, thus allowing your CI system to track test/spec successes and
-failures.
+CI::Reporter is an add-on to Test::Unit and RSpec that allows you to generate XML reports of your test and/or spec runs. The resulting files can be read by a continuous integration system that understands Ant's JUnit report XML format, thus allowing your CI system to track test/spec successes and failures.
 
 == Dependencies
 
@@ -10,7 +6,7 @@ CI::Reporter has one required dependency on Builder, but since many will have a 
 
 == Installation
 
-CI::Reporter is available as a gem. To install the gem, use the usual gem command: 
+CI::Reporter is available as a gem. To install the gem, use the usual gem command:
 
     gem install ci_reporter
 

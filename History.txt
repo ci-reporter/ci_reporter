@@ -1,5 +1,7 @@
 == 1.2
 
+- Capture standard output and standard error during each individual test suite and include in the XML file in system-out and system-err elements, respectively. [Tracker #9054]
+
 == 1.1
 
 - Add +assertions+ attribute to the +testsuite+ element that will contain per-suite assertion counts when used with Test::Unit.  Not useful with applications that read Ant/JUnit XML, but custom applications may wish to access it.
