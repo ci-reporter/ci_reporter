@@ -42,6 +42,11 @@ If for some reason you can't use the above technique to inject CI::Reporter (e.g
 
 There's a bit of a chicken and egg problem because rubygems needs to be loaded before you can require any CI::Reporter files.  If you cringe hard-coding a full path to a specific version of the gem, you can also copy the +rspec_loader+ file into your project and require it directly -- the contents are version-agnostic and are not likely to change in future releases.
 
+== Environment Variables
+
+* +CI_REPORTS+: if set, points to a directory where report files will be written.
+* +CI_CAPTURE+: if set to value "off", stdout/stderr capture will be disabled.
+
 == License
 
 This software is released under an MIT license.  For details, see the LICENSE.txt file included with the distribution.  The software is copyright (c) 2006-2007 Nick Sieger <nicksieger@gmail.com>.

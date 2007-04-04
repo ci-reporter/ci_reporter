@@ -47,8 +47,10 @@ module CI
       # Starts timing the test suite.
       def start
         @start = Time.now
-        @capture_out = OutputCapture.new($stdout) {|io| $stdout = io }
-        @capture_err = OutputCapture.new($stderr) {|io| $stderr = io }
+        unless ENV['CI_CAPTURE'] == "off"
+          @capture_out = OutputCapture.new($stdout) {|io| $stdout = io }
+          @capture_err = OutputCapture.new($stderr) {|io| $stderr = io }
+        end
       end
 
       # Finishes timing the test suite.
@@ -57,8 +59,8 @@ module CI
         self.time = Time.now - @start
         self.failures = testcases.select {|tc| tc.failure? }.size
         self.errors = testcases.select {|tc| tc.error? }.size
-        self.stdout = @capture_out.finish
-        self.stderr = @capture_err.finish
+        self.stdout = @capture_out.finish if @capture_out
+        self.stderr = @capture_err.finish if @capture_err
       end
 
       # Creates the xml builder instance used to create the report xml document.

@@ -1,3 +1,7 @@
+== 1.2.2
+
+- Responds to environment variable CI_CAPTURE: if set to "off", stdout/stderr capture will be disabled.
+
 == 1.2.1
 
 - Add license and copyright information (finally)
