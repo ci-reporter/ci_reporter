@@ -1,3 +1,8 @@
+== 1.2.3
+
+- Append to TESTOPTS and RSPECOPTS environment variables (Bret Pettichord) so that other apps can put values
+  in them as well
+
 == 1.2.2
 
 - Responds to environment variable CI_CAPTURE: if set to "off", stdout/stderr capture will be disabled.
