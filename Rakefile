@@ -4,7 +4,7 @@ require 'hoe'
 MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt", "LICENSE.txt", "Rakefile",
   "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
 
-Hoe.new("ci_reporter", "1.2.3") do |p|
+Hoe.new("ci_reporter", "1.2.4") do |p|
   p.rubyforge_name = "caldersphere"
   p.url = "http://caldersphere.rubyforge.org/ci_reporter"
   p.author = "Nick Sieger"
