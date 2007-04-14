@@ -1,3 +1,8 @@
+== 1.2.4
+
+- Allow to report on RSpec specs when working with non-gem RSpec
+- Note: CI::Reporter is only compatible with RSpec up to 0.8.2
+
 == 1.2.3
 
 - Append to TESTOPTS and RSPECOPTS environment variables (Bret Pettichord) so that other apps can put values

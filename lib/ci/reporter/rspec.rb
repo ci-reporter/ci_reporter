@@ -3,7 +3,12 @@
 # software license details.
 
 require 'ci/reporter/core'
-gem 'rspec'
+begin
+  gem 'rspec'
+rescue Gem::LoadError
+  # Needed for non-gem RSpec (e.g., reporting on RSpec's own specs); 
+  # if spec isn't found, the next require will blow up
+end
 require 'spec'
 
 module CI
