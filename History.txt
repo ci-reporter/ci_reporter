@@ -1,3 +1,8 @@
+== 1.3
+
+- Fixed to be compatible with RSpec 0.9
+- Failure location text now contains both the exception message and class name (in case the type and message attributes were truncated)
+
 == 1.2.4
 
 - Allow to report on RSpec specs when working with non-gem RSpec

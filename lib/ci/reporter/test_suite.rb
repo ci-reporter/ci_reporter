@@ -141,6 +141,7 @@ module CI
         builder.testcase(attrs) do
           if failure
             builder.failure(:type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
+              builder.text!(failure.message + " (#{failure.name})\n")
               builder.text!(failure.location)
             end
           end

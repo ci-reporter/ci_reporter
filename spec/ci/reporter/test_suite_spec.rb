@@ -91,7 +91,29 @@ context "TestSuite xml" do
     testcases = testsuite.elements.to_a("testcase")
     testcases.length.should == 3
   end
-  
+
+  specify "should contain full exception type and message in location element" do
+    failure = mock("failure")
+    failure.stub!(:failure?).and_return true
+    failure.stub!(:error?).and_return false
+    failure.stub!(:name).and_return "failure"
+    failure.stub!(:message).and_return "There was a failure"
+    failure.stub!(:location).and_return @exception.backtrace.join("\n")
+
+    @suite.start
+    @suite.testcases << CI::Reporter::TestCase.new("example test")
+    @suite.testcases << CI::Reporter::TestCase.new("failure test")
+    @suite.testcases.last.failure = failure
+    @suite.finish
+
+    xml = @suite.to_xml
+    doc = REXML::Document.new(xml)
+    elem = doc.root.elements.to_a("/testsuite/testcase[@name='failure test']/failure").first
+    location = elem.texts.join
+    location.should =~ Regexp.new(failure.message)
+    location.should =~ Regexp.new(failure.name)
+  end
+
   specify "should filter attributes properly for invalid characters" do
     failure = mock("failure")
     failure.stub!(:failure?).and_return true

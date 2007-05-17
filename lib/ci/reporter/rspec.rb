@@ -6,7 +6,7 @@ require 'ci/reporter/core'
 begin
   gem 'rspec'
 rescue Gem::LoadError
-  # Needed for non-gem RSpec (e.g., reporting on RSpec's own specs); 
+  # Needed for non-gem RSpec (e.g., reporting on RSpec's own specs);
   # if spec isn't found, the next require will blow up
 end
 require 'spec'
@@ -35,7 +35,13 @@ module CI
     # Custom +RSpec+ formatter used to hook into the spec runs and capture results.
     class RSpec < Spec::Runner::Formatter::ProgressBarFormatter
       def initialize(output, dry_run=false, colour=false, report_mgr=nil)
-        super(output, dry_run, colour)
+        if respond_to? :dry_run=
+          super(output)
+          self.dry_run=dry_run
+          self.colour=colour
+        else
+          super(output, dry_run, colour)
+        end
         @report_manager = report_mgr || ReportManager.new("spec")
         @suite = nil
       end
@@ -44,31 +50,52 @@ module CI
         super
       end
 
+      # Pre-0.9 hook
       def add_context(name, first)
         super
-        write_report if @suite
-        @suite = TestSuite.new name
-        @suite.start
+        new_suite(name)
       end
 
+      # Post-0.9 hook
+      def add_behaviour(name)
+        super
+        new_suite(name)
+      end
+
+      # Pre-0.9 hook
       def spec_started(name)
         super
-        spec = TestCase.new name
-        @suite.testcases << spec
-        spec.start
+        case_started(name)
       end
 
+      # Post-0.9 hook
+      def example_started(name)
+        super
+        case_started(name)
+      end
+
+      # Pre-0.9 hook
       def spec_failed(name, counter, failure)
         super
-        spec = @suite.testcases.last
-        spec.finish
-        spec.failure = RSpecFailure.new(failure)
+        case_failed(name, counter, failure)
       end
 
+      # Post-0.9 hook
+      def example_failed(name, counter, failure)
+        super
+        case_failed(name, counter, failure)
+      end
+
+      # Pre-0.9 hook
       def spec_passed(name)
         super
-        spec = @suite.testcases.last
-        spec.finish
+        case_passed(name)
+      end
+
+      # Post-0.9 hook
+      def example_passed(name)
+        super
+        case_passed(name)
       end
 
       def start_dump
@@ -79,7 +106,7 @@ module CI
         super
       end
 
-      def dump_summary(duration, spec_count, failure_count)
+      def dump_summary(duration, example_count, failure_count)
         super
         write_report
       end
@@ -88,6 +115,29 @@ module CI
       def write_report
         @suite.finish
         @report_manager.write_report(@suite)
+      end
+
+      def new_suite(name)
+        write_report if @suite
+        @suite = TestSuite.new name
+        @suite.start
+      end
+
+      def case_started(name)
+        spec = TestCase.new name
+        @suite.testcases << spec
+        spec.start
+      end
+
+      def case_failed(name, counter, failure)
+        spec = @suite.testcases.last
+        spec.finish
+        spec.failure = RSpecFailure.new(failure)
+      end
+
+      def case_passed(name)
+        spec = @suite.testcases.last
+        spec.finish
       end
     end
   end
