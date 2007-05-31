@@ -106,8 +106,12 @@ module CI
         super
       end
 
-      def dump_summary(duration, example_count, failure_count)
-        super
+      def dump_summary(duration, example_count, failure_count, not_implemented_count = nil)
+        begin
+          super
+        rescue ArgumentError
+          super(duration, example_count, failure_count)
+        end
         write_report
       end
 
