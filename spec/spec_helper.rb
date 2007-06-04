@@ -5,9 +5,14 @@
 require 'rubygems'
 gem 'rspec'
 require 'spec'
-$: << File.dirname(__FILE__) + "/../lib"
+
+unless defined?(CI_REPORTER_LIB)
+  CI_REPORTER_LIB = File.expand_path(File.dirname(__FILE__) + "/../lib")
+  $: << CI_REPORTER_LIB
+end
+
 require 'ci/reporter/core'
 require 'ci/reporter/test_unit'
 require 'ci/reporter/rspec'
 
-REPORTS_DIR = File.dirname(__FILE__) + "/reports"
+REPORTS_DIR = File.dirname(__FILE__) + "/reports" unless defined?(REPORTS_DIR)

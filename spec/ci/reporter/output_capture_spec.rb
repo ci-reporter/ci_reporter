@@ -5,12 +5,12 @@
 require File.dirname(__FILE__) + "/../../spec_helper.rb"
 require 'rexml/document'
 
-context "Output capture" do
-  setup do
+describe "Output capture" do
+  before(:each) do
     @suite = CI::Reporter::TestSuite.new "test"
   end
 
-  specify "should save stdout and stderr messages written during the test run" do
+  it "should save stdout and stderr messages written during the test run" do
     @suite.start
     puts "Hello"
     $stderr.print "Hi"
@@ -19,7 +19,7 @@ context "Output capture" do
     @suite.stderr.should == "Hi"
   end
 
-  specify "should include system-out and system-err elements in the xml output" do
+  it "should include system-out and system-err elements in the xml output" do
     @suite.start
     puts "Hello"
     $stderr.print "Hi"
@@ -32,7 +32,7 @@ context "Output capture" do
     root.elements.to_a('//system-err').first.cdatas.first.to_s.should == "Hi"
   end
 
-  specify "should return $stdout and $stderr to original value after finish" do
+  it "should return $stdout and $stderr to original value after finish" do
     out, err = $stdout, $stderr
     @suite.start
     $stdout.object_id.should_not == out.object_id
@@ -42,7 +42,7 @@ context "Output capture" do
     $stderr.object_id.should == err.object_id
   end
   
-  specify "should capture only during run of owner test suite" do
+  it "should capture only during run of owner test suite" do
     $stdout.print "A"
     $stderr.print "A"
     @suite.start

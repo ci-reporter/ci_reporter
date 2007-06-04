@@ -5,8 +5,8 @@
 require File.dirname(__FILE__) + "/../../spec_helper.rb"
 require 'stringio'
 
-context "The RSpec reporter" do
-  setup do
+describe "The RSpec reporter" do
+  before(:each) do
     @error = mock("error")
     @error.stub!(:exception).and_return do
       begin
@@ -20,20 +20,20 @@ context "The RSpec reporter" do
     @fmt = CI::Reporter::RSpec.new(StringIO.new(""), false, false, @report_mgr)
   end
 
-  specify "should create a test suite with one success and one failure" do
+  it "should create a test suite with one success and one failure" do
     @report_mgr.should_receive(:write_report).and_return do |suite|
       suite.testcases.length.should == 2
-      suite.testcases.first.should_not_be_failure
-      suite.testcases.first.should_not_be_error
-      suite.testcases.last.should_be_error
+      suite.testcases.first.should_not be_failure
+      suite.testcases.first.should_not be_error
+      suite.testcases.last.should be_error
     end
 
     @fmt.start(2)
-    @fmt.add_context("A context", true)
-    @fmt.spec_started("should pass")
-    @fmt.spec_passed("should pass")
-    @fmt.spec_started("should fail")
-    @fmt.spec_failed("should fail", 1, @error)
+    @fmt.add_behaviour("A context")
+    @fmt.example_started("should pass")
+    @fmt.example_passed("should pass")
+    @fmt.example_started("should fail")
+    @fmt.example_failed("should fail", 1, @error)
     @fmt.dump_summary(0.1, 2, 1)
   end
 end

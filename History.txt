@@ -1,3 +1,7 @@
+== 1.3.2
+
+- Fix bug trying to modify frozen environment strings
+
 == 1.3.1
 
 - Fixed to be compatible with RSpec 1.0.x (added fourth parameter to Formatter#dump_summary)

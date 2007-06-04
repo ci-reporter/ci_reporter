@@ -5,25 +5,25 @@
 require File.dirname(__FILE__) + "/../../spec_helper.rb"
 require 'rexml/document'
 
-context "A TestSuite" do
-  setup do
+describe "A TestSuite" do
+  before(:each) do
     @suite = CI::Reporter::TestSuite.new("example suite")
   end
 
-  specify "should collect timings when start and finish are invoked in sequence" do
+  it "should collect timings when start and finish are invoked in sequence" do
     @suite.start
     @suite.finish
-    @suite.time.should_be > 0
+    @suite.time.should > 0
   end
   
-  specify "should aggregate tests" do
+  it "should aggregate tests" do
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
     @suite.finish
     @suite.tests.should == 1
   end
   
-  specify "should indicate number of failures and errors" do
+  it "should indicate number of failures and errors" do
     failure = mock("failure")
     failure.stub!(:failure?).and_return true
     failure.stub!(:error?).and_return false
@@ -43,11 +43,10 @@ context "A TestSuite" do
     @suite.failures.should == 1
     @suite.errors.should == 1
   end
-  
 end
 
-context "TestSuite xml" do
-  setup do
+describe "TestSuite xml" do
+  before(:each) do
     @suite = CI::Reporter::TestSuite.new("example suite")
     @suite.assertions = 11
     begin
@@ -57,7 +56,7 @@ context "TestSuite xml" do
     end
   end
 
-  specify "should contain Ant/JUnit-formatted description of entire suite" do
+  it "should contain Ant/JUnit-formatted description of entire suite" do
     failure = mock("failure")
     failure.stub!(:failure?).and_return true
     failure.stub!(:error?).and_return false
@@ -92,7 +91,7 @@ context "TestSuite xml" do
     testcases.length.should == 3
   end
 
-  specify "should contain full exception type and message in location element" do
+  it "should contain full exception type and message in location element" do
     failure = mock("failure")
     failure.stub!(:failure?).and_return true
     failure.stub!(:error?).and_return false
@@ -114,7 +113,7 @@ context "TestSuite xml" do
     location.should =~ Regexp.new(failure.name)
   end
 
-  specify "should filter attributes properly for invalid characters" do
+  it "should filter attributes properly for invalid characters" do
     failure = mock("failure")
     failure.stub!(:failure?).and_return true
     failure.stub!(:error?).and_return false
@@ -128,18 +127,18 @@ context "TestSuite xml" do
     @suite.finish
 
     xml = @suite.to_xml
-    xml.should_match %r/message="There was a &lt;failure&gt;\.\.\."/
+    xml.should =~ %r/message="There was a &lt;failure&gt;\.\.\."/
   end
 end
 
-context "A TestCase" do
-  setup do
+describe "A TestCase" do
+  before(:each) do
     @tc = CI::Reporter::TestCase.new("example test")
   end
 
-  specify "should collect timings when start and finish are invoked in sequence" do
+  it "should collect timings when start and finish are invoked in sequence" do
     @tc.start
     @tc.finish
-    @tc.time.should_be > 0
+    @tc.time.should > 0
   end
 end

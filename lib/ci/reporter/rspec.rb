@@ -106,7 +106,7 @@ module CI
         super
       end
 
-      def dump_summary(duration, example_count, failure_count, not_implemented_count = nil)
+      def dump_summary(duration, example_count, failure_count, not_implemented_count = 0)
         begin
           super
         rescue ArgumentError
