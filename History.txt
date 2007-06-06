@@ -1,6 +1,8 @@
 == 1.3.2
 
 - Fix bug trying to modify frozen environment strings
+- Upgrade all specs to RSpec 1.0 style
+- Add specs for rake tasks
 
 == 1.3.1
 
