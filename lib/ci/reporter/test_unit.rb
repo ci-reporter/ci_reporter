@@ -57,6 +57,7 @@ module CI
         @last_assertion_count = 0
         @current_suite = nil
         @unknown_count = 0
+        @result_assertion_count = 0
       end
 
       def test_started(name)
@@ -115,6 +116,8 @@ module CI
         tc = @current_suite.testcases.last
         tc.finish
         tc.failure = Failure.new(failure) if failure
+        tc.assertions = @suite_result.assertion_count - @result_assertion_count
+        @result_assertion_count = @suite_result.assertion_count
       end
     end
   end

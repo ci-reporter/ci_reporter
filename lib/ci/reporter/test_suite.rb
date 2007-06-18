@@ -111,7 +111,7 @@ module CI
     end
 
     # Structure used to represent an individual test case.  Used to time the test and store the result.
-    class TestCase < Struct.new(:name, :time)
+    class TestCase < Struct.new(:name, :time, :assertions)
       attr_accessor :failure
 
       # Starts timing the test.
@@ -137,7 +137,7 @@ module CI
       # Writes xml representing the test result to the provided builder.
       def to_xml(builder)
         attrs = {}
-        each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) }
+        each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) unless v.nil? || v.to_s.empty?}
         builder.testcase(attrs) do
           if failure
             builder.failure(:type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do

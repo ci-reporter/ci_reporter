@@ -47,9 +47,12 @@ describe "The TestUnit reporter" do
     @suites.first.name.should == "TestCaseClass"
     @suites.first.testcases.length.should == 1
     @suites.first.testcases.first.name.should == "test_one"
+    @suites.first.testcases.first.assertions.should == 7
+
     @suites.last.name.should == "AnotherTestCaseClass"
     @suites.last.testcases.length.should == 1
     @suites.last.testcases.first.name.should == "test_two"
+    @suites.last.testcases.first.assertions.should == 0
   end
   
   it "should record assertion counts during test run" do
@@ -62,6 +65,7 @@ describe "The TestUnit reporter" do
     @testunit.finished(10)
 
     @suite.assertions.should == 7
+    @suite.testcases.last.assertions.should == 7
   end
   
   it "should add failures to testcases when encountering a fault" do

@@ -1,6 +1,7 @@
 == 1.3.3
 
 - Use SPEC_OPTS instead of RSPECOPTS (Aslak Hellesøy)
+- Add assertions attribute to individual test cases (Tracker #11563, Andy Sipe)
 
 == 1.3.2
 
