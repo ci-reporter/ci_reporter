@@ -2,9 +2,7 @@ CI::Reporter is an add-on to Test::Unit and RSpec that allows you to generate XM
 
 == Dependencies
 
-CI::Reporter has one required dependency on Builder, but since many will have a viable version of Builder via Rails' ActiveSupport gem, Builder is not a direct dependency of the project at the moment.  Instead, ensure that you have either the +builder+ or +activesupport+ gem installed before continuing.
-
-*NOTE*: As of this release, CI::Reporter is only compatible with RSpec up through version 0.8.2.  The 0.9 series has introduced an incompatibility that has not been rectified yet.
+CI::Reporter has one required dependency on Builder, but since many will have a viable version of Builder via Rails' ActiveSupport gem, Builder is not a direct dependency of the project at the moment.  Instead, ensure that you have either the +builder+ or +activesupport+ gem installed before continuing.  CI::Reporter will raise an exception at runtime if it cannot locate Builder.
 
 == Installation
 
@@ -18,7 +16,7 @@ To use CI::Reporter as a Rails plugin, first install the gem, and then install t
 
 == Usage
 
-CI::Reporter works best with projects that use a +Rakefile+ along with the standard <code>Rake::TestTask</code> or <code>Spec::Rake::SpecTask</code> tasks for running tests or specs, respectively. In this fashion, it hooks into <code>Test::Unit</code> or +RSpec+ using environment variables recognized by these custom tasks to inject the CI::Reporter code into the test or spec runs.  If you're using the Rails plugin, step 1 is unnecessary; skip to step 2.
+CI::Reporter works best with projects that use a +Rakefile+ along with the standard <code>Rake::TestTask</code> or <code>Spec::Rake::SpecTask</code> tasks for running tests or examples, respectively. In this fashion, it hooks into <code>Test::Unit</code> or +RSpec+ using environment variables recognized by these custom tasks to inject the CI::Reporter code into the test or spec runs.  If you're using the Rails plugin, step 1 is unnecessary; skip to step 2.
 
 1. To use CI::Reporter, simply add the following lines to your Rakefile:
 
@@ -48,6 +46,12 @@ There's a bit of a chicken and egg problem because rubygems needs to be loaded b
 
 * +CI_REPORTS+: if set, points to a directory where report files will be written.
 * +CI_CAPTURE+: if set to value "off", stdout/stderr capture will be disabled.
+
+== Source
+
+CI::Reporter source is not currently located in Rubyforge's SVN.  To get the source:
+
+    svn co http://svn.caldersphere.net/svn/main/rubyforge/ci_reporter/trunk ci_reporter
 
 == License
 

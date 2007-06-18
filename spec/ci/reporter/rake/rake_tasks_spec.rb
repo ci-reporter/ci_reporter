@@ -46,23 +46,23 @@ describe "ci_reporter ci:setup:rspec task" do
     Rake.application = @rake
     load CI_REPORTER_LIB + '/ci/reporter/rake/rspec.rb'
     save_env "CI_REPORTS"
-    save_env "RSPECOPTS"
+    save_env "SPEC_OPTS"
     ENV["CI_REPORTS"] = "some-bogus-nonexistent-directory-that-wont-fail-rm_rf"
   end
   after(:each) do
-    restore_env "RSPECOPTS"
+    restore_env "SPEC_OPTS"
     restore_env "CI_REPORTS"
     Rake.application = nil
   end
   
-  it "should set ENV['RSPECOPTS'] to include rspec formatter args" do
+  it "should set ENV['SPEC_OPTS'] to include rspec formatter args" do
     @rake["ci:setup:rspec"].invoke
-    ENV["RSPECOPTS"].should =~ /--require.*rspec_loader.*--format.*CI::Reporter::RSpec/
+    ENV["SPEC_OPTS"].should =~ /--require.*rspec_loader.*--format.*CI::Reporter::RSpec/
   end
   
-  it "should append to ENV['RSPECOPTS'] if it already contains a value" do
-    ENV["RSPECOPTS"] = "somevalue".freeze
+  it "should append to ENV['SPEC_OPTS'] if it already contains a value" do
+    ENV["SPEC_OPTS"] = "somevalue".freeze
     @rake["ci:setup:rspec"].invoke
-    ENV["RSPECOPTS"].should =~ /somevalue.*--require.*rspec_loader.*--format.*CI::Reporter::RSpec/
+    ENV["SPEC_OPTS"].should =~ /somevalue.*--require.*rspec_loader.*--format.*CI::Reporter::RSpec/
   end
 end

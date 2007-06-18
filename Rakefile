@@ -5,7 +5,7 @@ MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt", "LICENSE.txt", 
 
 begin
   require 'hoe'
-  hoe = Hoe.new("ci_reporter", "1.3.2") do |p|
+  hoe = Hoe.new("ci_reporter", "1.3.3") do |p|
     p.rubyforge_name = "caldersphere"
     p.url = "http://caldersphere.rubyforge.org/ci_reporter"
     p.author = "Nick Sieger"
