@@ -7,8 +7,8 @@ namespace :ci do
     task :rspec do
       rm_rf ENV["CI_REPORTS"] || "spec/reports"
 
-      spec_opts = ["--require", "#{File.dirname(__FILE__)}/rspec_loader.rb", 
-        "--format", "CI::Reporter::RSpec"].join(" ")      
+      spec_opts = ["--require", "#{File.dirname(__FILE__)}/rspec_loader.rb",
+        "--format", "CI::Reporter::RSpec"].join(" ")
       ENV["SPEC_OPTS"] ||= ""
       ENV["SPEC_OPTS"] += spec_opts
       # Pre RSpec 1.0.6

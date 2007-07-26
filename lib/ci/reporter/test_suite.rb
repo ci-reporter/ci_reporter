@@ -40,7 +40,7 @@ module CI
       attr_accessor :testcases
       attr_accessor :stdout, :stderr
       def initialize(name)
-        super
+        super(name.to_s) # RSpec passes a "description" object instead of a string
         @testcases = []
       end
 

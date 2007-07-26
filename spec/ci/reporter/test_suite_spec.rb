@@ -22,6 +22,12 @@ describe "A TestSuite" do
     @suite.finish
     @suite.tests.should == 1
   end
+
+  it "should stringify the name for cases when the object passed in is not a string" do
+    name = Object.new
+    def name.to_s; "object name"; end
+    CI::Reporter::TestSuite.new(name).name.should == "object name"
+  end
   
   it "should indicate number of failures and errors" do
     failure = mock("failure")
