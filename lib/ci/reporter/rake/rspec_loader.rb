@@ -2,10 +2,5 @@
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
-require 'rubygems'
-begin
-  gem 'ci_reporter'
-rescue => e
-  $: << File.dirname(__FILE__) + "/../../../lib"
-end
+$: << File.dirname(__FILE__) + "/../../../lib"
 require 'ci/reporter/rspec'
