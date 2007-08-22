@@ -16,6 +16,7 @@ describe "The RSpec reporter" do
       end
     end
     @error.stub!(:expectation_not_met?).and_return(false)
+    @error.stub!(:pending_fixed?).and_return(false)
     @report_mgr = mock("report manager")
     @fmt = CI::Reporter::RSpec.new(StringIO.new(""), false, false, @report_mgr)
   end

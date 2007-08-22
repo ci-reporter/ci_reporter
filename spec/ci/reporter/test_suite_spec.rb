@@ -13,7 +13,7 @@ describe "A TestSuite" do
   it "should collect timings when start and finish are invoked in sequence" do
     @suite.start
     @suite.finish
-    @suite.time.should > 0
+    @suite.time.should >= 0
   end
   
   it "should aggregate tests" do
@@ -145,6 +145,6 @@ describe "A TestCase" do
   it "should collect timings when start and finish are invoked in sequence" do
     @tc.start
     @tc.finish
-    @tc.time.should > 0
+    @tc.time.should >= 0
   end
 end
