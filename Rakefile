@@ -1,7 +1,7 @@
 require 'spec/rake/spectask'
 
 MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt", "LICENSE.txt", "Rakefile",
-  "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
+  "*.rake", "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
 
 begin
   require 'hoe'

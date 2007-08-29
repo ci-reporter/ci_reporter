@@ -4,7 +4,7 @@
   trunk which passes a Spec::DSL::Description instead of a string
 - Fix broken spec due to pending feature introduced in recent RSpec
 - Fix compatibility for JRuby
-- Add stub.rake file as another way to wrap existing Rakefile
+- Add stub.rake file as another way to wrap existing Rakefile, with note in README
 
 == 1.3.3
 

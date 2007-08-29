@@ -33,6 +33,11 @@ Report files are written, by default, to the <code>test/reports</code> or <code>
 
 == Advanced Usage
 
+If you don't have control over the Rakefile or don't want to modify it, CI::Reporter has a substitute rake file that you can specify on the command-line.  It assumes that the main project rake file is called +Rakefile+ and lives in the current directory.  Run like so:
+
+    rake -f GEM_PATH/stub.rake ci:setup:testunit test
+    rake -f GEM_PATH/stub.rake ci:setup:rspec spec
+
 If for some reason you can't use the above technique to inject CI::Reporter (e.g., you're not using Rake), you'll have to do one of these:
 
 1. If you're using <code>Test::Unit</code>, ensure the <code>ci/reporter/rake/test_unit_loader.rb</code> file is loaded or required at some point before the tests are run.
