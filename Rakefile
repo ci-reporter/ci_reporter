@@ -4,6 +4,7 @@ MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt", "LICENSE.txt", 
   "*.rake", "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
 
 begin
+  touch("Manifest.txt") unless File.exist?("Manifest.txt")
   require 'hoe'
   hoe = Hoe.new("ci_reporter", "1.3.4") do |p|
     p.rubyforge_name = "caldersphere"
