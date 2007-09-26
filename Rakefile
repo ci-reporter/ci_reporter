@@ -3,10 +3,11 @@ require 'spec/rake/spectask'
 MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt", "LICENSE.txt", "Rakefile",
   "*.rake", "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
 
+require File.dirname(__FILE__) + '/lib/ci/reporter/version'
 begin
   touch("Manifest.txt") unless File.exist?("Manifest.txt")
   require 'hoe'
-  hoe = Hoe.new("ci_reporter", "1.3.4") do |p|
+  hoe = Hoe.new("ci_reporter", CI::Reporter::VERSION) do |p|
     p.rubyforge_name = "caldersphere"
     p.url = "http://caldersphere.rubyforge.org/ci_reporter"
     p.author = "Nick Sieger"

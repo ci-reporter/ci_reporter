@@ -1,3 +1,7 @@
+== 1.3.5
+
+- Change way we append to environment variables to appease windows (Tracker #13998, Adam Anderson)
+
 == 1.3.4
 
 - Call #to_s on the object passed in as the test suite name; compatibility fix for RSpec
