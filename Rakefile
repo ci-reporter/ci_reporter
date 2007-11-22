@@ -51,3 +51,21 @@ task "spec:rcov" do
   rm_f "Manifest.txt"
 end
 task :rcov => "spec:rcov"
+
+task :generate_output do
+  ENV['CI_REPORTS'] = "acceptance/reports"
+  begin
+    `ruby -Ilib acceptance/test_unit_example_test.rb` rescue nil
+    `ruby -Ilib -S spec --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb` rescue nil
+  ensure
+    ENV.delete 'CI_REPORTS'
+  end
+end
+task :acceptance => :generate_output
+
+Spec::Rake::SpecTask.new(:acceptance_spec) do |t|
+  t.spec_files = FileList['acceptance/verification_spec.rb']
+end
+task :acceptance => :acceptance_spec
+
+task :default => :acceptance
