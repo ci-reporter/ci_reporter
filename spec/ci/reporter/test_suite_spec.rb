@@ -41,9 +41,9 @@ describe "A TestSuite" do
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
     @suite.testcases << CI::Reporter::TestCase.new("failure test")
-    @suite.testcases.last.failure = failure
+    @suite.testcases.last.failures << failure
     @suite.testcases << CI::Reporter::TestCase.new("error test")
-    @suite.testcases.last.failure = error
+    @suite.testcases.last.failures << error
     @suite.finish
     @suite.tests.should == 3
     @suite.failures.should == 1
@@ -80,9 +80,9 @@ describe "TestSuite xml" do
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
     @suite.testcases << CI::Reporter::TestCase.new("failure test")
-    @suite.testcases.last.failure = failure
+    @suite.testcases.last.failures << failure
     @suite.testcases << CI::Reporter::TestCase.new("error test")
-    @suite.testcases.last.failure = error
+    @suite.testcases.last.failures << error
     @suite.finish
 
     xml = @suite.to_xml
@@ -108,7 +108,7 @@ describe "TestSuite xml" do
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
     @suite.testcases << CI::Reporter::TestCase.new("failure test")
-    @suite.testcases.last.failure = failure
+    @suite.testcases.last.failures << failure
     @suite.finish
 
     xml = @suite.to_xml
@@ -129,7 +129,7 @@ describe "TestSuite xml" do
 
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("failure test")
-    @suite.testcases.last.failure = failure
+    @suite.testcases.last.failures << failure
     @suite.finish
 
     xml = @suite.to_xml

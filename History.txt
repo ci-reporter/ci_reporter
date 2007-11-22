@@ -1,3 +1,8 @@
+== 1.3.6
+
+- Explicit dependency requirement on Builder
+- Test::Unit tests that fail in multiple places (setup, test method, and teardown) are now tracked
+
 == 1.3.5
 
 - Change way we append to environment variables to appease windows (Tracker #13998, Adam Anderson)

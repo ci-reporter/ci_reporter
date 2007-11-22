@@ -136,7 +136,7 @@ module CI
       def case_failed(name, counter, failure)
         spec = @suite.testcases.last
         spec.finish
-        spec.failure = RSpecFailure.new(failure)
+        spec.failures << RSpecFailure.new(failure)
       end
 
       def case_passed(name)

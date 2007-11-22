@@ -69,6 +69,24 @@ describe "The TestUnit reporter" do
   end
   
   it "should add failures to testcases when encountering a fault" do
+    @failure = Test::Unit::Failure.new("test_one(TestCaseClass)", "somewhere:10", "it failed")
+
+    @suite = nil
+    @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
+
+    @testunit.started(@result)
+    @testunit.test_started("test_one(TestCaseClass)")
+    @testunit.fault(@failure)
+    @testunit.test_finished("test_one(TestCaseClass)")
+    @testunit.finished(10)
+
+    @suite.name.should == "TestCaseClass"
+    @suite.testcases.length.should == 1
+    @suite.testcases.first.name.should == "test_one"
+    @suite.testcases.first.should be_failure
+  end
+
+  it "should add errors to testcases when encountering a fault" do
     begin
       raise StandardError, "error"
     rescue => e
@@ -83,6 +101,7 @@ describe "The TestUnit reporter" do
     @testunit.test_finished("test_one(TestCaseClass)")
     @testunit.test_started("test_two(TestCaseClass)")
     @testunit.fault(@error)
+    @testunit.test_finished("test_two(TestCaseClass)")
     @testunit.finished(10)
 
     @suite.name.should == "TestCaseClass"
@@ -93,5 +112,41 @@ describe "The TestUnit reporter" do
     @suite.testcases.last.name.should == "test_two"
     @suite.testcases.last.should_not be_failure
     @suite.testcases.last.should be_error
+  end
+  
+  it "should add multiple failures to a testcase" do
+    @failure1 = Test::Unit::Failure.new("test_one(TestCaseClass)", "somewhere:10", "it failed")
+    @failure2 = Test::Unit::Failure.new("test_one(TestCaseClass)", "somewhere:12", "it failed again in teardown")
+
+    @suite = nil
+    @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
+
+    @testunit.started(@result)
+    @testunit.test_started("test_one(TestCaseClass)")
+    @testunit.fault(@failure1)
+    @testunit.fault(@failure2)
+    @testunit.test_finished("test_one(TestCaseClass)")
+    @testunit.finished(10)
+
+    @suite.name.should == "TestCaseClass"
+    @suite.testcases.length.should == 1
+    @suite.testcases.first.name.should == "test_one"
+    @suite.testcases.first.should be_failure
+    @suite.testcases.first.failures.size.should == 2
+    @suite.failures.should == 2
+  end
+
+  it "should count test case names that don't conform to the standard pattern" do
+    @suite = nil
+    @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
+
+    @testunit.started(@result)
+    @testunit.test_started("some unknown test")
+    @testunit.test_finished("some unknown test")
+    @testunit.finished(10)
+
+    @suite.name.should == "unknown-1"
+    @suite.testcases.length.should == 1
+    @suite.testcases.first.name.should == "some unknown test"
   end
 end

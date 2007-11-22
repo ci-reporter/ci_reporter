@@ -74,7 +74,8 @@ module CI
       end
 
       def fault(fault)
-        finish_test(fault)
+        tc = @current_suite.testcases.last
+        tc.failures << Failure.new(fault)
       end
 
       def finished(elapsed_time)
@@ -112,10 +113,9 @@ module CI
         @current_suite.testcases << tc
       end
 
-      def finish_test(failure = nil)
+      def finish_test
         tc = @current_suite.testcases.last
         tc.finish
-        tc.failure = Failure.new(failure) if failure
         tc.assertions = @suite_result.assertion_count - @result_assertion_count
         @result_assertion_count = @suite_result.assertion_count
       end

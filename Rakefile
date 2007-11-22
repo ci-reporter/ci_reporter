@@ -1,12 +1,13 @@
 require 'spec/rake/spectask'
+require 'spec/rake/verify_rcov'
 
 MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt", "LICENSE.txt", "Rakefile",
   "*.rake", "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
 
-require File.dirname(__FILE__) + '/lib/ci/reporter/version'
 begin
-  touch("Manifest.txt") unless File.exist?("Manifest.txt")
+  File.open("Manifest.txt", "w") {|f| MANIFEST.each {|n| f << "#{n}\n"} }
   require 'hoe'
+  require File.dirname(__FILE__) + '/lib/ci/reporter/version'
   hoe = Hoe.new("ci_reporter", CI::Reporter::VERSION) do |p|
     p.rubyforge_name = "caldersphere"
     p.url = "http://caldersphere.rubyforge.org/ci_reporter"
@@ -17,6 +18,7 @@ begin
     p.description = p.paragraphs_of('README.txt', 0...1).join("\n\n")
     p.extra_deps.reject!{|d| d.first == "hoe"}
     p.test_globs = ["spec/**/*_spec.rb"]
+    p.extra_deps << ['builder', ">= 2.1.2"]
   end
   hoe.spec.files = MANIFEST
   hoe.spec.dependencies.delete_if { |dep| dep.name == "hoe" }
@@ -28,16 +30,24 @@ end
 # !@#$ no easy way to empty the default list of prerequisites
 Rake::Task['default'].send :instance_variable_set, "@prerequisites", FileList[]
 
-task :default => :spec
+task :default => :rcov
 
 Spec::Rake::SpecTask.new do |t|
   t.spec_opts ||= []
   t.spec_opts << "--diff" << "unified"
 end
 
-# Automated manifest
-task :manifest do
-  File.open("Manifest.txt", "w") {|f| MANIFEST.each {|n| f << "#{n}\n"} }
+Spec::Rake::SpecTask.new("spec:rcov") do |t|
+  t.rcov = true
 end
-
-task :package => :manifest
+# so we don't confuse autotest
+RCov::VerifyTask.new(:rcov) do |t|
+  # Can't get threshold up to 100 until the RSpec < 1.0 compatibility
+  # code is dropped
+  t.threshold = 97
+  t.require_exact_threshold = false
+end
+task "spec:rcov" do
+  rm_f "Manifest.txt"
+end
+task :rcov => "spec:rcov"

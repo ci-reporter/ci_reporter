@@ -57,25 +57,17 @@ module CI
       def finish
         self.tests = testcases.size
         self.time = Time.now - @start
-        self.failures = testcases.select {|tc| tc.failure? }.size
-        self.errors = testcases.select {|tc| tc.error? }.size
+        self.failures = testcases.inject(0) {|sum,tc| sum += tc.failures.select{|f| f.failure? }.size }
+        self.errors = testcases.inject(0) {|sum,tc| sum += tc.failures.select{|f| f.error? }.size }
         self.stdout = @capture_out.finish if @capture_out
         self.stderr = @capture_err.finish if @capture_err
       end
 
       # Creates the xml builder instance used to create the report xml document.
       def create_builder
-        begin
-          gem 'builder'
-          require 'builder'
-        rescue
-          begin
-            gem 'activesupport'
-            require 'active_support'
-          rescue
-            raise LoadError, "XML Builder is required by CI::Reporter"
-          end
-        end unless defined?(Builder::XmlMarkup)
+        require 'rubygems'
+        gem 'builder'
+        require 'builder'
         # :escape_attrs is obsolete in a newer version, but should do no harm
         Builder::XmlMarkup.new(:indent => 2, :escape_attrs => true)
       end
@@ -84,14 +76,8 @@ module CI
       def to_xml
         builder = create_builder
         # more recent version of Builder doesn't need the escaping
-        if Builder::XmlMarkup.private_instance_methods.include?("_attr_value")
-          def builder.trunc!(txt)
-            txt.sub(/\n.*/m, '...')
-          end
-        else
-          def builder.trunc!(txt)
-            _escape(txt.sub(/\n.*/m, '...'))
-          end
+        def builder.trunc!(txt)
+          txt.sub(/\n.*/m, '...')
         end
         builder.instruct!
         attrs = {}
@@ -112,7 +98,12 @@ module CI
 
     # Structure used to represent an individual test case.  Used to time the test and store the result.
     class TestCase < Struct.new(:name, :time, :assertions)
-      attr_accessor :failure
+      attr_accessor :failures
+
+      def initialize(*args)
+        super
+        @failures = []
+      end
 
       # Starts timing the test.
       def start
@@ -126,12 +117,12 @@ module CI
 
       # Returns non-nil if the test failed.
       def failure?
-        failure && failure.failure?
+        !failures.empty? && failures.detect {|f| f.failure? }
       end
 
       # Returns non-nil if the test had an error.
       def error?
-        failure && failure.error?
+        !failures.empty? && failures.detect {|f| f.error? }
       end
 
       # Writes xml representing the test result to the provided builder.
@@ -139,7 +130,7 @@ module CI
         attrs = {}
         each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) unless v.nil? || v.to_s.empty?}
         builder.testcase(attrs) do
-          if failure
+          failures.each do |failure|
             builder.failure(:type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
               builder.text!(failure.message + " (#{failure.name})\n")
               builder.text!(failure.location)

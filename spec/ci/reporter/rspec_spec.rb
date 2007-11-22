@@ -8,13 +8,6 @@ require 'stringio'
 describe "The RSpec reporter" do
   before(:each) do
     @error = mock("error")
-    @error.stub!(:exception).and_return do
-      begin
-        raise StandardError, "error message"
-      rescue => e
-        e
-      end
-    end
     @error.stub!(:expectation_not_met?).and_return(false)
     @error.stub!(:pending_fixed?).and_return(false)
     @report_mgr = mock("report manager")
