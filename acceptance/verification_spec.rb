@@ -16,8 +16,8 @@ describe "Test::Unit acceptance" do
     doc.root.attributes["failures"].should == "1"
     doc.root.attributes["assertions"].should == "1"
     doc.root.attributes["tests"].should == "1"
-    failures = doc.root.elements.to_a("/testsuite/testcase/failure")
-    failures.size.should == 2
+    doc.root.elements.to_a("/testsuite/testcase").size.should == 1
+    doc.root.elements.to_a("/testsuite/testcase/failure").size.should == 2
   end
 
   it "should have no errors or failures for TestUnitExampleTestTwo" do
@@ -28,13 +28,26 @@ describe "Test::Unit acceptance" do
     doc.root.attributes["failures"].should == "0"
     doc.root.attributes["assertions"].should == "1"
     doc.root.attributes["tests"].should == "1"
-    failures = doc.root.elements.to_a("/testsuite/testcase/failure")
-    failures.size.should == 0
+    doc.root.elements.to_a("/testsuite/testcase").size.should == 1
+    doc.root.elements.to_a("/testsuite/testcase/failure").size.should == 0
   end
 end
 
 describe "RSpec acceptance" do
   it "should generate one XML file" do
-    violated "TODO"
+    File.exist?(File.join(REPORTS_DIR, 'SPEC-RSpec-example.xml')).should == true
+  end
+
+  it "should have two tests and one failure" do
+    doc = File.open(File.join(REPORTS_DIR, 'SPEC-RSpec-example.xml')) do |f|
+      REXML::Document.new(f)
+    end
+    doc.root.attributes["errors"].should == "0"
+    doc.root.attributes["failures"].should == "1"
+    doc.root.attributes["tests"].should == "2"
+    doc.root.elements.to_a("/testsuite/testcase").size.should == 2
+    failures = doc.root.elements.to_a("/testsuite/testcase/failure")
+    failures.size.should == 1
+    failures.first.attributes["type"].should == "Spec::Expectations::ExpectationNotMetError"
   end
 end
