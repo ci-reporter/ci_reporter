@@ -30,4 +30,11 @@ describe "The RSpec reporter" do
     @fmt.example_failed("should fail", 1, @error)
     @fmt.dump_summary(0.1, 2, 1)
   end
+
+  it "should report deprecation when called with RSpec < 0.9" do
+    @fmt.should_receive(:warn).exactly(2).times
+    @fmt.deprecated
+    @fmt.deprecated
+    @fmt.deprecated
+  end
 end

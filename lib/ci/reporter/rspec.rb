@@ -46,6 +46,15 @@ module CI
         @suite = nil
       end
 
+      def deprecated
+        unless @warned
+          require 'ci/reporter/version'
+          warn "warning: use of RSpec < 0.9 with CI::Reporter #{CI::Reporter::VERSION} is deprecated;"
+          warn "a future version will not be compatible."
+        end
+        @warned = true
+      end
+
       def start(spec_count)
         super
       end
@@ -53,6 +62,7 @@ module CI
       # Pre-0.9 hook
       def add_context(name, first)
         super
+        deprecated
         new_suite(name)
       end
 
@@ -65,6 +75,7 @@ module CI
       # Pre-0.9 hook
       def spec_started(name)
         super
+        deprecated
         case_started(name)
       end
 
@@ -77,6 +88,7 @@ module CI
       # Pre-0.9 hook
       def spec_failed(name, counter, failure)
         super
+        deprecated
         case_failed(name, counter, failure)
       end
 
@@ -89,6 +101,7 @@ module CI
       # Pre-0.9 hook
       def spec_passed(name)
         super
+        deprecated
         case_passed(name)
       end
 
