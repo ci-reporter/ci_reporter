@@ -30,11 +30,15 @@ end
 # !@#$ no easy way to empty the default list of prerequisites
 Rake::Task['default'].send :instance_variable_set, "@prerequisites", FileList[]
 
-task :default => :rcov
+# No RCov on JRuby at the moment
+if RUBY_PLATFORM =~ /java/
+  task :default => :spec
+else
+  task :default => :rcov
+end
 
 Spec::Rake::SpecTask.new do |t|
-  t.spec_opts ||= []
-  t.spec_opts << "--diff" << "unified"
+  t.spec_opts = ["--diff", "unified"]
 end
 
 Spec::Rake::SpecTask.new("spec:rcov") do |t|
@@ -44,7 +48,7 @@ end
 RCov::VerifyTask.new(:rcov) do |t|
   # Can't get threshold up to 100 until the RSpec < 1.0 compatibility
   # code is dropped
-  t.threshold = 97
+  t.threshold = 99
   t.require_exact_threshold = false
 end
 task "spec:rcov" do
@@ -53,6 +57,7 @@ end
 task :rcov => "spec:rcov"
 
 task :generate_output do
+  rm_f "acceptance/reports/*.xml"
   ENV['CI_REPORTS'] = "acceptance/reports"
   begin
     `ruby -Ilib acceptance/test_unit_example_test.rb` rescue nil

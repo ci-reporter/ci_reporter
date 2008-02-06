@@ -1,3 +1,15 @@
+== 1.5.1
+
+- Fix silly load-path error that some had been seeing
+
+== 1.5
+
+- Support for RSpec 1.1.1 example groups (which broke ci_reporter 1.4)
+- Change internal model to delegation instead of inheritance, allowing ci_reporter to wrap different output formatters
+- Add 'ci:setup:rspecdoc' task to output specdoc format instead of progress
+- Add support for pending examples; they will be listed in the report XML as successful, but the name will have a '(PENDING)' tag appended
+- Support for RSpec < 0.9 removed as promised; use 1.4 if you still need to use an older version of RSpec
+
 == 1.4
 
 - Test::Unit tests that fail in multiple places (setup, test method, and teardown) are now tracked (marcog)

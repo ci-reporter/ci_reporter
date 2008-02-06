@@ -2,5 +2,5 @@
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
-$: << File.dirname(__FILE__) + "/../../../lib"
+$: << File.dirname(__FILE__) + "/../../.."
 require 'ci/reporter/rspec'

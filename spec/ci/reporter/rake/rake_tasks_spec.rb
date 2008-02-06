@@ -59,6 +59,11 @@ describe "ci_reporter ci:setup:rspec task" do
     @rake["ci:setup:rspec"].invoke
     ENV["SPEC_OPTS"].should =~ /--require.*rspec_loader.*--format.*CI::Reporter::RSpec/
   end
+
+  it "should set ENV['SPEC_OPTS'] to include rspec doc formatter if task is ci:setup:rspecdoc" do
+    @rake["ci:setup:rspecdoc"].invoke
+    ENV["SPEC_OPTS"].should =~ /--require.*rspec_loader.*--format.*CI::Reporter::RSpecDoc/
+  end
   
   it "should append to ENV['SPEC_OPTS'] if it already contains a value" do
     ENV["SPEC_OPTS"] = "somevalue".freeze

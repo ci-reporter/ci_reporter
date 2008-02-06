@@ -3,13 +3,19 @@
 # software license details.
 
 require 'ci/reporter/core'
+tried_gem = false
 begin
-  gem 'rspec'
-rescue Gem::LoadError
-  # Needed for non-gem RSpec (e.g., reporting on RSpec's own specs);
-  # if spec isn't found, the next require will blow up
+  require 'spec'
+  require 'spec/runner/formatter/progress_bar_formatter'
+  require 'spec/runner/formatter/specdoc_formatter'
+rescue LoadError
+  unless tried_gem
+    tried_gem = true
+    require 'rubygems'
+    gem 'rspec'
+    retry
+  end
 end
-require 'spec'
 
 module CI
   module Reporter
@@ -33,99 +39,76 @@ module CI
     end
 
     # Custom +RSpec+ formatter used to hook into the spec runs and capture results.
-    class RSpec < Spec::Runner::Formatter::ProgressBarFormatter
-      def initialize(output, dry_run=false, colour=false, report_mgr=nil)
-        if respond_to? :dry_run=
-          super(output)
-          self.dry_run=dry_run
-          self.colour=colour
-        else
-          super(output, dry_run, colour)
-        end
-        @report_manager = report_mgr || ReportManager.new("spec")
+    class RSpec < Spec::Runner::Formatter::BaseFormatter
+      attr_accessor :report_manager
+      attr_accessor :formatter
+      def initialize(*args)
+        super
+        @formatter ||= Spec::Runner::Formatter::ProgressBarFormatter.new(*args)
+        @report_manager = ReportManager.new("spec")
         @suite = nil
       end
 
-      def deprecated
-        unless @warned
-          require 'ci/reporter/version'
-          warn "warning: use of RSpec < 0.9 with CI::Reporter #{CI::Reporter::VERSION} is deprecated;"
-          warn "a future version will not be compatible."
-        end
-        @warned = true
-      end
-
       def start(spec_count)
-        super
+        @formatter.start(spec_count)
       end
 
-      # Pre-0.9 hook
-      def add_context(name, first)
-        super
-        deprecated
-        new_suite(name)
-      end
-
-      # Post-0.9 hook
       def add_behaviour(name)
-        super
+        @formatter.add_behaviour(name)
         new_suite(name)
       end
 
-      # Pre-0.9 hook
-      def spec_started(name)
-        super
-        deprecated
-        case_started(name)
+      def add_example_group(example_group)
+        @formatter.add_example_group(example_group)
+        new_suite(example_group.description)
       end
 
-      # Post-0.9 hook
       def example_started(name)
-        super
-        case_started(name)
+        @formatter.example_started(name)
+        spec = TestCase.new name
+        @suite.testcases << spec
+        spec.start
       end
 
-      # Pre-0.9 hook
-      def spec_failed(name, counter, failure)
-        super
-        deprecated
-        case_failed(name, counter, failure)
-      end
-
-      # Post-0.9 hook
       def example_failed(name, counter, failure)
-        super
-        case_failed(name, counter, failure)
+        @formatter.example_failed(name, counter, failure)
+        spec = @suite.testcases.last
+        spec.finish
+        spec.failures << RSpecFailure.new(failure)
       end
 
-      # Pre-0.9 hook
-      def spec_passed(name)
-        super
-        deprecated
-        case_passed(name)
-      end
-
-      # Post-0.9 hook
       def example_passed(name)
-        super
-        case_passed(name)
+        @formatter.example_passed(name)
+        spec = @suite.testcases.last
+        spec.finish
+      end
+
+      def example_pending(*args)
+        @formatter.example_pending(*args)
+        spec = @suite.testcases.last
+        spec.finish
+        spec.name = "#{spec.name} (PENDING)"
       end
 
       def start_dump
-        super
+        @formatter.start_dump
       end
 
-      def dump_failure(counter, failure)
-        super
+      def dump_failure(*args)
+        @formatter.dump_failure(*args)
       end
 
-      def dump_summary(duration, example_count, failure_count, not_implemented_count = 0)
-        begin
-          super
-        rescue ArgumentError
-          super(duration, example_count, failure_count)
-        end
+      def dump_summary(*args)
+        @formatter.dump_summary(*args)
         write_report
+      end
+
+      def dump_pending
+        @formatter.dump_pending
+      end
+
+      def close
+        @formatter.close
       end
 
       private
@@ -139,22 +122,12 @@ module CI
         @suite = TestSuite.new name
         @suite.start
       end
+    end
 
-      def case_started(name)
-        spec = TestCase.new name
-        @suite.testcases << spec
-        spec.start
-      end
-
-      def case_failed(name, counter, failure)
-        spec = @suite.testcases.last
-        spec.finish
-        spec.failures << RSpecFailure.new(failure)
-      end
-
-      def case_passed(name)
-        spec = @suite.testcases.last
-        spec.finish
+    class RSpecDoc < RSpec
+      def initialize(*args)
+        @formatter = Spec::Runner::Formatter::SpecdocFormatter.new(*args)
+        super
       end
     end
   end
