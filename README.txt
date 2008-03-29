@@ -54,9 +54,13 @@ There's a bit of a chicken and egg problem because rubygems needs to be loaded b
 
 == Source
 
-CI::Reporter source is not currently located in Rubyforge's SVN.  To get the source:
+You can get the CI::Reporter source using Git, in any of the following ways:
 
-    svn co http://svn.caldersphere.net/svn/main/rubyforge/ci_reporter/trunk ci_reporter
+    git clone git://git.caldersphere.net/ci_reporter.git
+    git clone http://git.caldersphere.net/ci_reporter.git
+    git clone git://github.com/nicksieger/ci_reporter.git
+
+You can also download a tarball of the latest CI::Reporter source at http://github.com/nicksieger/ci_reporter/tree/master.
 
 == License
 
