@@ -1,4 +1,4 @@
-# (c) Copyright 2006-2007 Nick Sieger <nicksieger@gmail.com>
+# (c) Copyright 2006-2008 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -81,6 +81,28 @@ describe "The RSpec reporter" do
     @fmt.add_behaviour("A context")
     @fmt.example_started("should pass")
     @fmt.example_passed("should pass")
+    @fmt.dump_summary(0.1, 1, 0, 0)
+  end
+
+  it "should use the example #description method when available" do
+    group = mock "example group"
+    group.stub!(:description).and_return "group description"
+    example = mock "example"
+    example.stub!(:description).and_return "should do something"
+
+    @formatter.should_receive(:start)
+    @formatter.should_receive(:add_example_group).with(group)
+    @formatter.should_receive(:example_started).with(example).once
+    @formatter.should_receive(:example_passed).once
+    @formatter.should_receive(:dump_summary)
+    @report_mgr.should_receive(:write_report).and_return do |suite|
+      suite.testcases.last.name.should == "should do something"
+    end
+
+    @fmt.start(2)
+    @fmt.add_example_group(group)
+    @fmt.example_started(example)
+    @fmt.example_passed(example)
     @fmt.dump_summary(0.1, 1, 0, 0)
   end
 end

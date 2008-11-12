@@ -1,4 +1,4 @@
-# (c) Copyright 2006-2007 Nick Sieger <nicksieger@gmail.com>
+# (c) Copyright 2006-2008 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -65,6 +65,7 @@ module CI
 
       def example_started(name)
         @formatter.example_started(name)
+        name = name.description if name.respond_to?(:description)
         spec = TestCase.new name
         @suite.testcases << spec
         spec.start
