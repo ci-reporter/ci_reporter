@@ -56,7 +56,6 @@ There's a bit of a chicken and egg problem because rubygems needs to be loaded b
 
 You can get the CI::Reporter source using Git, in any of the following ways:
 
-    git clone git://git.caldersphere.net/ci_reporter.git
     git clone http://git.caldersphere.net/ci_reporter.git
     git clone git://github.com/nicksieger/ci_reporter.git
 

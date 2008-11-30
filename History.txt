@@ -1,3 +1,11 @@
+== 1.5.2
+
+- Compatibility with latest RSpec (1.1.11 or so); use example
+  description method if available
+- Remove dependency on rubygems when requiring builder (rescue
+  LoadError) (Jari Bakken)
+- Source repository moved to github/git.caldersphere.net
+
 == 1.5.1
 
 - Fix silly load-path error that some had been seeing
@@ -5,33 +13,43 @@
 == 1.5
 
 - Support for RSpec 1.1.1 example groups (which broke ci_reporter 1.4)
-- Change internal model to delegation instead of inheritance, allowing ci_reporter to wrap different output formatters
-- Add 'ci:setup:rspecdoc' task to output specdoc format instead of progress
-- Add support for pending examples; they will be listed in the report XML as successful, but the name will have a '(PENDING)' tag appended
-- Support for RSpec < 0.9 removed as promised; use 1.4 if you still need to use an older version of RSpec
+- Change internal model to delegation instead of inheritance, allowing
+  ci_reporter to wrap different output formatters
+- Add 'ci:setup:rspecdoc' task to output specdoc format instead of
+  progress
+- Add support for pending examples; they will be listed in the report
+  XML as successful, but the name will have a '(PENDING)' tag appended
+- Support for RSpec < 0.9 removed as promised; use 1.4 if you still
+  need to use an older version of RSpec
 
 == 1.4
 
-- Test::Unit tests that fail in multiple places (setup, test method, and teardown) are now tracked (marcog)
+- Test::Unit tests that fail in multiple places (setup, test method,
+  and teardown) are now tracked (marcog)
 - Explicit dependency requirement on Builder (>= 2.1.2)
-- Use of RSpec < 0.9 is now deprecated; support will probably disappear in the next version
+- Use of RSpec < 0.9 is now deprecated; support will probably
+  disappear in the next version
 
 == 1.3.5
 
-- Change way we append to environment variables to appease windows (Tracker #13998, Adam Anderson)
+- Change way we append to environment variables to appease windows
+  (Tracker #13998, Adam Anderson)
 
 == 1.3.4
 
-- Call #to_s on the object passed in as the test suite name; compatibility fix for RSpec
-  trunk which passes a Spec::DSL::Description instead of a string
+- Call #to_s on the object passed in as the test suite name;
+  compatibility fix for RSpec trunk which passes a
+  Spec::DSL::Description instead of a string
 - Fix broken spec due to pending feature introduced in recent RSpec
 - Fix compatibility for JRuby
-- Add stub.rake file as another way to wrap existing Rakefile, with note in README
+- Add stub.rake file as another way to wrap existing Rakefile, with
+  note in README
 
 == 1.3.3
 
 - Use SPEC_OPTS instead of RSPECOPTS (Aslak Hellesøy)
-- Add assertions attribute to individual test cases (Tracker #11563, Andy Sipe)
+- Add assertions attribute to individual test cases (Tracker #11563,
+  Andy Sipe)
 
 == 1.3.2
 
@@ -41,12 +59,14 @@
 
 == 1.3.1
 
-- Fixed to be compatible with RSpec 1.0.x (added fourth parameter to Formatter#dump_summary)
+- Fixed to be compatible with RSpec 1.0.x (added fourth parameter to
+  Formatter#dump_summary)
 
 == 1.3
 
 - Fixed to be compatible with RSpec 0.9
-- Failure location text now contains both the exception message and class name (in case the type and message attributes were truncated)
+- Failure location text now contains both the exception message and
+  class name (in case the type and message attributes were truncated)
 
 == 1.2.4
 
@@ -55,12 +75,13 @@
 
 == 1.2.3
 
-- Append to TESTOPTS and RSPECOPTS environment variables (Bret Pettichord) so that other apps can put values
-  in them as well
+- Append to TESTOPTS and RSPECOPTS environment variables (Bret
+  Pettichord) so that other apps can put values in them as well
 
 == 1.2.2
 
-- Responds to environment variable CI_CAPTURE: if set to "off", stdout/stderr capture will be disabled.
+- Responds to environment variable CI_CAPTURE: if set to "off",
+  stdout/stderr capture will be disabled.
 
 == 1.2.1
 
@@ -68,11 +89,17 @@
 
 == 1.2
 
-- Capture standard output and standard error during each individual test suite and include in the XML file in system-out and system-err elements, respectively (Tracker#9054[http://rubyforge.org/tracker/index.php?func=detail&aid=9054&group_id=2857&atid=11007])
+- Capture standard output and standard error during each individual
+  test suite and include in the XML file in system-out and system-err
+  elements, respectively
+  (Tracker#9054[http://rubyforge.org/tracker/index.php?func=detail&aid=9054&group_id=2857&atid=11007])
 
 == 1.1
 
-- Add +assertions+ attribute to the +testsuite+ element that will contain per-suite assertion counts when used with Test::Unit.  Not useful with applications that read Ant/JUnit XML, but custom applications may wish to access it.
+- Add +assertions+ attribute to the +testsuite+ element that will
+  contain per-suite assertion counts when used with Test::Unit. Not
+  useful with applications that read Ant/JUnit XML, but custom
+  applications may wish to access it.
 
 == 1.0
 
