@@ -58,8 +58,8 @@ module CI
         new_suite(name)
       end
 
-      def add_example_group(example_group)
-        @formatter.add_example_group(example_group)
+      def example_group_started(example_group)
+        @formatter.example_group_started(example_group)
         new_suite(example_group.description)
       end
 

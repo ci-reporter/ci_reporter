@@ -43,7 +43,7 @@ describe "The RSpec reporter" do
     example_group.stub!(:description).and_return "A context"
 
     @formatter.should_receive(:start).with(3)
-    @formatter.should_receive(:add_example_group).with(example_group)
+    @formatter.should_receive(:example_group_started).with(example_group)
     @formatter.should_receive(:example_started).exactly(3).times
     @formatter.should_receive(:example_passed).once
     @formatter.should_receive(:example_failed).once
@@ -55,7 +55,7 @@ describe "The RSpec reporter" do
     @formatter.should_receive(:close).once
 
     @fmt.start(3)
-    @fmt.add_example_group(example_group)
+    @fmt.example_group_started(example_group)
     @fmt.example_started("should pass")
     @fmt.example_passed("should pass")
     @fmt.example_started("should fail")
@@ -91,7 +91,7 @@ describe "The RSpec reporter" do
     example.stub!(:description).and_return "should do something"
 
     @formatter.should_receive(:start)
-    @formatter.should_receive(:add_example_group).with(group)
+    @formatter.should_receive(:example_group_started).with(group)
     @formatter.should_receive(:example_started).with(example).once
     @formatter.should_receive(:example_passed).once
     @formatter.should_receive(:dump_summary)
@@ -100,7 +100,7 @@ describe "The RSpec reporter" do
     end
 
     @fmt.start(2)
-    @fmt.add_example_group(group)
+    @fmt.example_group_started(group)
     @fmt.example_started(example)
     @fmt.example_passed(example)
     @fmt.dump_summary(0.1, 1, 0, 0)
