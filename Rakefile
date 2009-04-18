@@ -42,6 +42,7 @@ Spec::Rake::SpecTask.new do |t|
 end
 
 Spec::Rake::SpecTask.new("spec:rcov") do |t|
+  t.rcov_opts << '--exclude gems/*'
   t.rcov = true
 end
 # so we don't confuse autotest
