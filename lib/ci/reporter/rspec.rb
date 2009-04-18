@@ -1,4 +1,4 @@
-# (c) Copyright 2006-2008 Nick Sieger <nicksieger@gmail.com>
+# (c) Copyright 2006-2009 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -53,11 +53,19 @@ module CI
         @formatter.start(spec_count)
       end
 
+      # rspec 0.9
       def add_behaviour(name)
         @formatter.add_behaviour(name)
         new_suite(name)
       end
 
+      # Compatibility with rspec < 1.2.4
+      def add_example_group(example_group)
+        @formatter.add_example_group(example_group)
+        new_suite(example_group.description)
+      end
+
+      # rspec >= 1.2.4
       def example_group_started(example_group)
         @formatter.example_group_started(example_group)
         new_suite(example_group.description)

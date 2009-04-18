@@ -47,9 +47,9 @@ Spec::Rake::SpecTask.new("spec:rcov") do |t|
 end
 # so we don't confuse autotest
 RCov::VerifyTask.new(:rcov) do |t|
-  # Can't get threshold up to 100 until the RSpec < 1.0 compatibility
+  # Can't get threshold up to 100 unless RSpec backwards compatibility
   # code is dropped
-  t.threshold = 99
+  t.threshold = 98
   t.require_exact_threshold = false
 end
 task "spec:rcov" do
