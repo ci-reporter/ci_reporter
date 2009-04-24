@@ -4,7 +4,7 @@
 
 begin
   gem 'ci_reporter'
-rescue
+rescue Gem::LoadError
   $: << File.dirname(__FILE__) + "/../lib"
 end
 require 'ci/reporter/rake/rspec'
