@@ -9,5 +9,6 @@
 #
 
 load File.dirname(__FILE__) + '/lib/ci/reporter/rake/rspec.rb'
+load File.dirname(__FILE__) + '/lib/ci/reporter/rake/cucumber.rb'
 load File.dirname(__FILE__) + '/lib/ci/reporter/rake/test_unit.rb'
 load 'Rakefile'
