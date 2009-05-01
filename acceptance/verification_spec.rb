@@ -62,3 +62,38 @@ describe "RSpec acceptance" do
     doc.root.elements.to_a("/testsuite/testcase").size.should == 1
   end
 end
+
+describe "Cucumber acceptance" do
+  it "should generate two XML files" do
+    File.exist?(File.join(REPORTS_DIR, 'CUCUMBER-example-feature-conscientious-developer.xml')).should == true
+    File.exist?(File.join(REPORTS_DIR, 'CUCUMBER-example-feature-lazy-hacker.xml')).should == true
+  end
+
+  it "should have three tests and no failures for the conscientious developer" do
+    doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-example-feature-conscientious-developer.xml')) do |f|
+      REXML::Document.new(f)
+    end
+    doc.root.attributes["errors"].should == "0"
+    doc.root.attributes["failures"].should == "0"
+    doc.root.attributes["tests"].should == "3"
+    doc.root.elements.to_a("/testsuite/testcase").size.should == 3
+  end
+
+  it "should have three tests, one failure and one error (skipped) for the lazy hacker" do
+    doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-example-feature-lazy-hacker.xml')) do |f|
+      REXML::Document.new(f)
+    end
+    doc.root.attributes["errors"].should == "1"
+    doc.root.attributes["failures"].should == "1"
+    doc.root.attributes["tests"].should == "3"
+    doc.root.elements.to_a("/testsuite/testcase").size.should == 3
+
+    failures = doc.root.elements.to_a("/testsuite/testcase/failure")
+    failures.size.should == 1
+    failures.first.attributes["type"].should == "Spec::Expectations::ExpectationNotMetError"
+
+    error = doc.root.elements.to_a("/testsuite/testcase/error")
+    error.size.should == 1
+    error.first.attributes["type"].should == "Skipped"
+  end
+end
