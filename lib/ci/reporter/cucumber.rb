@@ -19,6 +19,34 @@ end
 
 module CI
   module Reporter
+    class CucumberFailure
+      attr_reader :step
+
+      def initialize(step)
+        @step = step
+      end
+
+      def failure?
+        step.exception.is_a? StandardError
+      end
+
+      def error?
+        !failure?
+      end
+
+      def name
+        step.exception.class.name
+      end
+
+      def message
+        step.exception.message
+      end
+
+      def location
+        step.exception.backtrace.join("\n")
+      end
+    end
+
     class Cucumber < ::Cucumber::Formatter::Progress
 
       attr_accessor :test_suite, :report_manager, :feature_name
@@ -53,6 +81,16 @@ module CI
         return_value = super
 
         test_case.finish
+
+        case step.status
+        when :pending, :undefined
+          test_case.name = "#{test_case.name} (PENDING)"
+        when :skipped
+          test_case.name = "#{test_case.name} (SKIPPED)"
+        when :failed
+          test_case.failures << CucumberFailure.new(step)
+        end
+
         test_suite.testcases << test_case
 
         return_value
