@@ -65,12 +65,12 @@ end
 
 describe "Cucumber acceptance" do
   it "should generate two XML files" do
-    File.exist?(File.join(REPORTS_DIR, 'CUCUMBER-example-feature-conscientious-developer.xml')).should == true
-    File.exist?(File.join(REPORTS_DIR, 'CUCUMBER-example-feature-lazy-hacker.xml')).should == true
+    File.exist?(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Conscientious-developer.xml')).should == true
+    File.exist?(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Lazy-hacker.xml')).should == true
   end
 
   it "should have three tests and no failures for the conscientious developer" do
-    doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-example-feature-conscientious-developer.xml')) do |f|
+    doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Conscientious-developer.xml')) do |f|
       REXML::Document.new(f)
     end
     doc.root.attributes["errors"].should == "0"
@@ -80,7 +80,7 @@ describe "Cucumber acceptance" do
   end
 
   it "should have three tests, one failure and one error (skipped) for the lazy hacker" do
-    doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-example-feature-lazy-hacker.xml')) do |f|
+    doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Lazy-hacker.xml')) do |f|
       REXML::Document.new(f)
     end
     doc.root.attributes["errors"].should == "1"
