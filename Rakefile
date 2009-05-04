@@ -58,7 +58,7 @@ end
 task :rcov => "spec:rcov"
 
 task :generate_output do
-  rm_f "acceptance/reports/*.xml"
+  rm_rf "acceptance/reports"
   ENV['CI_REPORTS'] = "acceptance/reports"
   begin
     `ruby -Ilib acceptance/test_unit_example_test.rb` rescue nil
