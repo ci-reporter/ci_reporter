@@ -20,58 +20,42 @@ end
 module CI
   module Reporter
     class Cucumber < ::Cucumber::Formatter::Progress
+
+      attr_accessor :test_suite, :report_manager, :feature_name
+
       def initialize(*args, &block)
+        self.report_manager = ReportManager.new("cucumber")
         super
-        @report_manager = ReportManager.new("cucumber")
-        @current_suite  = nil
-        @current_test   = nil
       end
 
       def visit_feature_name(name)
-        @feature_name = name.split("\n").first
+        self.feature_name = name.split("\n").first
         super
       end
 
-      def visit_scenario_name(keyword, name, file_colon_line, source_indent)
-        start_scenario("#{@feature_name}-#{name}")
-        super
+      def visit_feature_element(feature_element)
+        self.test_suite = TestSuite.new("#{feature_name} #{feature_element.instance_variable_get("@name")}")
+        test_suite.start
+
+        return_value = super
+
+        test_suite.finish
+        report_manager.write_report(test_suite)
+        self.test_suite = nil
+
+        return_value
       end
 
-      def visit_step_name(keyword, step_match, status, source_indent, background)
-        start_scenario(step_match) unless status == :outline
-        super
-      end
+      def visit_step(step)
+        test_case = TestCase.new(step.name)
+        test_case.start
 
-      private
-      def start_scenario(suite_name)
-        finish_scenario unless @current_suite.nil?
-        @current_suite = TestSuite.new(suite_name)
-        @current_suite.start
-      end
+        return_value = super
 
-      def finish_scenario
-        finish_example unless @current_test.nil?
-        unless @current_suite.nil?
-          @current_suite.finish
-          # puts @current_suite.inspect
-          @report_manager.write_report(@current_suite)
-          @current_suite = nil
-        end
-      end
+        test_case.finish
+        test_suite.testcases << test_case
 
-      def start_example(test_name)
-        finish_example unless @current_test.nil?
-        @current_test = TestCase.new(test_name)
-        @current_test.start
-        puts @current_test.inspect
-      end
-
-      def finish_example
-        unless @current_test.nil?
-          @current_test.finish
-          @current_suite.testcases << @current_test
-          @current_test = nil
-        end
+        return_value
       end
     end
 
