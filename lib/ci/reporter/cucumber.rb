@@ -6,8 +6,7 @@ require 'ci/reporter/core'
 tried_gem = false
 begin
   require 'cucumber'
-  require 'cucumber/formatter/progress'
-  require 'cucumber/formatter/pretty'
+  require 'cucumber/ast/visitor'
 rescue LoadError
   unless tried_gem
     tried_gem = true
@@ -47,13 +46,13 @@ module CI
       end
     end
 
-    class Cucumber < ::Cucumber::Formatter::Progress
+    class Cucumber < ::Cucumber::Ast::Visitor
 
       attr_accessor :test_suite, :report_manager, :feature_name
 
-      def initialize(*args, &block)
+      def initialize(step_mother, io, options)
         self.report_manager = ReportManager.new("cucumber")
-        super
+        super(step_mother)
       end
 
       def visit_feature_name(name)
