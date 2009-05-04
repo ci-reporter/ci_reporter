@@ -62,3 +62,51 @@ describe "RSpec acceptance" do
     doc.root.elements.to_a("/testsuite/testcase").size.should == 1
   end
 end
+
+describe "Cucumber acceptance" do
+  it "should generate three XML files" do
+    File.exist?(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Conscientious-developer.xml')).should == true
+    File.exist?(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Lazy-hacker.xml')).should == true
+    File.exist?(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Bad-coder.xml')).should == true
+
+    Dir["#{REPORTS_DIR}/CUCUMBER-*.xml"].length.should == 3
+  end
+
+  it "should have three tests and no failures for the conscientious developer" do
+    doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Conscientious-developer.xml')) do |f|
+      REXML::Document.new(f)
+    end
+    doc.root.attributes["errors"].should == "0"
+    doc.root.attributes["failures"].should == "0"
+    doc.root.attributes["tests"].should == "3"
+    doc.root.elements.to_a("/testsuite/testcase").size.should == 3
+  end
+
+  it "should have three tests and one failure for the lazy hacker" do
+    doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Lazy-hacker.xml')) do |f|
+      REXML::Document.new(f)
+    end
+    doc.root.attributes["errors"].should == "0"
+    doc.root.attributes["failures"].should == "1"
+    doc.root.attributes["tests"].should == "3"
+    doc.root.elements.to_a("/testsuite/testcase").size.should == 3
+
+    failures = doc.root.elements.to_a("/testsuite/testcase/failure")
+    failures.size.should == 1
+    failures.first.attributes["type"].should == "Spec::Expectations::ExpectationNotMetError"
+  end
+
+  it "should have three tests and one failure for the bad coder" do
+    doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Bad-coder.xml')) do |f|
+      REXML::Document.new(f)
+    end
+    doc.root.attributes["errors"].should == "0"
+    doc.root.attributes["failures"].should == "1"
+    doc.root.attributes["tests"].should == "3"
+    doc.root.elements.to_a("/testsuite/testcase").size.should == 3
+
+    failures = doc.root.elements.to_a("/testsuite/testcase/failure")
+    failures.size.should == 1
+    failures.first.attributes["type"].should == "RuntimeError"
+  end
+end
