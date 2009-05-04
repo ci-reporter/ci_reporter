@@ -79,11 +79,11 @@ describe "Cucumber acceptance" do
     doc.root.elements.to_a("/testsuite/testcase").size.should == 3
   end
 
-  it "should have three tests, one failure and one error (skipped) for the lazy hacker" do
+  it "should have three tests and one failure for the lazy hacker" do
     doc = File.open(File.join(REPORTS_DIR, 'CUCUMBER-Feature-Example-feature-Lazy-hacker.xml')) do |f|
       REXML::Document.new(f)
     end
-    doc.root.attributes["errors"].should == "1"
+    doc.root.attributes["errors"].should == "0"
     doc.root.attributes["failures"].should == "1"
     doc.root.attributes["tests"].should == "3"
     doc.root.elements.to_a("/testsuite/testcase").size.should == 3
