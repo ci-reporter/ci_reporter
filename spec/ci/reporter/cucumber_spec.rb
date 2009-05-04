@@ -129,7 +129,7 @@ describe "The Cucumber reporter" do
         @cucumber = new_instance
         @cucumber.stub!(:test_suite).and_return(@test_suite)
 
-        @test_case = mock("test_case", :start => nil, :finish => nil)
+        @test_case = mock("test_case", :start => nil, :finish => nil, :name => "Step Name")
         CI::Reporter::TestCase.stub!(:new).and_return(@test_case)
 
         @step = mock("step", :accept => true, :status => :passed)
@@ -156,6 +156,48 @@ describe "The Cucumber reporter" do
         @cucumber.visit_step(@step)
         @testcases.should_not be_empty
         @testcases.first.should == @test_case
+      end
+
+      it "should alter the name of a test case that is pending to include '(PENDING)'" do
+        @step.stub!(:status).and_return(:pending)
+        @test_case.should_receive(:name=).with("Step Name (PENDING)")
+        @cucumber.visit_step(@step)
+      end
+
+      it "should alter the name of a test case that is undefined to include '(PENDING)'" do
+        @step.stub!(:status).and_return(:undefined)
+        @test_case.should_receive(:name=).with("Step Name (PENDING)")
+        @cucumber.visit_step(@step)
+      end
+
+      it "should alter the name of a test case that was skipped to include '(SKIPPED)'" do
+        @step.stub!(:status).and_return(:skipped)
+        @test_case.should_receive(:name=).with("Step Name (SKIPPED)")
+        @cucumber.visit_step(@step)
+      end
+
+      describe "that fails" do
+        before(:each) do
+          @step.stub!(:status).and_return(:failed)
+
+          @failures = []
+          @test_case.stub!(:failures).and_return(@failures)
+
+          @cucumber_failure = mock("cucumber_failure")
+          CI::Reporter::CucumberFailure.stub!(:new).and_return(@cucumber_failure)
+        end
+
+        it "should create a new cucumber failure with that step" do
+          CI::Reporter::CucumberFailure.should_receive(:new).with(@step)
+          @cucumber.visit_step(@step)
+        end
+
+        it "should add the failure to the suite's list of failures" do
+          @failures.should be_empty
+          @cucumber.visit_step(@step)
+          @failures.should_not be_empty
+          @failures.first.should == @cucumber_failure
+        end
       end
     end
   end
