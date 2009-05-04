@@ -18,3 +18,13 @@ end
 
 Then /^I should be fired$/ do
 end
+
+Given /^that I can't code for peanuts$/ do
+end
+
+Given /^I write step definitions that throw exceptions$/ do
+  raise RuntimeError, "User error!"
+end
+
+Then /^I shouldn't be allowed out in public$/ do
+end

@@ -27,7 +27,7 @@ module CI
       end
 
       def failure?
-        step.exception.is_a? StandardError
+        true
       end
 
       def error?
