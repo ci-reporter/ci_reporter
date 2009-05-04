@@ -95,8 +95,5 @@ module CI
         return_value
       end
     end
-
-    class CucumberDoc < ::Cucumber::Formatter::Pretty
-    end
   end
 end

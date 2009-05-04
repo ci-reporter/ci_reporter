@@ -13,11 +13,5 @@ namespace :ci do
         "--format", "CI::Reporter::Cucumber"].join(" ")
       ENV["CUCUMBER_OPTS"] = "#{ENV['CUCUMBER_OPTS']} #{spec_opts}"
     end
-
-    task :cucumberdoc => :cucumber_report_cleanup do
-      spec_opts = ["--require", "#{File.dirname(__FILE__)}/cucumber_loader.rb",
-        "--format", "CI::Reporter::CucumberDoc"].join(" ")
-      ENV["CUCUMBER_OPTS"] = "#{ENV['CUCUMBER_OPTS']} #{spec_opts}"
-    end
   end
 end
