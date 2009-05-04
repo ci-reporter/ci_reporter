@@ -91,9 +91,5 @@ describe "Cucumber acceptance" do
     failures = doc.root.elements.to_a("/testsuite/testcase/failure")
     failures.size.should == 1
     failures.first.attributes["type"].should == "Spec::Expectations::ExpectationNotMetError"
-
-    error = doc.root.elements.to_a("/testsuite/testcase/error")
-    error.size.should == 1
-    error.first.attributes["type"].should == "Skipped"
   end
 end
