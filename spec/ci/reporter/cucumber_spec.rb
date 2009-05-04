@@ -52,4 +52,111 @@ describe "The Cucumber reporter" do
       @cucumber_failure.location.should == "First line\nSecond line"
     end
   end
+
+  describe CI::Reporter::Cucumber do
+    before(:each) do
+      @step_mother = mock("step_mother")
+      @io = mock("io")
+
+      @report_manager = mock("report_manager")
+      CI::Reporter::ReportManager.stub!(:new).and_return(@report_manager)
+    end
+
+    def new_instance
+      CI::Reporter::Cucumber.new(@step_mother, @io, {})
+    end
+
+    it "should create a new report manager to report on test success/failure" do
+      CI::Reporter::ReportManager.should_receive(:new)
+      new_instance
+    end
+
+    it "should record the feature name when a new feature is visited" do
+      cucumber = new_instance
+      cucumber.visit_feature_name("Some feature name")
+      cucumber.feature_name.should == "Some feature name"
+    end
+
+    it "should record only the first line of a feature name" do
+      cucumber = new_instance
+      cucumber.visit_feature_name("Some feature name\nLonger description")
+      cucumber.feature_name.should == "Some feature name"
+    end
+
+    describe "when visiting a new scenario" do
+      before(:each) do
+        @cucumber = new_instance
+        @cucumber.visit_feature_name("Demo feature")
+
+        @test_suite = mock("test_suite", :start => nil, :finish => nil)
+        CI::Reporter::TestSuite.stub!(:new).and_return(@test_suite)
+
+        @feature_element = mock("feature_element", :accept => true)
+
+        @report_manager.stub!(:write_report)
+      end
+
+      it "should create a new test suite" do
+        # FIXME: @name is feature_element purely as a by-product of the
+        # mocking framework implementation.  But then again, using
+        # +instance_variable_get+ in the first place is a bit icky.
+        CI::Reporter::TestSuite.should_receive(:new).with("Demo feature feature_element")
+        @cucumber.visit_feature_element(@feature_element)
+      end
+
+      it "should indicate that the test suite has started" do
+        @test_suite.should_receive(:start)
+        @cucumber.visit_feature_element(@feature_element)
+      end
+
+      it "should indicate that the test suite has finished" do
+        @test_suite.should_receive(:finish)
+        @cucumber.visit_feature_element(@feature_element)
+      end
+
+      it "should ask the report manager to write a report" do
+        @report_manager.should_receive(:write_report).with(@test_suite)
+        @cucumber.visit_feature_element(@feature_element)
+      end
+    end
+
+    describe "when visiting a step inside a scenario" do
+      before(:each) do
+        @testcases = []
+
+        @test_suite = mock("test_suite", :testcases => @testcases)
+
+        @cucumber = new_instance
+        @cucumber.stub!(:test_suite).and_return(@test_suite)
+
+        @test_case = mock("test_case", :start => nil, :finish => nil)
+        CI::Reporter::TestCase.stub!(:new).and_return(@test_case)
+
+        @step = mock("step", :accept => true, :status => :passed)
+        @step.stub!(:name).and_return("Step Name")
+      end
+
+      it "should create a new test case" do
+        CI::Reporter::TestCase.should_receive(:new).with("Step Name")
+        @cucumber.visit_step(@step)
+      end
+
+      it "should indicate that the test case has started" do
+        @test_case.should_receive(:start)
+        @cucumber.visit_step(@step)
+      end
+
+      it "should indicate that the test case has finished" do
+        @test_case.should_receive(:finish)
+        @cucumber.visit_step(@step)
+      end
+
+      it "should add the test case to the suite's list of cases" do
+        @testcases.should be_empty
+        @cucumber.visit_step(@step)
+        @testcases.should_not be_empty
+        @testcases.first.should == @test_case
+      end
+    end
+  end
 end
