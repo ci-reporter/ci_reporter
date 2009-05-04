@@ -63,7 +63,7 @@ task :generate_output do
   begin
     `ruby -Ilib acceptance/test_unit_example_test.rb` rescue nil
     `ruby -Ilib -S spec --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb` rescue nil
-    `ruby -Ilib -S cucumber --require ci/reporter/rake/cucumber_loader --format CI::Reporter::Cucumber acceptance/cucumber` rescue nil
+    `ruby -Ilib -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber` rescue nil
   ensure
     ENV.delete 'CI_REPORTS'
   end
