@@ -51,7 +51,7 @@ module CI
       attr_accessor :test_suite, :report_manager, :feature_name
 
       def initialize(step_mother, io, options)
-        self.report_manager = ReportManager.new("cucumber")
+        self.report_manager = ReportManager.new("features")
         super(step_mother)
       end
 
