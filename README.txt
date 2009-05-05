@@ -1,4 +1,4 @@
-CI::Reporter is an add-on to Test::Unit and RSpec that allows you to generate XML reports of your test and/or spec runs. The resulting files can be read by a continuous integration system that understands Ant's JUnit report XML format, thus allowing your CI system to track test/spec successes and failures.
+CI::Reporter is an add-on to Test::Unit, RSpec and Cucumber that allows you to generate XML reports of your test, spec and/or feature runs. The resulting files can be read by a continuous integration system that understands Ant's JUnit report XML format, thus allowing your CI system to track test/spec successes and failures.
 
 == Dependencies
 
@@ -22,14 +22,15 @@ CI::Reporter works best with projects that use a +Rakefile+ along with the stand
 
     require 'rubygems'
     gem 'ci_reporter'
-    require 'ci/reporter/rake/rspec' # use this if you're using RSpec
+    require 'ci/reporter/rake/rspec'     # use this if you're using RSpec
+    require 'ci/reporter/rake/cucumber'  # use this if you're using Cucumber
     require 'ci/reporter/rake/test_unit' # use this if you're using Test::Unit
 
-2. Next, either modify your Rakefile to make the <code>ci:setup:rspec</code> or <code>ci:setup:testunit</code> task a dependency of your test tasks, or include them on the Rake command-line before the name of the task that runs the tests or specs.
+2. Next, either modify your Rakefile to make the <code>ci:setup:rspec</code>, <code>ci:setup:cucumber</code> or <code>ci:setup:testunit</code> task a dependency of your test tasks, or include them on the Rake command-line before the name of the task that runs the tests or specs.
 
     rake ci:setup:testunit test
 
-Report files are written, by default, to the <code>test/reports</code> or <code>spec/reports</code> subdirectory of your project.  If you wish to customize the location, simply set the environment variable CI_REPORTS (either in the environment, on the Rake command line, or in your Rakefile) to the location where they should go.
+Report files are written, by default, to the <code>test/reports</code>, <code>features/reports</code> or <code>spec/reports</code> subdirectory of your project.  If you wish to customize the location, simply set the environment variable CI_REPORTS (either in the environment, on the Rake command line, or in your Rakefile) to the location where they should go.
 
 == Advanced Usage
 
@@ -37,13 +38,20 @@ If you don't have control over the Rakefile or don't want to modify it, CI::Repo
 
     rake -f GEM_PATH/stub.rake ci:setup:testunit test
     rake -f GEM_PATH/stub.rake ci:setup:rspec spec
+    rake -f GEM_PATH/stub.rake ci:setup:cucumber features
 
 If for some reason you can't use the above technique to inject CI::Reporter (e.g., you're not using Rake), you'll have to do one of these:
 
 1. If you're using <code>Test::Unit</code>, ensure the <code>ci/reporter/rake/test_unit_loader.rb</code> file is loaded or required at some point before the tests are run.
+
 2. If you're using +RSpec+, you'll need to pass the following arguments to the +spec+ command:
+
     --require GEM_PATH/lib/ci/reporter/rake/rspec_loader
     --format CI::Reporter::RSpec
+
+3. If you're using Cucumber, you'll need to cheat slightly so that Cucumber's step definition autoloading will still work.  Instead of calling the +cucumber+ script directly, run:
+
+    ruby -r GEM_PATH/lib/ci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber
 
 There's a bit of a chicken and egg problem because rubygems needs to be loaded before you can require any CI::Reporter files.  If you cringe hard-coding a full path to a specific version of the gem, you can also copy the +rspec_loader+ file into your project and require it directly -- the contents are version-agnostic and are not likely to change in future releases.
 
