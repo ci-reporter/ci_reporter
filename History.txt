@@ -1,4 +1,4 @@
-== 1.6
+== 1.6.0
 
 - Add support for Cucumber (tested against 0.3.0 - 0.3.2); (Graeme Mathieson)
 
