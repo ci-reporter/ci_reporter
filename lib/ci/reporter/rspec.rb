@@ -81,6 +81,10 @@ module CI
 
       def example_failed(name, counter, failure)
         @formatter.example_failed(name, counter, failure)
+        # In case we fail in before(:all)
+        if @suite.testcases.empty?
+          example_started(name)
+        end
         spec = @suite.testcases.last
         spec.finish
         spec.failures << RSpecFailure.new(failure)
