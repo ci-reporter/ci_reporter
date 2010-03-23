@@ -97,6 +97,7 @@ module CI
         spec = @suite.testcases.last
         spec.finish
         spec.name = "#{spec.name} (PENDING)"
+        spec.skipped = true
       end
 
       def start_dump

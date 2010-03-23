@@ -1,4 +1,4 @@
-# (c) Copyright 2006-2007 Nick Sieger <nicksieger@gmail.com>
+# (c) Copyright 2006-2007, 2010 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -79,6 +79,7 @@ describe "TestSuite xml" do
 
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
+    @suite.testcases << CI::Reporter::TestCase.new("skipped test").tap {|tc| tc.skipped = true }
     @suite.testcases << CI::Reporter::TestCase.new("failure test")
     @suite.testcases.last.failures << failure
     @suite.testcases << CI::Reporter::TestCase.new("error test")
@@ -94,7 +95,7 @@ describe "TestSuite xml" do
     testsuite.attributes["assertions"].should == "11"
 
     testcases = testsuite.elements.to_a("testcase")
-    testcases.length.should == 3
+    testcases.length.should == 4
   end
 
   it "should contain full exception type and message in location element" do

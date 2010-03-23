@@ -1,4 +1,4 @@
-# (c) Copyright 2006-2007 Nick Sieger <nicksieger@gmail.com>
+# (c) Copyright 2006-2007, 2010 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -36,7 +36,7 @@ module CI
     end
 
     # Basic structure representing the running of a test suite.  Used to time tests and store results.
-    class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors, :assertions)
+    class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors, :skipped, :assertions)
       attr_accessor :testcases
       attr_accessor :stdout, :stderr
       def initialize(name)
@@ -59,6 +59,7 @@ module CI
         self.time = Time.now - @start
         self.failures = testcases.inject(0) {|sum,tc| sum += tc.failures.select{|f| f.failure? }.size }
         self.errors = testcases.inject(0) {|sum,tc| sum += tc.failures.select{|f| f.error? }.size }
+        self.skipped = testcases.inject(0) {|sum,tc| sum += (tc.skipped? ? 1 : 0) }
         self.stdout = @capture_out.finish if @capture_out
         self.stderr = @capture_err.finish if @capture_err
       end
@@ -103,6 +104,7 @@ module CI
     # Structure used to represent an individual test case.  Used to time the test and store the result.
     class TestCase < Struct.new(:name, :time, :assertions)
       attr_accessor :failures
+      attr_accessor :skipped
 
       def initialize(*args)
         super
@@ -129,15 +131,23 @@ module CI
         !failures.empty? && failures.detect {|f| f.error? }
       end
 
+      def skipped?
+        return skipped
+      end
+
       # Writes xml representing the test result to the provided builder.
       def to_xml(builder)
         attrs = {}
         each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) unless v.nil? || v.to_s.empty?}
         builder.testcase(attrs) do
-          failures.each do |failure|
-            builder.failure(:type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
-              builder.text!(failure.message + " (#{failure.name})\n")
-              builder.text!(failure.location)
+          if skipped
+            builder.skipped
+          else
+            failures.each do |failure|
+              builder.failure(:type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
+                builder.text!(failure.message + " (#{failure.name})\n")
+                builder.text!(failure.location)
+              end
             end
           end
         end
