@@ -8,7 +8,8 @@ begin
   File.open("Manifest.txt", "w") {|f| MANIFEST.each {|n| f << "#{n}\n"} }
   require 'hoe'
   require File.dirname(__FILE__) + '/lib/ci/reporter/version'
-  hoe = Hoe.new("ci_reporter", CI::Reporter::VERSION) do |p|
+  hoe = Hoe.spec("ci_reporter") do |p|
+    p.version = CI::Reporter::VERSION
     p.rubyforge_name = "caldersphere"
     p.url = "http://caldersphere.rubyforge.org/ci_reporter"
     p.author = "Nick Sieger"
@@ -28,7 +29,11 @@ end
 
 # Hoe insists on setting task :default => :test
 # !@#$ no easy way to empty the default list of prerequisites
-Rake::Task['default'].send :instance_variable_set, "@prerequisites", FileList[]
+# Leave my tasks alone, Hoe
+%w(default spec rcov).each do |task|
+  Rake::Task[task].prerequisites.clear
+  Rake::Task[task].actions.clear
+end
 
 # No RCov on JRuby at the moment
 if RUBY_PLATFORM =~ /java/
