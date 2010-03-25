@@ -10,10 +10,6 @@ CI::Reporter is available as a gem. To install the gem, use the usual gem comman
 
     gem install ci_reporter
 
-To use CI::Reporter as a Rails plugin, first install the gem, and then install the plugin as follows:
-
-    script/plugin install http://svn.caldersphere.net/svn/main/plugins/ci_reporter
-
 == Usage
 
 CI::Reporter works best with projects that use a +Rakefile+ along with the standard <code>Rake::TestTask</code> or <code>Spec::Rake::SpecTask</code> tasks for running tests or examples, respectively. In this fashion, it hooks into <code>Test::Unit</code> or +RSpec+ using environment variables recognized by these custom tasks to inject the CI::Reporter code into the test or spec runs.  If you're using the Rails plugin, step 1 is unnecessary; skip to step 2.
@@ -64,7 +60,7 @@ There's a bit of a chicken and egg problem because rubygems needs to be loaded b
 
 You can get the CI::Reporter source using Git, in any of the following ways:
 
-    git clone http://git.caldersphere.net/ci_reporter.git
+    git clone git://git.caldersphere.net/ci_reporter.git
     git clone git://github.com/nicksieger/ci_reporter.git
 
 You can also download a tarball of the latest CI::Reporter source at http://github.com/nicksieger/ci_reporter/tree/master.
