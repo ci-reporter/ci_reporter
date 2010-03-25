@@ -1,4 +1,4 @@
 Manifest.txt
-coverage
+coverage*
 acceptance/reports
 pkg
