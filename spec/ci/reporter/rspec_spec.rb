@@ -105,4 +105,21 @@ describe "The RSpec reporter" do
     @fmt.example_passed(example)
     @fmt.dump_summary(0.1, 1, 0, 0)
   end
+
+  it "should create a test suite with failure in before(:all)" do
+    example_group = mock "example group"
+    example_group.stub!(:description).and_return "A context"
+
+    @formatter.should_receive(:start)
+    @formatter.should_receive(:example_group_started).with(example_group)
+    @formatter.should_receive(:example_started).once
+    @formatter.should_receive(:example_failed).once
+    @formatter.should_receive(:dump_summary)
+    @report_mgr.should_receive(:write_report)
+
+    @fmt.start(2)
+    @fmt.example_group_started(example_group)
+    @fmt.example_failed("should fail", 1, @error)
+    @fmt.dump_summary(0.1, 1, 0, 0)
+  end
 end
