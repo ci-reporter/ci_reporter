@@ -2,6 +2,7 @@
 
 - GH #1: Properly escape text in system-out and system-err tags (Matt Kanwisher)
 - GH #2: Report rspec before(:all) failures (Edgars Beigarts)
+- GH #3: Support for Omissions and Pending Tests from Test::Unit 2.0.x (Sam Hendley)
 
 == 1.6.1
 
