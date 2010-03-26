@@ -12,15 +12,15 @@ module CI
     # of the test.
     class Failure
       def self.new(fault)
-        fault.kind_of?(Test::Unit::Failure) ? TestUnitFailure.new(fault) : TestUnitError.new(fault)
+        return TestUnitFailure.new(fault) if fault.kind_of?(Test::Unit::Failure)
+        return TestUnitSkipped.new(fault) if Test::Unit.constants.include?("Omission") && (fault.kind_of?(Test::Unit::Omission) || fault.kind_of?(Test::Unit::Pending))
+        TestUnitError.new(fault)
       end
     end
 
     # Wrapper around a <code>Test::Unit</code> error to be used by the test suite to interpret results.
     class TestUnitError
-      def initialize(fault)
-        @fault = fault
-      end
+      def initialize(fault) @fault = fault end
       def failure?() false end
       def error?() true end
       def name() @fault.exception.class.name end
@@ -30,12 +30,20 @@ module CI
 
     # Wrapper around a <code>Test::Unit</code> failure to be used by the test suite to interpret results.
     class TestUnitFailure
-      def initialize(fault)
-        @fault = fault
-      end
+      def initialize(fault) @fault = fault end
       def failure?() true end
       def error?() false end
       def name() Test::Unit::AssertionFailedError.name end
+      def message() @fault.message end
+      def location() @fault.location.join("\n") end
+    end
+
+    # Wrapper around a <code>Test::Unit</code> 2.0 omission.
+    class TestUnitSkipped
+      def initialize(fault) @fault = fault end
+      def failure?() false end
+      def error?() false end
+      def name() Test::Unit::Omission.name end
       def message() @fault.message end
       def location() @fault.location.join("\n") end
     end
@@ -100,7 +108,7 @@ module CI
 
       def finish_suite
         if @current_suite
-          @current_suite.finish 
+          @current_suite.finish
           @current_suite.assertions = @suite_result.assertion_count - @last_assertion_count
           @last_assertion_count = @suite_result.assertion_count
           @report_manager.write_report(@current_suite)
