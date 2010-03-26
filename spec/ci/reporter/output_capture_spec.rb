@@ -28,8 +28,8 @@ describe "Output capture" do
     root = REXML::Document.new(@suite.to_xml).root
     root.elements.to_a('//system-out').length.should == 1
     root.elements.to_a('//system-err').length.should == 1
-    root.elements.to_a('//system-out').first.cdatas.first.to_s.should == "Hello\n"
-    root.elements.to_a('//system-err').first.cdatas.first.to_s.should == "Hi"
+    root.elements.to_a('//system-out').first.texts.first.to_s.strip.should == "Hello"
+    root.elements.to_a('//system-err').first.texts.first.to_s.strip.should == "Hi"
   end
 
   it "should return $stdout and $stderr to original value after finish" do

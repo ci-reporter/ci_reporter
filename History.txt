@@ -1,3 +1,8 @@
+== 1.6.2
+
+- GH #1: Properly escape text in system-out and system-err tags (Matt Kanwisher)
+- GH #2: Report rspec before(:all) failures (Edgars Beigarts)
+
 == 1.6.1
 
 - Add 'skipped' flag for pending RSpec examples (Aaron Unger)

@@ -18,6 +18,9 @@ describe "Test::Unit acceptance" do
     doc.root.attributes["tests"].should == "1"
     doc.root.elements.to_a("/testsuite/testcase").size.should == 1
     doc.root.elements.to_a("/testsuite/testcase/failure").size.should == 2
+    doc.root.elements.to_a("/testsuite/system-out").first.texts.inject("") do |c,e|
+      c << e.value; c
+    end.strip.should == "Some <![CDATA[on stdout]]>"
   end
 
   it "should have no errors or failures for TestUnitExampleTestTwo" do
