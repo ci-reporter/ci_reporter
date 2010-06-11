@@ -73,8 +73,7 @@ module CI
 
       def example_started(name)
         @formatter.example_started(name)
-        name = name.description if name.respond_to?(:description)
-        spec = TestCase.new name
+        spec = TestCase.new
         @suite.testcases << spec
         spec.start
       end
@@ -87,6 +86,7 @@ module CI
         end
         spec = @suite.testcases.last
         spec.finish
+        spec.name = name.respond_to?(:description) ? name.description : "UNKNOWN"
         spec.failures << RSpecFailure.new(failure)
       end
 
@@ -94,13 +94,15 @@ module CI
         @formatter.example_passed(name)
         spec = @suite.testcases.last
         spec.finish
+        spec.name = name.respond_to?(:description) ? name.description : "UNKNOWN"
       end
 
       def example_pending(*args)
         @formatter.example_pending(*args)
+        name = args[0].respond_to?(:description) ? args[0].description : "UNKNOWN"
         spec = @suite.testcases.last
         spec.finish
-        spec.name = "#{spec.name} (PENDING)"
+        spec.name = "#{name} (PENDING)"
         spec.skipped = true
       end
 
