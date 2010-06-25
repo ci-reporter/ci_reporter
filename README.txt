@@ -67,4 +67,4 @@ You can also download a tarball of the latest CI::Reporter source at http://gith
 
 == License
 
-This software is released under an MIT license.  For details, see the LICENSE.txt file included with the distribution.  The software is copyright (c) 2006-2007 Nick Sieger <nicksieger@gmail.com>.
+This software is released under an MIT license.  For details, see the LICENSE.txt file included with the distribution.  The software is copyright (c) 2006-2010 Nick Sieger <nicksieger@gmail.com>.

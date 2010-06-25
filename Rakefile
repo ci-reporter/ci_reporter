@@ -23,6 +23,12 @@ begin
   end
   hoe.spec.files = MANIFEST
   hoe.spec.dependencies.delete_if { |dep| dep.name == "hoe" }
+  hoe.spec.rdoc_options += ["-SHN", "-f", "darkfish"]
+
+  task :gemspec do
+    File.open("#{hoe.name}.gemspec", "w") {|f| f << hoe.spec.to_ruby }
+  end
+  task :package => :gemspec
 rescue LoadError
   puts "You really need Hoe installed to be able to package this gem"
 end
