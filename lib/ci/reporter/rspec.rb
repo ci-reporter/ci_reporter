@@ -8,11 +8,18 @@ begin
   require 'spec'
   require 'spec/runner/formatter/progress_bar_formatter'
   require 'spec/runner/formatter/specdoc_formatter'
+  CI::Reporter::RSPEC_VERSION = 1
 rescue LoadError
   unless tried_gem
     tried_gem = true
     require 'rubygems'
-    gem 'rspec'
+    begin
+      gem 'rspec', '~> 2'
+      CI::Reporter::RSPEC_VERSION = 2
+    rescue LoadError
+      gem 'rspec', '~> 1'  
+      CI::Reporter::RSPEC_VERSION = 1
+    end
     retry
   end
 end
@@ -39,17 +46,19 @@ module CI
     end
 
     # Custom +RSpec+ formatter used to hook into the spec runs and capture results.
-    class RSpec < Spec::Runner::Formatter::BaseFormatter
+    class RSpec < CI::Reporter::RSPEC_VERSION == 2 ? RSpec::Core::Formatters::BaseFormatter : Spec::Runner::Formatter::BaseFormatter
+    
       attr_accessor :report_manager
       attr_accessor :formatter
       def initialize(*args)
         super
-        @formatter ||= Spec::Runner::Formatter::ProgressBarFormatter.new(*args)
+        @formatter ||= CI::Reporter::RSPEC_VERSION == 2 ? Rspec::Core::Formatters::ProgressFormatter.new(*args) : Spec::Runner::Formatter::ProgressBarFormatter.new(*args) 
         @report_manager = ReportManager.new("spec")
         @suite = nil
       end
 
       def start(spec_count)
+        @start = Time.now if CI::Reporter::RSPEC_VERSION == 2
         @formatter.start(spec_count)
       end
 
@@ -140,7 +149,7 @@ module CI
 
     class RSpecDoc < RSpec
       def initialize(*args)
-        @formatter = Spec::Runner::Formatter::SpecdocFormatter.new(*args)
+        @formatter = CI::Reporter::RSPEC_VERSION == 2 ? RSpec::Core::Formatters::SpecdocFormatter.new(*args) : Spec::Runner::Formatter::SpecdocFormatter.new(*args)
         super
       end
     end
