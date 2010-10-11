@@ -46,53 +46,81 @@ module CI
       end
     end
 
-    class Cucumber < ::Cucumber::Ast::Visitor
-
-      attr_accessor :test_suite, :report_manager, :feature_name
+    class Cucumber
+      attr_accessor :report_manager, :test_suite, :name
 
       def initialize(step_mother, io, options)
-        self.report_manager = ReportManager.new("features")
-        super(step_mother)
+        @report_manager = ReportManager.new("features")
       end
 
-      def visit_feature_name(name)
-        self.feature_name = name.split("\n").first
-        super
-      end
-
-      def visit_feature_element(feature_element)
-        self.test_suite = TestSuite.new("#{feature_name} #{feature_element.instance_variable_get("@name")}")
+      def before_feature(feature)
+        self.test_suite = TestSuite.new(@name)
         test_suite.start
-
-        return_value = super
-
-        test_suite.finish
-        report_manager.write_report(test_suite)
-        self.test_suite = nil
-
-        return_value
       end
 
-      def visit_step(step)
-        test_case = TestCase.new(step.name)
-        test_case.start
+      def after_feature(feature)
+        test_suite.name = @name
+        test_suite.finish
+        report_manager.write_report(@test_suite)
+        @test_suite = nil
+      end
 
-        return_value = super
+      def before_background(*args)
+      end
 
-        test_case.finish
+      def after_background(*args)
+      end
 
-        case step.status
+      def feature_name(keyword, name)
+        @name = (name || "Unnamed feature").split("\n").first
+      end
+
+      def scenario_name(keyword, name, *args)
+        @scenario = (name || "Unnamed scenario").split("\n").first
+      end
+
+      def before_steps(steps)
+        @test_case = TestCase.new(@scenario)
+        @test_case.start
+      end
+
+      def after_steps(steps)
+        @test_case.finish
+
+        case steps.status
         when :pending, :undefined
-          test_case.name = "#{test_case.name} (PENDING)"
+          @test_case.name = "#{@test_case.name} (PENDING)"
         when :skipped
-          test_case.name = "#{test_case.name} (SKIPPED)"
+          @test_case.name = "#{@test_case.name} (SKIPPED)"
         when :failed
-          test_case.failures << CucumberFailure.new(step)
+          @test_case.failures << CucumberFailure.new(steps)
         end
 
-        test_suite.testcases << test_case
+        test_suite.testcases << @test_case
+        @test_case = nil
+      end
 
-        return_value
+      def before_examples(*args)
+        @header_row = true
+      end
+
+      def after_examples(*args)
+      end
+
+      def before_table_row(table_row)
+        @test_case = TestCase.new("#@scenario (outline: #{table_row.name})")
+        @test_case.start
+      end
+
+      def after_table_row(table_row)
+        if @header_row
+          @header_row = false
+          return
+        end
+        @test_case.finish
+        @test_case.failures << CucumberFailure.new(table_row) if table_row.failed?
+        test_suite.testcases << @test_case
+        @test_case = nil
       end
     end
   end

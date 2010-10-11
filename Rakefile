@@ -37,6 +37,7 @@ end
 # !@#$ no easy way to empty the default list of prerequisites
 # Leave my tasks alone, Hoe
 %w(default spec rcov).each do |task|
+  next unless Rake::Task.task_defined?(task)
   Rake::Task[task].prerequisites.clear
   Rake::Task[task].actions.clear
 end
