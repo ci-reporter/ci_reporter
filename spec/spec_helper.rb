@@ -5,7 +5,7 @@
 require 'rubygems'
 begin
   require 'rspec'
-rescue
+rescue LoadError
   require 'spec'
 end
 
