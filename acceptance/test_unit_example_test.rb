@@ -1,5 +1,4 @@
 require 'test/unit'
-require 'ci/reporter/rake/test_unit_loader'
 
 class TestUnitExampleTestOne < Test::Unit::TestCase
   def test_one

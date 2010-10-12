@@ -1,4 +1,8 @@
-require 'spec/expectations'
+begin
+  require 'rspec/expectations'
+rescue LoadError
+  require 'spec/expectations'
+end
 
 Given /^that I am a conscientious developer$/ do
 end

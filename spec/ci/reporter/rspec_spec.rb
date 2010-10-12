@@ -10,10 +10,11 @@ describe "The RSpec reporter" do
     @error = mock("error")
     @error.stub!(:expectation_not_met?).and_return(false)
     @error.stub!(:pending_fixed?).and_return(false)
+    @error.stub!(:exception).and_return(StandardError.new)
     @report_mgr = mock("report manager")
     @options = mock("options")
     @args = [@options, StringIO.new("")]
-    @args.shift if Spec::VERSION::MAJOR == 1 && Spec::VERSION::MINOR < 1
+    @args.shift unless defined?(::Spec) && ::Spec::VERSION::MAJOR == 1 && ::Spec::VERSION::MINOR >= 1
     @fmt = CI::Reporter::RSpec.new *@args
     @fmt.report_manager = @report_mgr
     @formatter = mock("formatter")
@@ -22,12 +23,12 @@ describe "The RSpec reporter" do
 
   it "should use a progress bar formatter by default" do
     fmt = CI::Reporter::RSpec.new *@args
-    fmt.formatter.should be_instance_of(Spec::Runner::Formatter::ProgressBarFormatter)
+    fmt.formatter.should be_instance_of(CI::Reporter::RSpecFormatters::ProgressFormatter)
   end
 
   it "should use a specdoc formatter for RSpecDoc" do
     fmt = CI::Reporter::RSpecDoc.new *@args
-    fmt.formatter.should be_instance_of(Spec::Runner::Formatter::SpecdocFormatter)
+    fmt.formatter.should be_instance_of(CI::Reporter::RSpecFormatters::DocFormatter)
   end
 
   it "should create a test suite with one success, one failure, and one pending" do

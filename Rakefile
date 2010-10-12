@@ -1,6 +1,3 @@
-require 'spec/rake/spectask'
-require 'spec/rake/verify_rcov'
-
 MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt", "LICENSE.txt", "Rakefile",
   "*.rake", "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
 
@@ -49,21 +46,36 @@ else
   task :default => :rcov
 end
 
-Spec::Rake::SpecTask.new do |t|
-  t.spec_opts = ["--diff", "unified"]
+RSpecTask = begin
+  require 'rspec/core/rake_task'
+  @spec_bin = 'rspec'
+  RSpec::Core::RakeTask
+rescue LoadError
+  require 'spec/rake/spectask'
+  @spec_bin = 'spec'
+  Spec::Rake::SpecTask
 end
 
-Spec::Rake::SpecTask.new("spec:rcov") do |t|
-  t.rcov_opts << '--exclude gems/*'
+RSpecTask.new do |t|
+end
+
+RSpecTask.new("spec:rcov") do |t|
+  t.rcov_opts = ['--exclude gems/*']
   t.rcov = true
 end
-# so we don't confuse autotest
-RCov::VerifyTask.new(:rcov) do |t|
-  # Can't get threshold up to 100 unless RSpec backwards compatibility
-  # code is dropped
-  t.threshold = 98
-  t.require_exact_threshold = false
+
+begin
+  require 'spec/rake/verify_rcov'
+  # so we don't confuse autotest
+  RCov::VerifyTask.new(:rcov) do |t|
+    # Can't get threshold up to 100 unless RSpec backwards compatibility
+    # code is dropped
+    t.threshold = 98
+    t.require_exact_threshold = false
+  end
+rescue LoadError
 end
+
 task "spec:rcov" do
   rm_f "Manifest.txt"
 end
@@ -73,17 +85,17 @@ task :generate_output do
   rm_rf "acceptance/reports"
   ENV['CI_REPORTS'] = "acceptance/reports"
   begin
-    `ruby -Ilib acceptance/test_unit_example_test.rb` rescue nil
-    `ruby -Ilib -S spec --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb` rescue nil
-    `ruby -Ilib -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber` rescue nil
+    `ruby -Ilib -rci/reporter/rake/test_unit_loader acceptance/test_unit_example_test.rb` rescue puts "Warning: #{$!}"
+    `ruby -Ilib -S #{@spec_bin} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb` rescue puts "Warning: #{$!}"
+    `ruby -Ilib -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber` rescue puts "Warning: #{$!}"
   ensure
     ENV.delete 'CI_REPORTS'
   end
 end
 task :acceptance => :generate_output
 
-Spec::Rake::SpecTask.new(:acceptance_spec) do |t|
-  t.spec_files = FileList['acceptance/verification_spec.rb']
+RSpecTask.new(:acceptance_spec) do |t|
+  t.pattern = FileList['acceptance/verification_spec.rb']
 end
 task :acceptance => :acceptance_spec
 

@@ -52,7 +52,7 @@ describe "RSpec acceptance" do
     doc.root.elements.to_a("/testsuite/testcase").size.should == 3
     failures = doc.root.elements.to_a("/testsuite/testcase/failure")
     failures.size.should == 1
-    failures.first.attributes["type"].should == "Spec::Expectations::ExpectationNotMetError"
+    failures.first.attributes["type"].should =~ /ExpectationNotMetError/
   end
 
   it "should have one test in the nested example report" do
@@ -90,7 +90,7 @@ describe "Cucumber acceptance" do
     it "should have one failure for the lazy hacker" do
       failures = @doc.root.elements.to_a("/testsuite/testcase[@name='Lazy hacker']/failure")
       failures.size.should == 1
-      failures.first.attributes["type"].should == "Spec::Expectations::ExpectationNotMetError"
+      failures.first.attributes["type"].should =~ /ExpectationNotMetError/
     end
 
     it "should have one failure for the bad coder" do

@@ -3,8 +3,11 @@
 # software license details.
 
 require 'rubygems'
-gem 'rspec'
-require 'spec'
+begin
+  require 'rspec'
+rescue
+  require 'spec'
+end
 
 unless defined?(CI_REPORTER_LIB)
   CI_REPORTER_LIB = File.expand_path(File.dirname(__FILE__) + "/../lib")

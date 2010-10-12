@@ -5,7 +5,7 @@ describe "RSpec example" do
   end
 
   it "should fail" do
-    violated
+    true.should be_false
   end
 
   it "should be pending"
