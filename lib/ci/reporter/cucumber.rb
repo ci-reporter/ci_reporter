@@ -3,17 +3,10 @@
 # software license details.
 
 require 'ci/reporter/core'
-tried_gem = false
+require 'cucumber'
 begin
-  require 'cucumber'
   require 'cucumber/ast/visitor'
 rescue LoadError
-  unless tried_gem
-    tried_gem = true
-    require 'rubygems'
-    gem 'cucumber'
-    retry
-  end
 end
 
 module CI

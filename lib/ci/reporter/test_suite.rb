@@ -66,12 +66,6 @@ module CI
 
       # Creates the xml builder instance used to create the report xml document.
       def create_builder
-        begin
-          require 'rubygems'
-          gem 'builder'
-        rescue LoadError
-        end
-
         require 'builder'
         # :escape_attrs is obsolete in a newer version, but should do no harm
         Builder::XmlMarkup.new(:indent => 2, :escape_attrs => true)

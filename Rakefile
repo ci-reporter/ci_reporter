@@ -70,7 +70,7 @@ begin
   RCov::VerifyTask.new(:rcov) do |t|
     # Can't get threshold up to 100 unless RSpec backwards compatibility
     # code is dropped
-    t.threshold = 98
+    t.threshold = 95
     t.require_exact_threshold = false
   end
 rescue LoadError
@@ -85,9 +85,9 @@ task :generate_output do
   rm_rf "acceptance/reports"
   ENV['CI_REPORTS'] = "acceptance/reports"
   begin
-    `ruby -Ilib -rci/reporter/rake/test_unit_loader acceptance/test_unit_example_test.rb` rescue puts "Warning: #{$!}"
-    `ruby -Ilib -S #{@spec_bin} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb` rescue puts "Warning: #{$!}"
-    `ruby -Ilib -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber` rescue puts "Warning: #{$!}"
+    `ruby -Ilib -rubygems -rci/reporter/rake/test_unit_loader acceptance/test_unit_example_test.rb` rescue puts "Warning: #{$!}"
+    `ruby -Ilib -rubygems -S #{@spec_bin} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb` rescue puts "Warning: #{$!}"
+    `ruby -Ilib -rubygems -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber` rescue puts "Warning: #{$!}"
   ensure
     ENV.delete 'CI_REPORTS'
   end
