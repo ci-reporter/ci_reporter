@@ -1,3 +1,11 @@
+== 1.6.3
+
+- Thanks to yairgo and tylerkovacs for their assistance and prodding
+  for RSpec 2 support this release.
+- GH #4: Updated for modern Cucumber (0.9.2 as of this writing)
+- GH #6: Capture dynamically-named RSpec examples
+- GH #7: RSpec 2.0.0 compatibility
+
 == 1.6.2
 
 - GH #1: Properly escape text in system-out and system-err tags (Matt Kanwisher)

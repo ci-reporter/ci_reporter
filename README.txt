@@ -1,9 +1,5 @@
 CI::Reporter is an add-on to Test::Unit, RSpec and Cucumber that allows you to generate XML reports of your test, spec and/or feature runs. The resulting files can be read by a continuous integration system that understands Ant's JUnit report XML format, thus allowing your CI system to track test/spec successes and failures.
 
-== Dependencies
-
-CI::Reporter has one required dependency on Builder, but since many will have a viable version of Builder via Rails' ActiveSupport gem, Builder is not a direct dependency of the project at the moment.  Instead, ensure that you have either the +builder+ or +activesupport+ gem installed before continuing.  CI::Reporter will raise an exception at runtime if it cannot locate Builder.
-
 == Installation
 
 CI::Reporter is available as a gem. To install the gem, use the usual gem command:
@@ -12,12 +8,11 @@ CI::Reporter is available as a gem. To install the gem, use the usual gem comman
 
 == Usage
 
-CI::Reporter works best with projects that use a +Rakefile+ along with the standard <code>Rake::TestTask</code> or <code>Spec::Rake::SpecTask</code> tasks for running tests or examples, respectively. In this fashion, it hooks into <code>Test::Unit</code> or +RSpec+ using environment variables recognized by these custom tasks to inject the CI::Reporter code into the test or spec runs.  If you're using the Rails plugin, step 1 is unnecessary; skip to step 2.
+CI::Reporter works best with projects that use a +Rakefile+ along with the standard <code>Rake::TestTask</code> or <code>Spec::Rake::SpecTask/RSpec::Core::RakeTask</code> tasks for running tests or examples, respectively. In this fashion, it hooks into <code>Test::Unit</code> or +RSpec+ using environment variables recognized by these custom tasks to inject the CI::Reporter code into the test or spec runs.  If you're using the Rails plugin, step 1 is unnecessary; skip to step 2.
 
 1. To use CI::Reporter, simply add the following lines to your Rakefile:
 
     require 'rubygems'
-    gem 'ci_reporter'
     require 'ci/reporter/rake/rspec'     # use this if you're using RSpec
     require 'ci/reporter/rake/cucumber'  # use this if you're using Cucumber
     require 'ci/reporter/rake/test_unit' # use this if you're using Test::Unit
@@ -49,7 +44,7 @@ If for some reason you can't use the above technique to inject CI::Reporter (e.g
 
     ruby -r GEM_PATH/lib/ci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber
 
-There's a bit of a chicken and egg problem because rubygems needs to be loaded before you can require any CI::Reporter files.  If you cringe hard-coding a full path to a specific version of the gem, you can also copy the +rspec_loader+ file into your project and require it directly -- the contents are version-agnostic and are not likely to change in future releases.
+There's a bit of a chicken and egg problem because rubygems needs to be loaded before you can require any CI::Reporter files.  If you cringe hard-coding a full path to a specific version of the gem, you can also copy the +cucumber_loader+ file into your project and require it directly -- the contents are version-agnostic and are not likely to change in future releases.
 
 == Environment Variables
 
@@ -63,7 +58,7 @@ You can get the CI::Reporter source using Git, in any of the following ways:
     git clone git://git.caldersphere.net/ci_reporter.git
     git clone git://github.com/nicksieger/ci_reporter.git
 
-You can also download a tarball of the latest CI::Reporter source at http://github.com/nicksieger/ci_reporter/tree/master.
+You can also download a tarball of the latest CI::Reporter source at http://github.com/nicksieger/ci_reporter/.
 
 == License
 
