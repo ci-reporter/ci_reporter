@@ -144,6 +144,7 @@ module CI
       def dump_summary(*args)
         @formatter.dump_summary(*args)
         write_report
+        @formatter.dump_failures
       end
 
       def dump_pending
