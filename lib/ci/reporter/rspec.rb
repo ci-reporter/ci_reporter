@@ -43,9 +43,9 @@ module CI
         !failure?
       end
 
-      def name() exception.class.name end
-      def message() exception.message end
-      def location() (exception.backtrace || ["No backtrace available"]).join("\n") end
+      def name() @example.metadata[:execution_result][:exception].class.name end
+      def message() @example.metadata[:execution_result][:exception].message end
+      def location() @example.metadata[:execution_result][:exception].backtrace.join("\n") end
     end
 
     class RSpec2Failure < RSpecFailure
