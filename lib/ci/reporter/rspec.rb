@@ -51,7 +51,7 @@ module CI
     class RSpec2Failure < RSpecFailure
       def initialize(example)
         @example = example
-        @exception = @example.execution_result[:exception_encountered]
+        @exception = @example.execution_result[:exception] || @example.execution_result[:exception_encountered]
       end
 
       def failure?

@@ -123,4 +123,24 @@ describe "The RSpec reporter" do
     @fmt.example_failed("should fail", 1, @error)
     @fmt.dump_summary(0.1, 1, 0, 0)
   end
+  
+  describe 'RSpec2Failure' do
+    before(:each) do
+      @rspec20_example = mock('RSpec2.0 Example', :execution_result => {:exception_encountered => StandardError.new('rspec2.0 ftw')})
+      @rspec22_example = mock('RSpec2.2 Example', :execution_result => {:exception => StandardError.new('rspec2.2 ftw')})
+    end
+
+    it 'should handle rspec (< 2.2) execution results' do
+      failure = CI::Reporter::RSpec2Failure.new(@rspec20_example)
+      failure.name.should_not be_nil
+      failure.message.should == 'rspec2.0 ftw'
+      failure.location.should_not be_nil
+    end
+    it 'should handle rspec (>= 2.2) execution results' do
+      failure = CI::Reporter::RSpec2Failure.new(@rspec22_example)
+      failure.name.should_not be_nil
+      failure.message.should == 'rspec2.2 ftw'
+      failure.location.should_not be_nil
+    end
+  end
 end
