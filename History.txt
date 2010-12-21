@@ -1,3 +1,7 @@
+== 1.6.4 (12/21/10)
+
+- RSpec 2.2+ support (thanks emi)
+
 == 1.6.3
 
 - Thanks to yairgo and tylerkovacs for their assistance and prodding
