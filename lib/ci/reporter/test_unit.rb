@@ -14,6 +14,7 @@ module CI
       def self.new(fault)
         return TestUnitFailure.new(fault) if fault.kind_of?(Test::Unit::Failure)
         return TestUnitSkipped.new(fault) if Test::Unit.constants.include?("Omission") && (fault.kind_of?(Test::Unit::Omission) || fault.kind_of?(Test::Unit::Pending))
+        return TestUnitNotification.new(fault) if Test::Unit.constants.include?("Notification") && fault.kind_of?(Test::Unit::Notification)
         TestUnitError.new(fault)
       end
     end
@@ -44,6 +45,16 @@ module CI
       def failure?() false end
       def error?() false end
       def name() Test::Unit::Omission.name end
+      def message() @fault.message end
+      def location() @fault.location.join("\n") end
+    end
+
+    # Wrapper around a <code>Test::Unit</code> 2.0 notification.
+    class TestUnitNotification
+      def initialize(fault) @fault = fault end
+      def failure?() false end
+      def error?() false end
+      def name() Test::Unit::Notification.name end
       def message() @fault.message end
       def location() @fault.location.join("\n") end
     end
