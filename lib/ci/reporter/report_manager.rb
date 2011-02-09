@@ -3,20 +3,31 @@
 # software license details.
 
 require 'fileutils'
+require 'digest/sha1'
 
 module CI #:nodoc:
   module Reporter #:nodoc:
     class ReportManager
       def initialize(prefix)
         @basedir = ENV['CI_REPORTS'] || File.expand_path("#{Dir.getwd}/#{prefix.downcase}/reports")
-        @basename = "#{@basedir}/#{prefix.upcase}"
+        @basename = "#{prefix.upcase}"
         FileUtils.mkdir_p(@basedir)
       end
       
       def write_report(suite)
-        File.open("#{@basename}-#{suite.name.gsub(/[^a-zA-Z0-9]+/, '-')}.xml", "w") do |f|
+        File.open(filename(suite.name), "w") do |f|
           f << suite.to_xml
         end
+      end
+
+    protected
+      
+      def filename(test_name)
+        filebase = "#{@basename}-#{test_name.gsub(/[^a-zA-Z0-9]+/, '-')}"
+        if filebase.size > 251
+          filebase = "#{filebase[0..209]}-#{Digest::SHA1.hexdigest(filebase[209..-1])}"
+        end
+        "#{@basedir}/#{filebase}.xml"
       end
     end
   end

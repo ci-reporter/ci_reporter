@@ -36,4 +36,16 @@ describe "The ReportManager" do
     File.exist?(filename).should be_true
     File.open(filename) {|f| f.read.should == "<xml></xml>"}
   end
+
+  it "should not write files with names longer than 255 characters" do
+    reporter = CI::Reporter::ReportManager.new("spec")
+    suite = mock("test suite")
+    suite.should_receive(:name).and_return("some " + ("long " * 50) + " suite name")
+    suite.should_receive(:to_xml).and_return("<xml></xml>")
+    reporter.write_report(suite)
+
+    files = Dir["#{REPORTS_DIR}/SPEC-some-long-long-long-long*.xml"]
+    files.size.should == 1
+    files.first.split('/').last.size.should <= 255
+  end
 end
