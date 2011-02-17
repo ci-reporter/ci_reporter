@@ -14,9 +14,43 @@ module CI #:nodoc:
       end
       
       def write_report(suite)
-        File.open("#{@basename}-#{suite.name.gsub(/[^a-zA-Z0-9]+/, '-')}.xml", "w") do |f|
+        File.open(filename_for(suite), "w") do |f|
           f << suite.to_xml
         end
+      end
+      
+    private
+    
+
+      # creates a uniqe filename per suite
+      # to prevent results from being overwritten
+      # if a result file is already written, it appends an index
+      # e.g.
+      #   SPEC-MailsController.xml
+      #   SPEC-MailsController.0.xml
+      #   SPEC-MailsController.1.xml
+      #   SPEC-MailsController...xml
+      #   SPEC-MailsController.N.xml
+      #
+      # with N < 100000, to prevent endless sidestep loops
+      MAX_SIDESTEPS = 100000
+      #
+      def filename_for(suite)
+        basename = "#{@basename}-#{suite.name.gsub(/[^a-zA-Z0-9]+/, '-')}"
+        suffix = "xml"
+        
+        # the initial filename, e.g. SPEC-MailsController.xml
+        filename = [basename, suffix].join(".")
+        
+        # if the initial filename is already in use
+        # do sidesteps, beginning with SPEC-MailsController.0.xml
+        i = 0
+        while File.exists?(filename) && i < MAX_SIDESTEPS
+          filename = [basename, i, suffix].join(".")
+          i += 1
+        end
+        
+        filename
       end
     end
   end
