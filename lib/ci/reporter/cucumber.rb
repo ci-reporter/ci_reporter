@@ -101,7 +101,12 @@ module CI
       end
 
       def before_table_row(table_row)
-        @test_case = TestCase.new("#@scenario (outline: #{table_row.name})")
+        row = table_row # shorthand for table_row
+        # check multiple versions of the row and try to find the best fit
+        outline = (row.respond_to? :name)             ? row.name :
+                  (row.respond_to? :scenario_outline) ? row.scenario_outline :
+                                                        row.to_s
+        @test_case = TestCase.new("#@scenario (outline: #{outline})")
         @test_case.start
       end
 
