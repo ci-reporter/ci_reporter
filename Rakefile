@@ -4,6 +4,7 @@ MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt", "LICENSE.txt", 
 begin
   File.open("Manifest.txt", "w") {|f| MANIFEST.each {|n| f << "#{n}\n"} }
   require 'hoe'
+  Hoe.plugin :rubyforge
   require File.dirname(__FILE__) + '/lib/ci/reporter/version'
   hoe = Hoe.spec("ci_reporter") do |p|
     p.version = CI::Reporter::VERSION
@@ -19,7 +20,6 @@ begin
     p.extra_deps << ['builder', ">= 2.1.2"]
   end
   hoe.spec.files = MANIFEST
-  hoe.spec.dependencies.delete_if { |dep| dep.name == "hoe" }
   hoe.spec.rdoc_options += ["-SHN", "-f", "darkfish"]
 
   task :gemspec do
