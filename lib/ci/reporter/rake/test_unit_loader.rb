@@ -5,6 +5,7 @@
 $: << File.dirname(__FILE__) + "/../../.."
 require 'ci/reporter/test_unit'
 
+# Intercepts mediator creation in ruby-test < 2.1
 module Test #:nodoc:all
   module Unit
     module UI
@@ -14,6 +15,20 @@ module Test #:nodoc:all
             # swap in our custom mediator
             return CI::Reporter::TestUnit.new(suite)
           end
+        end
+      end
+    end
+  end
+end
+
+# Intercepts mediator creation in ruby-test >= 2.1
+module Test #:nodoc:all
+  module Unit
+    module UI
+      class TestRunner
+        def setup_mediator
+          # swap in our custom mediator
+          @mediator = CI::Reporter::TestUnit.new(@suite)
         end
       end
     end
