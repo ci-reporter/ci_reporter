@@ -65,10 +65,9 @@ module CI
         output.push @exception.message
 
         @formatter.format_backtrace(@exception.backtrace, @example).each do |backtrace_info|
-          output.push backtrace_info
+          output.push "     #{backtrace_info}"
         end
-        
-        output.join '\n'
+        output.join "\n"
       end
     end
 
