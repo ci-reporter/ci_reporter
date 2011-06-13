@@ -91,6 +91,10 @@ module CI
         @formatter.example_group_started(example_group)
         new_suite(description_for(example_group))
       end
+      
+      def example_group_finished(example_group)
+        @formatter.example_group_finished(example_group)
+      end
 
       def example_started(name_or_example)
         @formatter.example_started(name_or_example)
