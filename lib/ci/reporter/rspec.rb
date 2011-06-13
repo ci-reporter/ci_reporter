@@ -141,6 +141,10 @@ module CI
         @formatter.start_dump
       end
 
+      def dump_failures(*args)
+        @formatter.dump_failures(*args)
+      end
+
       def dump_failure(*args)
         @formatter.dump_failure(*args)
       end
