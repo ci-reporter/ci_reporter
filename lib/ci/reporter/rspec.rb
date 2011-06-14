@@ -49,13 +49,25 @@ module CI
     end
 
     class RSpec2Failure < RSpecFailure
-      def initialize(example)
+      def initialize(example, formatter)
+        @formatter = formatter
         @example = example
         @exception = @example.execution_result[:exception] || @example.execution_result[:exception_encountered]
       end
 
       def failure?
         exception.is_a?(::RSpec::Expectations::ExpectationNotMetError)
+      end
+
+      def location() 
+        output = []
+        output.push "#{exception.class.name << ":"}" unless exception.class.name =~ /RSpec/
+        output.push @exception.message
+
+        @formatter.format_backtrace(@exception.backtrace, @example).each do |backtrace_info|
+          output.push "     #{backtrace_info}"
+        end
+        output.join "\n"
       end
     end
 
@@ -91,6 +103,10 @@ module CI
         @formatter.example_group_started(example_group)
         new_suite(description_for(example_group))
       end
+      
+      def example_group_finished(example_group)
+        @formatter.example_group_finished(example_group)
+      end
 
       def example_started(name_or_example)
         @formatter.example_started(name_or_example)
@@ -106,7 +122,7 @@ module CI
         example_started(name_or_example) if @suite.testcases.empty?
 
         if name_or_example.respond_to?(:execution_result) # RSpec 2
-          failure = RSpec2Failure.new(name_or_example)
+          failure = RSpec2Failure.new(name_or_example, @formatter)
         else
           failure = RSpecFailure.new(rest[1]) # example_failed(name, counter, failure) in RSpec 1
         end
@@ -135,6 +151,10 @@ module CI
 
       def start_dump
         @formatter.start_dump
+      end
+
+      def dump_failures(*args)
+        @formatter.dump_failures(*args)
       end
 
       def dump_failure(*args)
