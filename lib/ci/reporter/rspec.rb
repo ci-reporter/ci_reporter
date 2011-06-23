@@ -205,5 +205,12 @@ module CI
         super
       end
     end
+
+    class RSpecBase < RSpec
+      def initialize(*args)
+        @formatter = RSpecFormatters::BaseFormatter.new(*args)
+        super
+      end
+    end
   end
 end
