@@ -53,6 +53,7 @@ describe "The RSpec reporter" do
     @formatter.should_receive(:dump_failure).once
     @formatter.should_receive(:dump_summary).once
     @formatter.should_receive(:dump_pending).once
+    @formatter.should_receive(:dump_failures).once
     @formatter.should_receive(:close).once
 
     @fmt.start(3)
@@ -76,6 +77,7 @@ describe "The RSpec reporter" do
     @formatter.should_receive(:example_started).once
     @formatter.should_receive(:example_passed).once
     @formatter.should_receive(:dump_summary)
+    @formatter.should_receive(:dump_failures).once
     @report_mgr.should_receive(:write_report)
 
     @fmt.start(2)
@@ -96,6 +98,7 @@ describe "The RSpec reporter" do
     @formatter.should_receive(:example_started).with(example).once
     @formatter.should_receive(:example_passed).once
     @formatter.should_receive(:dump_summary)
+    @formatter.should_receive(:dump_failures).once
     @report_mgr.should_receive(:write_report).and_return do |suite|
       suite.testcases.last.name.should == "should do something"
     end
@@ -116,6 +119,7 @@ describe "The RSpec reporter" do
     @formatter.should_receive(:example_started).once
     @formatter.should_receive(:example_failed).once
     @formatter.should_receive(:dump_summary)
+    @formatter.should_receive(:dump_failures).once
     @report_mgr.should_receive(:write_report)
 
     @fmt.start(2)
