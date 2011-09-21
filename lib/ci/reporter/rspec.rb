@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2010 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2011 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -55,11 +55,19 @@ module CI
         @exception = @example.execution_result[:exception] || @example.execution_result[:exception_encountered]
       end
 
+      def name
+        @exception.class.name
+      end
+
+      def message
+        @exception.message
+      end
+
       def failure?
         exception.is_a?(::RSpec::Expectations::ExpectationNotMetError)
       end
 
-      def location() 
+      def location
         output = []
         output.push "#{exception.class.name << ":"}" unless exception.class.name =~ /RSpec/
         output.push @exception.message
