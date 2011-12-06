@@ -1,3 +1,9 @@
+== 1.6.6 (12/06/11)
+
+- added code and spec to shorten filenames that will cause
+  Errno::ENAMETOOLONG
+- RSpec 2.2.1 compatability
+
 == 1.6.5 (06/14/11)
 
 - Works with RSpec up to 2.6.x
