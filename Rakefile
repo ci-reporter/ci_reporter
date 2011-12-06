@@ -1,4 +1,4 @@
-MANIFEST = FileList["History.txt", "Manifest.txt", "README.txt", "LICENSE.txt", "Rakefile",
+MANIFEST = FileList["History.txt", "Manifest.txt", "README.rdoc", "LICENSE.txt", "Rakefile",
   "*.rake", "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
 
 begin
@@ -9,12 +9,14 @@ begin
   hoe = Hoe.spec("ci_reporter") do |p|
     p.version = CI::Reporter::VERSION
     p.rubyforge_name = "caldersphere"
+    p.readme_file = "README.rdoc"
     p.url = "http://caldersphere.rubyforge.org/ci_reporter"
     p.author = "Nick Sieger"
     p.email = "nick@nicksieger.com"
     p.summary = "CI::Reporter allows you to generate reams of XML for use with continuous integration systems."
     p.changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
-    p.description = p.paragraphs_of('README.txt', 0...1).join("\n\n")
+    p.description = p.paragraphs_of('README.rdoc', 0...1).join("\n\n")
+    p.extra_rdoc_files += ["README.rdoc"]
     p.extra_deps.reject!{|d| d.first == "hoe"}
     p.test_globs = ["spec/**/*_spec.rb"]
     p.extra_deps << ['builder', ">= 2.1.2"]
