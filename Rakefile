@@ -1,3 +1,5 @@
+require 'bundler/setup'
+
 MANIFEST = FileList["History.txt", "Manifest.txt", "README.rdoc", "LICENSE.txt", "Rakefile",
   "*.rake", "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
 
@@ -86,11 +88,19 @@ task :rcov => "spec:rcov"
 task :generate_output do
   rm_rf "acceptance/reports"
   ENV['CI_REPORTS'] = "acceptance/reports"
+  if ENV['RUBYOPT']
+    opts = ENV['RUBYOPT']
+    ENV['RUBYOPT'] = nil
+  else
+    opts = "-rubygems"
+  end
   begin
-    `ruby -Ilib -rubygems -rci/reporter/rake/test_unit_loader acceptance/test_unit_example_test.rb` rescue puts "Warning: #{$!}"
-    `ruby -Ilib -rubygems -S #{@spec_bin} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb` rescue puts "Warning: #{$!}"
-    `ruby -Ilib -rubygems -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber` rescue puts "Warning: #{$!}"
+    result_proc = proc {|ok,*| puts "Failures above are expected." unless ok }
+    ruby "-Ilib #{opts} -rci/reporter/rake/test_unit_loader acceptance/test_unit_example_test.rb", &result_proc
+    ruby "-Ilib #{opts} -S #{@spec_bin} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb", &result_proc
+    ruby "-Ilib #{opts} -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber", &result_proc
   ensure
+    ENV['RUBYOPT'] = opts if opts != "-rubygems"
     ENV.delete 'CI_REPORTS'
   end
 end
