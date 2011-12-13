@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ci_reporter}
-  s.version = "1.6.6"
+  s.version = "1.6.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Nick Sieger}]
-  s.date = %q{2011-12-06}
+  s.date = %q{2011-12-13}
   s.description = %q{CI::Reporter is an add-on to Test::Unit, RSpec and Cucumber that allows you to generate XML reports of your test, spec and/or feature runs. The resulting files can be read by a continuous integration system that understands Ant's JUnit report XML format, thus allowing your CI system to track test/spec successes and failures.}
   s.email = %q{nick@nicksieger.com}
   s.extra_rdoc_files = [%q{History.txt}, %q{Manifest.txt}, %q{LICENSE.txt}, %q{README.rdoc}]
