@@ -5,6 +5,8 @@
 require 'delegate'
 require 'stringio'
 
+require 'ci/reporter/test_unit'
+
 module CI
   module Reporter
     # Emulates/delegates IO to $stdout or $stderr in order to capture output to report in the XML file.
@@ -138,7 +140,12 @@ module CI
             builder.skipped
           else
             failures.each do |failure|
-              builder.failure(:type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
+              tag = case failure
+                    when TestUnitSkipped then :skipped
+                    when TestUnitError then :error
+                    else :failure end
+
+              builder.tag!(tag, :type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
                 builder.text!(failure.message + " (#{failure.name})\n")
                 builder.text!(failure.location)
               end
