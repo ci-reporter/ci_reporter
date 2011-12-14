@@ -1,11 +1,9 @@
-# Copyright (c) 2006-2010 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2011 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
 require 'delegate'
 require 'stringio'
-
-require 'ci/reporter/test_unit'
 
 module CI
   module Reporter
@@ -140,9 +138,9 @@ module CI
             builder.skipped
           else
             failures.each do |failure|
-              tag = case failure
-                    when TestUnitSkipped then :skipped
-                    when TestUnitError then :error
+              tag = case failure.class.name
+                    when /TestUnitSkipped/ then :skipped
+                    when /TestUnitError/ then :error
                     else :failure end
 
               builder.tag!(tag, :type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
