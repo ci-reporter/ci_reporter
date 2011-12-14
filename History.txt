@@ -1,3 +1,7 @@
+== 1.6.8 (12/13/11)
+
+- #47: Fix regression - don't pull test/unit in unnecessarily
+
 == 1.6.7 (12/13/11)
 
 - Add support for JUnit skipped and error tags (thanks Jørgen Tjernø)
