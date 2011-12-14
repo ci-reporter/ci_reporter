@@ -9,4 +9,5 @@ group :development do
   gem 'test-unit', '> 2.0.0'
   gem 'rcov'
   gem 'rdoc'
+  gem 'jruby-openssl', :platform => :jruby
 end

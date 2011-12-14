@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    bouncy-castle-java (1.5.0146.1)
     builder (3.0.0)
     cucumber (0.10.2)
       builder (>= 2.1.2)
@@ -15,6 +16,8 @@ GEM
       json (>= 1.4.6)
     hoe (2.12.4)
       rake (~> 0.8)
+    jruby-openssl (0.7.4)
+      bouncy-castle-java
     json (1.6.3)
     json (1.6.3-java)
     json_pure (1.6.1)
@@ -43,6 +46,7 @@ DEPENDENCIES
   builder
   cucumber
   hoe
+  jruby-openssl
   rcov
   rdoc
   rspec (> 2.0.0)
