@@ -53,6 +53,7 @@ end
 
 describe "TestSuite xml" do
   before(:each) do
+    ENV['CI_CAPTURE'] = nil
     @suite = CI::Reporter::TestSuite.new("example suite")
     @suite.assertions = 11
     begin
@@ -60,6 +61,14 @@ describe "TestSuite xml" do
     rescue => e
       @exception = e
     end
+  end
+
+  it "should render successfully with CI_CAPTURE off" do
+    ENV['CI_CAPTURE'] = 'off'
+    @suite.start
+    @suite.testcases << CI::Reporter::TestCase.new("example test")
+    @suite.finish
+    xml = @suite.to_xml
   end
 
   it "should contain Ant/JUnit-formatted description of entire suite" do
