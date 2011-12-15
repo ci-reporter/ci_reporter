@@ -1,3 +1,7 @@
+== 1.6.9 (12/14/11)
+
+- #49: fix nil to_xs with CI_CAPTURE=off (thanks Sean Walbran)
+
 == 1.6.8 (12/13/11)
 
 - #47: Fix regression - don't pull test/unit in unnecessarily
