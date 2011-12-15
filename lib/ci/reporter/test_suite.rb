@@ -86,10 +86,10 @@ module CI
             tc.to_xml(builder)
           end
           builder.tag! "system-out" do
-            builder.text! self.stdout
+            builder.text!(self.stdout || '' )
           end
           builder.tag! "system-err" do
-            builder.text! self.stderr
+            builder.text!(self.stderr || '' )
           end
         end
       end
