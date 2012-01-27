@@ -14,7 +14,9 @@ module CI
         return MiniTestFailure.new(fault, meth) if type == :failure
         MiniTestError.new(fault)
       end
+    end
 
+    class FailureCore
       def location(e)
         last_before_assertion = ""
         e.backtrace.reverse_each do |s|
@@ -25,7 +27,7 @@ module CI
       end
     end
 
-    class MiniTestSkipped < Failure
+    class MiniTestSkipped < FailureCore
       def initialize(fault) @fault = fault end
       def failure?() false end
       def error?() false end
@@ -34,7 +36,7 @@ module CI
       def location() super @fault end
     end
 
-    class MiniTestFailure < Failure
+    class MiniTestFailure < FailureCore
       def initialize(fault, meth) @fault = fault; @meth = meth end
       def failure?() true end
       def error?() false end
@@ -43,7 +45,7 @@ module CI
       def location() super @fault end
     end
 
-    class MiniTestError
+    class MiniTestError < FailureCore
       def initialize(fault) @fault = fault end
       def failure?() false end
       def error?() true end
