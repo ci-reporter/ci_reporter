@@ -72,8 +72,10 @@ module CI
         output.push "#{exception.class.name << ":"}" unless exception.class.name =~ /RSpec/
         output.push @exception.message
 
-        @formatter.format_backtrace(@exception.backtrace, @example).lines.each do |backtrace_info|
-          output.push "     #{backtrace_info}"
+        [@formatter.format_backtrace(@exception.backtrace, @example)].flatten.each do |backtrace_info|
+          backtrace_info.lines.each do |line|
+            output.push "     #{line}"
+          end
         end
         output.join "\n"
       end
