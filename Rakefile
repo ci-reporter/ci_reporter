@@ -10,7 +10,7 @@ MANIFEST = FileList["History.txt", "Manifest.txt", "README.rdoc", "LICENSE.txt",
   "*.rake", "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
 
 begin
-  File.open("Manifest.txt", "w") {|f| MANIFEST.each {|n| f << "#{n}\n"} }
+  File.open("Manifest.txt", "w") {|f| MANIFEST.sort.each {|n| f << "#{n}\n"} }
   require 'hoe'
   Hoe.plugin :rubyforge
   require File.dirname(__FILE__) + '/lib/ci/reporter/version'
