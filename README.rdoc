@@ -16,6 +16,7 @@ CI::Reporter works best with projects that use a +Rakefile+ along with the stand
     require 'ci/reporter/rake/rspec'     # use this if you're using RSpec
     require 'ci/reporter/rake/cucumber'  # use this if you're using Cucumber
     require 'ci/reporter/rake/test_unit' # use this if you're using Test::Unit
+    require 'ci/reporter/rake/minitest' # use this if you're using MiniTest::Unit
 
 2. Next, either modify your Rakefile to make the <code>ci:setup:rspec</code>, <code>ci:setup:cucumber</code> or <code>ci:setup:testunit</code> task a dependency of your test tasks, or include them on the Rake command-line before the name of the task that runs the tests or specs.
 
@@ -28,6 +29,7 @@ Report files are written, by default, to the <code>test/reports</code>, <code>fe
 If you don't have control over the Rakefile or don't want to modify it, CI::Reporter has a substitute rake file that you can specify on the command-line.  It assumes that the main project rake file is called +Rakefile+ and lives in the current directory.  Run like so:
 
     rake -f GEM_PATH/stub.rake ci:setup:testunit test
+    rake -f GEM_PATH/stub.rake ci:setup:minitest test
     rake -f GEM_PATH/stub.rake ci:setup:rspec spec
     rake -f GEM_PATH/stub.rake ci:setup:cucumber features
 
