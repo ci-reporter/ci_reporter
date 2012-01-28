@@ -140,7 +140,7 @@ module CI
             failures.each do |failure|
               tag = case failure.class.name
                     when /TestUnitSkipped/ then :skipped
-                    when /TestUnitError/ then :error
+                    when /TestUnitError/, /MiniTestError/ then :error
                     else :failure end
 
               builder.tag!(tag, :type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
