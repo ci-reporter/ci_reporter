@@ -32,7 +32,7 @@ describe "ci_reporter ci:setup:testunit task" do
     @rake["ci:setup:testunit"].invoke
     ENV["TESTOPTS"].should =~ /test_unit_loader/
   end
-  
+
   it "should append to ENV['TESTOPTS'] if it already contains a value" do
     ENV["TESTOPTS"] = "somevalue".freeze
     @rake["ci:setup:testunit"].invoke
@@ -54,7 +54,7 @@ describe "ci_reporter ci:setup:rspec task" do
     restore_env "CI_REPORTS"
     Rake.application = nil
   end
-  
+
   it "should set ENV['SPEC_OPTS'] to include rspec formatter args" do
     @rake["ci:setup:rspec"].invoke
     ENV["SPEC_OPTS"].should =~ /--require.*rspec_loader.*--format.*CI::Reporter::RSpec/
@@ -64,7 +64,12 @@ describe "ci_reporter ci:setup:rspec task" do
     @rake["ci:setup:rspecdoc"].invoke
     ENV["SPEC_OPTS"].should =~ /--require.*rspec_loader.*--format.*CI::Reporter::RSpecDoc/
   end
-  
+
+  it "should set ENV['SPEC_OPTS'] to include rspec base formatter if task is ci:setup:rspecbase" do
+    @rake["ci:setup:rspecbase"].invoke
+    ENV["SPEC_OPTS"].should =~ /--require.*rspec_loader.*--format.*CI::Reporter::RSpecBase/
+  end
+
   it "should append to ENV['SPEC_OPTS'] if it already contains a value" do
     ENV["SPEC_OPTS"] = "somevalue".freeze
     @rake["ci:setup:rspec"].invoke
@@ -86,7 +91,7 @@ describe "ci_reporter ci:setup:cucumber task" do
     restore_env "CI_REPORTS"
     Rake.application = nil
   end
-  
+
   it "should set ENV['CUCUMBER_OPTS'] to include cucumber formatter args" do
     @rake["ci:setup:cucumber"].invoke
     ENV["CUCUMBER_OPTS"].should =~ /--require.*cucumber_loader.*--format.*CI::Reporter::Cucumber/

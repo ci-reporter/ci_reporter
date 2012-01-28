@@ -47,4 +47,16 @@ describe "The ReportManager" do
     File.exist?(filename).should be_true
     File.open(filename) {|f| f.read.should == "<xml></xml>"}
   end
+
+  it "sidesteps existing files by adding an incrementing number" do
+    filename = "#{REPORTS_DIR}/SPEC-colliding-test-suite-name.xml"
+    FileUtils.mkdir_p(File.dirname(filename))
+    FileUtils.touch filename
+    reporter = CI::Reporter::ReportManager.new("spec")
+    suite = mock("test suite")
+    suite.should_receive(:name).and_return("colliding test suite name")
+    suite.should_receive(:to_xml).and_return("<xml></xml>")
+    reporter.write_report(suite)
+    File.exist?(filename.sub('.xml', '.0.xml')).should be_true
+  end
 end
