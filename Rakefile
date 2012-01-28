@@ -49,8 +49,8 @@ end
   Rake::Task[task].actions.clear
 end
 
-# No RCov on JRuby at the moment
-if RUBY_PLATFORM =~ /java/
+# RCov only on 1.8
+if defined?(RUBY_ENGINE)
   task :default => :spec
 else
   task :default => :rcov
@@ -86,9 +86,6 @@ begin
 rescue LoadError
 end
 
-task "spec:rcov" do
-  rm_f "Manifest.txt"
-end
 task :rcov => "spec:rcov"
 
 task :generate_output do

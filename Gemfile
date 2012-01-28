@@ -13,7 +13,7 @@ group :development do
   gem 'cucumber'
   gem 'rspec', '> 2.0.0'
   gem 'test-unit', '> 2.0.0'
-  gem 'rcov'
+  gem 'rcov', :platform => :ruby_18
   gem 'rdoc'
   gem 'jruby-openssl', :platform => :jruby
 end
