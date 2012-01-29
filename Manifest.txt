@@ -5,8 +5,11 @@ README.rdoc
 Rakefile
 lib/ci/reporter/core.rb
 lib/ci/reporter/cucumber.rb
+lib/ci/reporter/minitest.rb
 lib/ci/reporter/rake/cucumber.rb
 lib/ci/reporter/rake/cucumber_loader.rb
+lib/ci/reporter/rake/minitest.rb
+lib/ci/reporter/rake/minitest_loader.rb
 lib/ci/reporter/rake/rspec.rb
 lib/ci/reporter/rake/rspec_loader.rb
 lib/ci/reporter/rake/test_unit.rb
