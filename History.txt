@@ -1,3 +1,8 @@
+== 1.7.0 (01/28/11)
+
+- #39, #49: Minitest support (thanks Alexander Shcherbinin)!
+- #14, #44: fix remaining 1.9 issues
+
 == 1.6.9 (12/14/11)
 
 - #49: fix nil to_xs with CI_CAPTURE=off (thanks Sean Walbran)
