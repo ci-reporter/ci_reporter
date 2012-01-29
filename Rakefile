@@ -67,6 +67,7 @@ rescue LoadError
 end
 
 RSpecTask.new do |t|
+  t.rspec_opts = "--color"
 end
 
 RSpecTask.new("spec:rcov") do |t|
@@ -112,6 +113,7 @@ task :acceptance => :generate_output
 
 RSpecTask.new(:acceptance_spec) do |t|
   t.pattern = FileList['acceptance/verification_spec.rb']
+  t.rspec_opts = "--color"
 end
 task :acceptance => :acceptance_spec
 
