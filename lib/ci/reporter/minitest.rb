@@ -211,7 +211,11 @@ module CI
 
       def fault(fault, type = nil, meth = nil)
         tc = @current_suite.testcases.last
-        tc.failures << Failure.new(fault, type, meth)
+        if :skip == type
+          tc.skipped = true
+        else
+          tc.failures << Failure.new(fault, type, meth)
+        end
       end
 
     end
