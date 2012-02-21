@@ -52,7 +52,11 @@ module CI
       def initialize(example, formatter)
         @formatter = formatter
         @example = example
-        @exception = @example.execution_result[:exception] || @example.execution_result[:exception_encountered]
+        if @example.respond_to?(:execution_result)
+          @exception = @example.execution_result[:exception] || @example.execution_result[:exception_encountered]
+        else
+          @exception = @example.metadata[:execution_result][:exception]
+        end
       end
 
       def name
