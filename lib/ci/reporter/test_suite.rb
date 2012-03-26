@@ -8,10 +8,24 @@ require 'stringio'
 module CI
   module Reporter
     # Emulates/delegates IO to $stdout or $stderr in order to capture output to report in the XML file.
-    class OutputCapture < DelegateClass(IO)
+    module OutputCapture
+      class Delegate < DelegateClass(IO)
+        include OutputCapture
+        def initialize(io, &assign)
+          capture(io, &assign)
+        end
+      end
+
+      def self.wrap(io, &assign)
+        if defined?(RUBY_ENGINE) # JRuby, Ruby 1.9, etc.
+          Delegate.new(io, &assign)
+        else          # Ruby 1.8 requires streams to be subclass of IO
+          IO.new(io.fileno, "w").tap {|x| x.extend self; x.capture(io, &assign) }
+        end
+      end
+
       # Start capturing IO, using the given block to assign self to the proper IO global.
-      def initialize(io, &assign)
-        super
+      def capture(io, &assign)
         @delegate_io = io
         @captured_io = StringIO.new
         @assign_block = assign
@@ -48,8 +62,8 @@ module CI
       def start
         @start = Time.now
         unless ENV['CI_CAPTURE'] == "off"
-          @capture_out = OutputCapture.new($stdout) {|io| $stdout = io }
-          @capture_err = OutputCapture.new($stderr) {|io| $stderr = io }
+          @capture_out = OutputCapture.wrap($stdout) {|io| $stdout = io }
+          @capture_err = OutputCapture.wrap($stderr) {|io| $stderr = io }
         end
       end
 
