@@ -17,11 +17,21 @@ CI::Reporter works best with projects that use a +Rakefile+ along with the stand
     require 'ci/reporter/rake/test_unit' # use this if you're using Test::Unit
     require 'ci/reporter/rake/minitest'  # use this if you're using Ruby 1.9 or minitest
 
-2. Next, either modify your Rakefile to make the <code>ci:setup:rspec</code>, <code>ci:setup:cucumber</code>, <code>ci:setup:testunit</code> or <code>ci:setup:minitest</code> task a dependency of your test tasks, or include them on the Rake command-line before the name of the task that runs the tests or specs.
+2. Next, either modify your Rakefile to make the <code>ci:setup:rspec</code>, <code>ci:setup:cucumber</code>, <code>ci:setup:testunit</code> or <code>ci:setup:minitest</code> task a dependency of your test tasks, or run one of these rake tasks:
 
     rake ci:setup:testunit test
+    rake ci:setup:minitest test
+    rake ci:setup:rspec spec
+    rake ci:setup:cucumber features
+
+== Jenkins setup
+
+1. Tick the box labelled "Publish JUnit test result report" in the job configuration
+
+2. Enter "test/reports/*.xml,spec/reports/*.xml" in the "Test report XMLs" field (adjust this to suit which tests you are running)
 
 Report files are written, by default, to the <code>test/reports</code>, <code>features/reports</code> or <code>spec/reports</code> subdirectory of your project.  If you wish to customize the location, simply set the environment variable CI_REPORTS (either in the environment, on the Rake command line, or in your Rakefile) to the location where they should go.
+
 
 == Advanced Usage
 
