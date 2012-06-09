@@ -54,4 +54,11 @@ describe "Output capture" do
     @suite.stdout.should == "B"
     @suite.stderr.should == "B"
   end
+  
+  it "should not barf when commands are executed with back-ticks" do
+    @suite.start
+    `echo "B"`
+    @suite.finish
+  end
+  
 end

@@ -29,7 +29,7 @@ module CI
         @delegate_io = io
         @captured_io = StringIO.new
         @assign_block = assign
-        @assign_block.call self
+        @assign_block.call @captured_io
       end
 
       # Finalize the capture and reset to the original IO object.

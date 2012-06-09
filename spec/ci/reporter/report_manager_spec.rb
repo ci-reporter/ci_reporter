@@ -40,10 +40,11 @@ describe "The ReportManager" do
   it "should shorten extremely long report filenames" do
     reporter = CI::Reporter::ReportManager.new("spec")
     suite = mock("test suite")
-    suite.should_receive(:name).and_return("some test suite name that goes on and on and on and on and on and on and does not look like it will end any time soon and just when you think it is almost over it just continues to go on and on and on and on and on until it is almost over but wait there is more and then el fin")
+    very_long_name = "some test suite name that goes on and on and on and on and on and on and does not look like it will end any time soon and just when you think it is almost over it just continues to go on and on and on and on and on until it is almost over but wait there is more and then el fin"
+    suite.should_receive(:name).and_return(very_long_name)
     suite.should_receive(:to_xml).and_return("<xml></xml>")
     reporter.write_report(suite)
-    filename = "#{REPORTS_DIR}/SPEC-some-test-suite-name-that-goes-on-and-on-and-on-and-on-and-on-and-on-and-does-not-look-like-it-will-end-any-time-soon-and-just-when-you-think-it-is-almost-over-it-just-continues-t.xml"
+    filename = "#{REPORTS_DIR}/SPEC-#{very_long_name}"[0..CI::Reporter::ReportManager::MAX_FILENAME_SIZE].gsub(/\s/, '-') + ".xml"
     File.exist?(filename).should be_true
     File.open(filename) {|f| f.read.should == "<xml></xml>"}
   end
