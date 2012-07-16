@@ -5,7 +5,7 @@ module CI
   module Reporter
     class Spinach < ::Spinach::Reporter
       def initialize
-        @report_manager = ReportManager.new('spinach')
+        @report_manager = ReportManager.new('features')
       end
 
       #def on_feature_not_found(feature)
