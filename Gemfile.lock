@@ -3,6 +3,7 @@ GEM
   specs:
     bouncy-castle-java (1.5.0146.1)
     builder (3.0.0)
+    colorize (0.5.8)
     cucumber (0.10.2)
       builder (>= 2.1.2)
       diff-lcs (>= 1.1.2)
@@ -35,6 +36,9 @@ GEM
     rspec-mocks (2.8.0)
     rubyforge (2.0.4)
       json_pure (>= 1.1.7)
+    spinach (0.1.5.3)
+      colorize
+      gherkin
     term-ansicolor (1.0.5)
     test-unit (2.3.0)
 
@@ -52,4 +56,5 @@ DEPENDENCIES
   rdoc
   rspec (> 2.0.0)
   rubyforge
+  spinach (< 0.2)
   test-unit (> 2.0.0)
