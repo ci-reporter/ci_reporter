@@ -8,10 +8,6 @@ module CI
         @report_manager = ReportManager.new('features')
       end
 
-      #def on_feature_not_found(feature)
-      #  feature['name']
-      #end
-
       def before_feature_run(feature)
         @test_suite = TestSuite.new(feature.is_a?(Hash) ? feature['name'] : feature.name)
         @test_suite.start
@@ -25,10 +21,6 @@ module CI
       def on_undefined_step(step, failure, step_definitions = nil)
         @test_case.name = "#{@test_case.name} (PENDING)"
       end
-
-#      def on_skipped_step(step, step_definitions = nil)
-#        @test_case.name = "#{@test_case.name} (SKIPPED)"
-#      end
 
       def on_failed_step(step, failure, step_location, step_definitions = nil)
         @test_case.failures << SpinachFailure.new(:failed, step, failure, step_location)
