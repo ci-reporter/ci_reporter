@@ -203,8 +203,10 @@ module CI
       end
 
       def write_report
-        @suite.finish
-        @report_manager.write_report(@suite)
+        if @suite
+          @suite.finish
+          @report_manager.write_report(@suite)
+        end
       end
 
       def new_suite(name)
