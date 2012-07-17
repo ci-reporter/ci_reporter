@@ -19,14 +19,11 @@ module CI
       end
 
       def on_undefined_step(step, failure, step_definitions = nil)
-        @test_case.name = "#{@test_case.name} (PENDING)"
+        @test_case.failures << SpinachFailure.new(:error, step, failure, nil)
       end
 
       def on_failed_step(step, failure, step_location, step_definitions = nil)
         @test_case.failures << SpinachFailure.new(:failed, step, failure, step_location)
-        #step['name']
-        #failure
-        #step_location
       end
 
       def on_error_step(step, failure, step_location, step_definitions = nil)

@@ -160,16 +160,22 @@ describe "Spinach acceptance" do
     end
 
     it "should have three tests and two failures" do
-      @doc.root.attributes["errors"].should == "1"
+      @doc.root.attributes["errors"].should == "2"
       @doc.root.attributes["failures"].should == "1"
-      @doc.root.attributes["tests"].should == "3"
-      @doc.root.elements.to_a("/testsuite/testcase").size.should == 3
+      @doc.root.attributes["tests"].should == "4"
+      @doc.root.elements.to_a("/testsuite/testcase").size.should == 4
     end
 
     it "should have one failure for the lazy hacker" do
       failures = @doc.root.elements.to_a("/testsuite/testcase[@name='Lazy hacker']/failure")
       failures.size.should == 1
       failures.first.attributes["type"].should =~ /ExpectationNotMetError/
+    end
+
+    it "should have one failure for missing steps" do
+      failures = @doc.root.elements.to_a("/testsuite/testcase[@name='Missing steps']/failure")
+      failures.size.should == 1
+      failures.first.attributes["type"].should =~ /StepNotDefinedException/
     end
 
     it "should have one failure for the bad coder" do

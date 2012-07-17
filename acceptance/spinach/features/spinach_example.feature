@@ -17,3 +17,8 @@ Feature: Example feature
     Given that I can't code for peanuts
     And I write step definitions that throw exceptions
     Then I shouldn't be allowed out in public
+
+  Scenario: Missing steps
+    Given that I am a lazy hacker
+    And I don't implement steps before I commit
+    Then I should be fired
