@@ -106,7 +106,7 @@ task :generate_output do
     ruby "-Ilib #{opts} -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber", &result_proc
     Dir.chdir 'acceptance/spinach' do
       Bundler.with_clean_env do
-        ENV['CI_REPORTS'] = "../reports"
+        ENV['CI_REPORTS'] = "../reports/spinach"
         ruby "-S bundle"
         ruby "-I../../lib #{opts} -rci/reporter/rake/spinach_loader -S spinach", &result_proc
       end

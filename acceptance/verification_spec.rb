@@ -143,16 +143,18 @@ describe "Cucumber acceptance" do
   end
 end
 
+SPINACH_REPORTS_DIR = File.expand_path('spinach', REPORTS_DIR)
+
 describe "Spinach acceptance" do
   it "should generate three XML files" do
-    File.exist?(File.join(REPORTS_DIR, 'SPINACH-Example-feature.xml')).should == true
+    File.exist?(File.join(SPINACH_REPORTS_DIR, 'FEATURES-Example-feature.xml')).should == true
 
-    Dir["#{REPORTS_DIR}/SPINACH-*.xml"].length.should == 1
+    Dir["#{SPINACH_REPORTS_DIR}/FEATURES-*.xml"].length.should == 1
   end
 
   context "SPINACH report file" do
     before :each do
-      @doc = File.open(File.join(REPORTS_DIR, 'SPINACH-Example-feature.xml')) do |f|
+      @doc = File.open(File.join(SPINACH_REPORTS_DIR, 'FEATURES-Example-feature.xml')) do |f|
         REXML::Document.new(f)
       end
     end
