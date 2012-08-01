@@ -12,6 +12,7 @@ module CI
       class Delegate < DelegateClass(IO)
         include OutputCapture
         def initialize(io, &assign)
+          super(io)
           capture(io, &assign)
         end
       end
