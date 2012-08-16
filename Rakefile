@@ -6,11 +6,7 @@
 
 require 'bundler/setup'
 
-MANIFEST = FileList["History.txt", "Manifest.txt", "README.rdoc", "LICENSE.txt", "Rakefile",
-  "*.rake", "lib/**/*.rb", "spec/**/*.rb", "tasks/**/*.rake"]
-
 begin
-  File.open("Manifest.txt", "w") {|f| MANIFEST.sort.each {|n| f << "#{n}\n"} }
   require 'hoe'
   Hoe.plugin :rubyforge
   require File.dirname(__FILE__) + '/lib/ci/reporter/version'
@@ -28,8 +24,8 @@ begin
     p.extra_rdoc_files += ["README.rdoc"]
     p.test_globs = ["spec/**/*_spec.rb"]
     p.extra_deps << ['builder', ">= 2.1.2"]
+    p.clean_globs += ["spec/reports", "acceptance/reports"]
   end
-  hoe.spec.files = MANIFEST
   hoe.spec.rdoc_options += ["-SHN", "-f", "darkfish"]
 
   task :gemspec do
