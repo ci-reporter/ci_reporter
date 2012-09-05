@@ -116,9 +116,11 @@ module CI
           return
         end
         @test_case.finish
-        @test_case.failures << CucumberFailure.new(table_row) if table_row.failed?
-        test_suite.testcases << @test_case
-        @test_case = nil
+        if table_row.respond_to? :failed?
+          @test_case.failures << CucumberFailure.new(table_row) if table_row.failed?
+          test_suite.testcases << @test_case
+          @test_case = nil
+        end
       end
     end
   end
