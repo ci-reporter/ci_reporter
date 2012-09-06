@@ -13,8 +13,8 @@ module CI
     class Failure
       def self.new(fault)
         return TestUnitFailure.new(fault) if fault.kind_of?(Test::Unit::Failure)
-        return TestUnitSkipped.new(fault) if Test::Unit.const_defined?(:Omission) && (fault.kind_of?(Test::Unit::Omission) || fault.kind_of?(Test::Unit::Pending))
-        return TestUnitNotification.new(fault) if Test::Unit.const_defined?(:Notification) && fault.kind_of?(Test::Unit::Notification)
+        return TestUnitSkipped.new(fault) if Test::Unit.const_defined?(:Omission, false) && (fault.kind_of?(Test::Unit::Omission) || fault.kind_of?(Test::Unit::Pending))
+        return TestUnitNotification.new(fault) if Test::Unit.const_defined?(:Notification, false) && fault.kind_of?(Test::Unit::Notification)
         TestUnitError.new(fault)
       end
     end
