@@ -1,4 +1,4 @@
-== 1.7.2
+== 1.7.2 (9/10/12)
 
 - #73: do not search ancestors when checking Test::Unit.const_defined? (Sean Walbran)
 - #68: make sure @suite is not nil (Patrick Cheng)
