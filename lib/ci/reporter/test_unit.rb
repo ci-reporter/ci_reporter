@@ -11,10 +11,30 @@ module CI
     # Factory for constructing either a CI::Reporter::TestUnitFailure or CI::Reporter::TestUnitError depending on the result
     # of the test.
     class Failure
+      CONST_DEFINED_ARITY = Module.method(:const_defined?).arity
+
+      def self.omission_constant?
+        if CONST_DEFINED_ARITY == 1 # 1.8.7 varieties
+          Test::Unit.const_defined?(:Omission)
+        else
+          Test::Unit.const_defined?(:Omission, false)
+        end
+      end
+
+      def self.notification_constant?
+        if CONST_DEFINED_ARITY == 1 # 1.8.7 varieties
+          Test::Unit.const_defined?(:Notification)
+        else
+          Test::Unit.const_defined?(:Notification, false)
+        end
+      end
+
       def self.new(fault)
         return TestUnitFailure.new(fault) if fault.kind_of?(Test::Unit::Failure)
-        return TestUnitSkipped.new(fault) if Test::Unit.const_defined?(:Omission, false) && (fault.kind_of?(Test::Unit::Omission) || fault.kind_of?(Test::Unit::Pending))
-        return TestUnitNotification.new(fault) if Test::Unit.const_defined?(:Notification, false) && fault.kind_of?(Test::Unit::Notification)
+        return TestUnitSkipped.new(fault) if omission_constant? &&
+          (fault.kind_of?(Test::Unit::Omission) || fault.kind_of?(Test::Unit::Pending))
+        return TestUnitNotification.new(fault) if notification_constant? &&
+          fault.kind_of?(Test::Unit::Notification)
         TestUnitError.new(fault)
       end
     end
