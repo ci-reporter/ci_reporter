@@ -1,3 +1,8 @@
+== 1.7.2
+
+- #73: do not search ancestors when checking Test::Unit.const_defined? (Sean Walbran)
+- #68: make sure @suite is not nil (Patrick Cheng)
+
 == 1.7.1 (08/16/12)
 
 - #58: Use const_defined? for checking a constant is defined (Kouhei Sutou)
