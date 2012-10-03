@@ -185,6 +185,12 @@ module CI
         @formatter.dump_pending
       end
 
+      def seed(number)
+        output.puts
+        output.puts "Randomized with seed #{number}"
+        output.puts
+      end
+
       def close
         @formatter.close
       end
