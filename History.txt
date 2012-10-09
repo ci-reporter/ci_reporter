@@ -1,3 +1,8 @@
+== 1.7.3 (10/09/12)
+
+- Don't extend RSpec BaseFormatter but instead delegate via method_missing for
+  better forward-compatibility
+
 == 1.7.2 (9/10/12)
 
 - #73: do not search ancestors when checking Test::Unit.const_defined? (Sean Walbran)
