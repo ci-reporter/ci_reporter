@@ -86,18 +86,13 @@ module CI
     end
 
     # Custom +RSpec+ formatter used to hook into the spec runs and capture results.
-    class RSpec < RSpecFormatters::BaseFormatter
+    class RSpec
       attr_accessor :report_manager
       attr_accessor :formatter
       def initialize(*args)
-        super
         @formatter ||= RSpecFormatters::ProgressFormatter.new(*args)
         @report_manager = ReportManager.new("spec")
         @suite = nil
-      end
-
-      def start(spec_count)
-        @formatter.start(spec_count)
       end
 
       # rspec 0.9
@@ -116,10 +111,6 @@ module CI
       def example_group_started(example_group)
         @formatter.example_group_started(example_group)
         new_suite(description_for(example_group))
-      end
-      
-      def example_group_finished(example_group)
-        @formatter.example_group_finished(example_group)
       end
 
       def example_started(name_or_example)
@@ -163,30 +154,19 @@ module CI
         spec.skipped = true
       end
 
-      def start_dump
-        @formatter.start_dump
-      end
-
-      def dump_failures(*args)
-        @formatter.dump_failures(*args)
-      end
-
-      def dump_failure(*args)
-        @formatter.dump_failure(*args)
-      end
-
       def dump_summary(*args)
         @formatter.dump_summary(*args)
         write_report
         @formatter.dump_failures
       end
 
-      def dump_pending
-        @formatter.dump_pending
+      def respond_to?(*args)
+        @formatter.respond_to?(*args)
       end
 
-      def close
-        @formatter.close
+      # Pass through other methods to RSpec formatter for compatibility
+      def method_missing(meth,*args,&block)
+        @formatter.send(meth,*args,&block)
       end
 
       private
