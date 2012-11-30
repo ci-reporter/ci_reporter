@@ -23,7 +23,12 @@ begin
     p.description = p.paragraphs_of('README.rdoc', 0...1).join("\n\n")
     p.extra_rdoc_files += ["README.rdoc"]
     p.test_globs = ["spec/**/*_spec.rb"]
-    p.extra_deps << ['builder', ">= 2.1.2"]
+    p.extra_deps     << [ 'builder',   '>= 2.1.2'  ]
+    p.extra_dev_deps << [ 'cucumber',  '~> 0.10.0' ]
+    p.extra_dev_deps << [ 'rspec',     '> 2.0.0'   ]
+    p.extra_dev_deps << [ 'test-unit', '> 2.0.0'   ]
+    p.extra_dev_deps << [ 'minitest',  '~> 2.2.0'  ]
+
     p.clean_globs += ["spec/reports", "acceptance/reports"]
   end
   hoe.spec.rdoc_options += ["-SHN", "-f", "darkfish"]
