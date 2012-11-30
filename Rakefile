@@ -105,6 +105,13 @@ task :generate_output do
     ruby "-Ilib #{opts} -rci/reporter/rake/minitest_loader acceptance/minitest_example_test.rb", &result_proc
     ruby "-Ilib #{opts} -S #{@spec_bin} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb", &result_proc
     ruby "-Ilib #{opts} -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber", &result_proc
+    Dir.chdir 'acceptance/spinach' do
+      Bundler.with_clean_env do
+        ENV['CI_REPORTS'] = "../reports/spinach"
+        ruby "-S bundle"
+        ruby "-I../../lib #{opts} -rci/reporter/rake/spinach_loader -S spinach", &result_proc
+      end
+    end
   ensure
     ENV['RUBYOPT'] = opts if opts != "-rubygems"
     ENV.delete 'CI_REPORTS'
