@@ -75,8 +75,14 @@ module CI
         output = []
         output.push "#{exception.class.name << ":"}" unless exception.class.name =~ /RSpec/
         output.push @exception.message
+        
+        format_metadata = if defined?(::RSpec::Core::BacktraceFormatter)
+          @example.metadata
+        else
+          @example
+        end
 
-        [@formatter.format_backtrace(@exception.backtrace, @example)].flatten.each do |backtrace_info|
+        [@formatter.format_backtrace(@exception.backtrace, format_metadata)].flatten.each do |backtrace_info|
           backtrace_info.lines.each do |line|
             output.push "     #{line}"
           end
