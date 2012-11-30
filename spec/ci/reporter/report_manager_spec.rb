@@ -43,7 +43,8 @@ describe "The ReportManager" do
     suite.should_receive(:name).and_return("some test suite name that goes on and on and on and on and on and on and does not look like it will end any time soon and just when you think it is almost over it just continues to go on and on and on and on and on until it is almost over but wait there is more and then el fin")
     suite.should_receive(:to_xml).and_return("<xml></xml>")
     reporter.write_report(suite)
-    filename = "#{REPORTS_DIR}/SPEC-some-test-suite-name-that-goes-on-and-on-and-on-and-on-and-on-and-on-and-does-not-look-like-it-will-end-any-time-soon-and-just-when-you-think-it-is-almost-over-it-just-continues-t.xml"
+    filename = "#{REPORTS_DIR}/SPEC-some-test-suite-name-that-goes-on-and-on-and-on-and-on-and-on-and-on-and-does-not-look-like-it-will-end-any-time-soon-and-just-when-you-think-it-is-almost-over-it-just-continues-to-go-on-a.xml"
+    filename.length.should be_<= 255
     File.exist?(filename).should be_true
     File.open(filename) {|f| f.read.should == "<xml></xml>"}
   end
