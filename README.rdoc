@@ -62,6 +62,8 @@ There's a bit of a chicken and egg problem because rubygems needs to be loaded b
 * +CI_REPORTS+: if set, points to a directory where report files will be written.
 * +CI_CAPTURE+: if set to value "off", stdout/stderr capture will be disabled.
 
+== Travis Build Status {<img src="https://secure.travis-ci.org/nicksieger/ci_reporter.png"/>}[http://travis-ci.org/#!/nicksieger/ci_reporter]
+
 == Source
 
 You can get the CI::Reporter source using Git, in any of the following ways:
