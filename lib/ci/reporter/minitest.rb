@@ -49,9 +49,9 @@ module CI
       def initialize(fault) @fault = fault end
       def failure?() false end
       def error?() true end
-      def name() @fault.exception.class.name end
-      def message() @fault.exception.message end
-      def location() @fault.exception.backtrace.join("\n") end
+      def name() @fault.class.name end
+      def message() @fault.message end
+      def location() @fault.backtrace.join("\n") end
     end
 
     class Runner < MiniTest::Unit

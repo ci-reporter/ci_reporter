@@ -45,6 +45,7 @@ describe "The ReportManager" do
     suite.should_receive(:to_xml).and_return("<xml></xml>")
     reporter.write_report(suite)
     filename = "#{REPORTS_DIR}/SPEC-#{very_long_name}"[0..CI::Reporter::ReportManager::MAX_FILENAME_SIZE].gsub(/\s/, '-') + ".xml"
+    filename.length.should be_<= 255
     File.exist?(filename).should be_true
     File.open(filename) {|f| f.read.should == "<xml></xml>"}
   end
