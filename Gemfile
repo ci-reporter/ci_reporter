@@ -11,6 +11,7 @@ group :development do
   gem 'hoe'
   gem 'rubyforge'
   gem 'cucumber'
+  gem 'spinach', '< 0.2'
   gem 'rspec', '> 2.0.0'
   gem 'test-unit', '> 2.0.0'
   gem 'minitest'
