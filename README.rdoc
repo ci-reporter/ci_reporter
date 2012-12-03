@@ -14,8 +14,13 @@ CI::Reporter works best with projects that use a +Rakefile+ along with the stand
 
     require 'ci/reporter/rake/rspec'     # use this if you're using RSpec
     require 'ci/reporter/rake/cucumber'  # use this if you're using Cucumber
+    require 'ci/reporter/rake/spinach'   # use this if you're using Spinach
     require 'ci/reporter/rake/test_unit' # use this if you're using Test::Unit
     require 'ci/reporter/rake/minitest'  # use this if you're using Ruby 1.9 or minitest
+
+Note: If you use both cucumber and spinach, you are likely to see strange errors, due to
+`gherkin` and `gherkin-ruby` both being loaded. So, you should choose only one of
+cucumber and spinach.
 
 2. Next, either modify your Rakefile to make the <code>ci:setup:rspec</code>, <code>ci:setup:cucumber</code>, <code>ci:setup:testunit</code> or <code>ci:setup:minitest</code> task a dependency of your test tasks, or run one of these rake tasks:
 
@@ -23,6 +28,7 @@ CI::Reporter works best with projects that use a +Rakefile+ along with the stand
     rake ci:setup:minitest test
     rake ci:setup:rspec spec
     rake ci:setup:cucumber features
+    rake ci:setup:spinach features
 
 == Jenkins setup
 
@@ -41,6 +47,7 @@ If you don't have control over the Rakefile or don't want to modify it, CI::Repo
     rake -f GEM_PATH/stub.rake ci:setup:minitest test
     rake -f GEM_PATH/stub.rake ci:setup:rspec spec
     rake -f GEM_PATH/stub.rake ci:setup:cucumber features
+    rake -f GEM_PATH/stub.rake ci:setup:spinach features
 
 If for some reason you can't use the above technique to inject CI::Reporter (e.g., you're not using Rake), you'll have to do one of these:
 
@@ -54,6 +61,10 @@ If for some reason you can't use the above technique to inject CI::Reporter (e.g
 3. If you're using Cucumber, you'll need to cheat slightly so that Cucumber's step definition autoloading will still work.  Instead of calling the +cucumber+ script directly, run:
 
     ruby -r GEM_PATH/lib/ci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber
+
+4. If you're using Spinach, you'll want to do this:
+
+    ruby -r GEM_PATH/lib/ci/reporter/rake/spinach_loader -S spinach
 
 There's a bit of a chicken and egg problem because rubygems needs to be loaded before you can require any CI::Reporter files.  If you cringe hard-coding a full path to a specific version of the gem, you can also copy the +cucumber_loader+ file into your project and require it directly -- the contents are version-agnostic and are not likely to change in future releases.
 
