@@ -10,6 +10,10 @@ acceptance/cucumber/cucumber_example.feature
 acceptance/cucumber/step_definitions/development_steps.rb
 acceptance/minitest_example_test.rb
 acceptance/rspec_example_spec.rb
+acceptance/spinach/Gemfile
+acceptance/spinach/Gemfile.lock
+acceptance/spinach/features/spinach_example.feature
+acceptance/spinach/features/steps/example_steps.rb
 acceptance/test_unit_example_test.rb
 acceptance/verification_spec.rb
 ci_reporter.gemspec
@@ -22,11 +26,14 @@ lib/ci/reporter/rake/minitest.rb
 lib/ci/reporter/rake/minitest_loader.rb
 lib/ci/reporter/rake/rspec.rb
 lib/ci/reporter/rake/rspec_loader.rb
+lib/ci/reporter/rake/spinach.rb
+lib/ci/reporter/rake/spinach_loader.rb
 lib/ci/reporter/rake/test_unit.rb
 lib/ci/reporter/rake/test_unit_loader.rb
 lib/ci/reporter/rake/utils.rb
 lib/ci/reporter/report_manager.rb
 lib/ci/reporter/rspec.rb
+lib/ci/reporter/spinach.rb
 lib/ci/reporter/test_suite.rb
 lib/ci/reporter/test_unit.rb
 lib/ci/reporter/version.rb

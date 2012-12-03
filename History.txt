@@ -1,3 +1,7 @@
+== 1.8.1 (12/03/12)
+
+- Manifest and gemspec for 1.8.0 was missing spinach files. Fixes #79.
+
 == 1.8.0 (11/30/12)
 
 - Add support for Spinach -- pull request #67 from spraints/spinach

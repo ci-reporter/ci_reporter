@@ -28,6 +28,7 @@ begin
     p.extra_dev_deps << [ 'rspec',     '> 2.0.0'   ]
     p.extra_dev_deps << [ 'test-unit', '> 2.0.0'   ]
     p.extra_dev_deps << [ 'minitest',  '~> 2.2.0'  ]
+    p.extra_dev_deps << [ 'spinach',   '< 0.2'     ]
 
     p.clean_globs += ["spec/reports", "acceptance/reports"]
   end
