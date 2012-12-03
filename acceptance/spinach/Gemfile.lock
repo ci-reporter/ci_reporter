@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    ci_reporter (1.7.3)
+    ci_reporter (1.8.0)
       builder (>= 2.1.2)
 
 GEM
@@ -19,7 +19,7 @@ GEM
     rspec-expectations (2.8.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.8.0)
-    spinach (0.5.2)
+    spinach (0.6.0)
       colorize
       gherkin-ruby (~> 0.2.0)
 
