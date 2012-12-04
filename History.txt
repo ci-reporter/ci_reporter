@@ -1,3 +1,7 @@
+== 1.8.2 (12/04/12)
+
+- #80: Handle rspec-core 2.10.0 #format_backtrace regression and fix
+
 == 1.8.1 (12/03/12)
 
 - Manifest and gemspec for 1.8.0 was missing spinach files. Fixes #79.
