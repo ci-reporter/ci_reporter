@@ -132,8 +132,12 @@ describe "The RSpec reporter" do
     before(:each) do
       @formatter = mock "formatter"
       @formatter.should_receive(:format_backtrace).and_return("backtrace")
-      @rspec20_example = mock('RSpec2.0 Example', :execution_result => {:exception_encountered => StandardError.new('rspec2.0 ftw')})
-      @rspec22_example = mock('RSpec2.2 Example', :execution_result => {:exception => StandardError.new('rspec2.2 ftw')})
+      @rspec20_example = mock('RSpec2.0 Example',
+                              :execution_result => {:exception_encountered => StandardError.new('rspec2.0 ftw')},
+                              :metadata => {})
+      @rspec22_example = mock('RSpec2.2 Example',
+                              :execution_result => {:exception => StandardError.new('rspec2.2 ftw')},
+                              :metadata => {})
     end
 
     it 'should handle rspec (< 2.2) execution results' do

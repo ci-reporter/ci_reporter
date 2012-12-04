@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    ci_reporter (1.7.3)
+    ci_reporter (1.8.1)
       builder (>= 2.1.2)
 
 GEM

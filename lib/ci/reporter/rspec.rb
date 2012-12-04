@@ -14,6 +14,11 @@ module CI
         BaseFormatter = ::RSpec::Core::Formatters::BaseFormatter
         ProgressFormatter = ::RSpec::Core::Formatters::ProgressFormatter
         DocFormatter = ::RSpec::Core::Formatters::DocumentationFormatter
+        # See https://github.com/nicksieger/ci_reporter/issues/76 and
+        #     https://github.com/nicksieger/ci_reporter/issues/80
+        require 'rspec/version'
+        RSpec_2_12_0_bug = (::RSpec::Version::STRING == '2.12.0' &&
+                            !BaseFormatter.instance_methods(false).map(&:to_s).include?("format_backtrace"))
       rescue LoadError => first_error
         begin
           require 'spec/runner/formatter/progress_bar_formatter'
@@ -75,12 +80,8 @@ module CI
         output = []
         output.push "#{exception.class.name << ":"}" unless exception.class.name =~ /RSpec/
         output.push @exception.message
-        
-        format_metadata = if defined?(::RSpec::Core::BacktraceFormatter)
-          @example.metadata
-        else
-          @example
-        end
+
+        format_metadata = RSpecFormatters::RSpec_2_12_0_bug ? @example.metadata : @example
 
         [@formatter.format_backtrace(@exception.backtrace, format_metadata)].flatten.each do |backtrace_info|
           backtrace_info.lines.each do |line|
