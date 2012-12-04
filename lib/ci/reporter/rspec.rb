@@ -16,8 +16,8 @@ module CI
         DocFormatter = ::RSpec::Core::Formatters::DocumentationFormatter
         # See https://github.com/nicksieger/ci_reporter/issues/76 and
         #     https://github.com/nicksieger/ci_reporter/issues/80
-        require 'rspec/version'
-        RSpec_2_12_0_bug = (::RSpec::Version::STRING == '2.12.0' &&
+        require 'rspec/core/version'
+        RSpec_2_12_0_bug = (::RSpec::Core::Version::STRING == '2.12.0' &&
                             !BaseFormatter.instance_methods(false).map(&:to_s).include?("format_backtrace"))
       rescue LoadError => first_error
         begin
