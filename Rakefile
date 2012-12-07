@@ -8,7 +8,7 @@ require 'bundler/setup'
 
 begin
   require 'hoe'
-  Hoe.plugin :rubyforge
+  Hoe.plugin :rubyforge, :git
   require File.dirname(__FILE__) + '/lib/ci/reporter/version'
   hoe = Hoe.spec("ci_reporter") do |p|
     p.version = CI::Reporter::VERSION
@@ -24,6 +24,7 @@ begin
     p.extra_rdoc_files += ["README.rdoc"]
     p.test_globs = ["spec/**/*_spec.rb"]
     p.extra_deps     << [ 'builder',   '>= 2.1.2'  ]
+    p.extra_dev_deps << [ 'hoe-git',   '~> 1.5.0'  ]
     p.extra_dev_deps << [ 'cucumber',  '~> 0.10.0' ]
     p.extra_dev_deps << [ 'rspec',     '> 2.0.0'   ]
     p.extra_dev_deps << [ 'test-unit', '> 2.4.9'   ]

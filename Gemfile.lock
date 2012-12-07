@@ -17,6 +17,8 @@ GEM
       json (>= 1.4.6)
     hoe (2.12.4)
       rake (~> 0.8)
+    hoe-git (1.5.0)
+      hoe (>= 2.2.0)
     jruby-openssl (0.7.4)
       bouncy-castle-java
     json (1.6.3)
@@ -50,6 +52,7 @@ DEPENDENCIES
   builder
   cucumber
   hoe
+  hoe-git (~> 1.5.0)
   jruby-openssl
   minitest
   rcov
