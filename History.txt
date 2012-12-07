@@ -1,3 +1,8 @@
+== 1.8.3 (12/07/12)
+
+- Update test-unit dependency to '> 2.4.9' (thanks Troy Dawson)
+- Add spinach documentation
+
 == 1.8.2 (12/04/12)
 
 - #80: Handle rspec-core 2.10.0 #format_backtrace regression and fix
