@@ -40,7 +40,7 @@ GEM
       colorize
       gherkin
     term-ansicolor (1.0.5)
-    test-unit (2.3.0)
+    test-unit (2.5.3)
 
 PLATFORMS
   java

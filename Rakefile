@@ -26,7 +26,7 @@ begin
     p.extra_deps     << [ 'builder',   '>= 2.1.2'  ]
     p.extra_dev_deps << [ 'cucumber',  '~> 0.10.0' ]
     p.extra_dev_deps << [ 'rspec',     '> 2.0.0'   ]
-    p.extra_dev_deps << [ 'test-unit', '> 2.0.0'   ]
+    p.extra_dev_deps << [ 'test-unit', '> 2.4.9'   ]
     p.extra_dev_deps << [ 'minitest',  '~> 2.2.0'  ]
     p.extra_dev_deps << [ 'spinach',   '< 0.2'     ]
 
