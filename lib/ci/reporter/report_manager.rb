@@ -43,7 +43,8 @@ module CI #:nodoc:
         # shorten basename if it exceeds 240 characters
         # most filesystems have a 255 character limit
         # so leave some room for the sidesteps
-        basename = basename[0..MAX_FILENAME_SIZE] if basename.length > MAX_FILENAME_SIZE
+        max_filename_size = (ENV['MAX_FILENAME_SIZE'] || MAX_FILENAME_SIZE).to_i
+        basename = basename[0..max_filename_size] if basename.length > max_filename_size
         
         # the initial filename, e.g. SPEC-MailsController.xml
         filename = [basename, suffix].join(".")
