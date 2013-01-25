@@ -1,3 +1,8 @@
+== 1.8.4 (01/25/13)
+
+- Fixing LoadError for rspec/version for apps that use rspec-rails (thanks
+  Dmitry Frenkel)
+
 == 1.8.3 (12/07/12)
 
 - Update test-unit dependency to '> 2.4.9' (thanks Troy Dawson)

@@ -24,6 +24,7 @@ GEM
       gherkin-ruby (~> 0.2.0)
 
 PLATFORMS
+  java
   ruby
 
 DEPENDENCIES
