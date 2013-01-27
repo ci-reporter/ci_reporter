@@ -57,4 +57,5 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<hoe>, ["~> 2.12"])
     s.add_dependency(%q<rdoc>, ["~> 3.10"])
   end
+  s.license = "MIT"
 end
