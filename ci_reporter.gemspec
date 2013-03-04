@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = "1.8.24"
   s.summary = "CI::Reporter allows you to generate reams of XML for use with continuous integration systems."
   s.test_files = ["spec/ci/reporter/cucumber_spec.rb", "spec/ci/reporter/output_capture_spec.rb", "spec/ci/reporter/report_manager_spec.rb", "spec/ci/reporter/rspec_spec.rb", "spec/ci/reporter/test_suite_spec.rb", "spec/ci/reporter/test_unit_spec.rb", "spec/ci/reporter/rake/rake_tasks_spec.rb"]
+  s.license = "MIT"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
