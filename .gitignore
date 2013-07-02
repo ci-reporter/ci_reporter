@@ -3,3 +3,4 @@ acceptance/reports
 pkg
 doc
 /.bundle/
+/Gemfile.lock
