@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 #++
@@ -46,18 +46,13 @@ end
 # Hoe insists on setting task :default => :test
 # !@#$ no easy way to empty the default list of prerequisites
 # Leave my tasks alone, Hoe
-%w(default spec rcov).each do |task|
+%w(default spec).each do |task|
   next unless Rake::Task.task_defined?(task)
   Rake::Task[task].prerequisites.clear
   Rake::Task[task].actions.clear
 end
 
-# RCov only on 1.8
-if defined?(RUBY_ENGINE)
-  task :default => :spec
-else
-  task :default => :rcov
-end
+task :default => :spec
 
 RSpecTask = begin
   require 'rspec/core/rake_task'
@@ -72,25 +67,6 @@ end
 RSpecTask.new do |t|
   t.rspec_opts = "--color"
 end
-
-RSpecTask.new("spec:rcov") do |t|
-  t.rcov_opts = ['--exclude gems/*']
-  t.rcov = true
-end
-
-begin
-  require 'spec/rake/verify_rcov'
-  # so we don't confuse autotest
-  RCov::VerifyTask.new(:rcov) do |t|
-    # Can't get threshold up to 100 unless RSpec backwards compatibility
-    # code is dropped
-    t.threshold = 95
-    t.require_exact_threshold = false
-  end
-rescue LoadError
-end
-
-task :rcov => "spec:rcov"
 
 task :generate_output do
   rm_rf "acceptance/reports"

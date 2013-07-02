@@ -1,10 +1,10 @@
 #--
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 #++
 
-source :rubygems
+source 'https://rubygems.org'
 
 gem 'builder'
 group :development do
