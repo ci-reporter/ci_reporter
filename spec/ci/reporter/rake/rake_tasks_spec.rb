@@ -94,12 +94,17 @@ describe "ci_reporter ci:setup:cucumber task" do
 
   it "should set ENV['CUCUMBER_OPTS'] to include cucumber formatter args" do
     @rake["ci:setup:cucumber"].invoke
-    ENV["CUCUMBER_OPTS"].should =~ /--require.*cucumber_loader.*--format.*CI::Reporter::Cucumber/
+    ENV["CUCUMBER_OPTS"].should =~ /--format\s+CI::Reporter::Cucumber/
+  end
+
+  it "should not set ENV['CUCUMBER_OPTS'] to require cucumber_loader" do
+    @rake["ci:setup:cucumber"].invoke
+    ENV["CUCUMBER_OPTS"].should_not =~ /.*--require\s+\S*cucumber_loader.*/
   end
 
   it "should append to ENV['CUCUMBER_OPTS'] if it already contains a value" do
     ENV["CUCUMBER_OPTS"] = "somevalue".freeze
     @rake["ci:setup:cucumber"].invoke
-    ENV["CUCUMBER_OPTS"].should =~ /somevalue.*--require.*cucumber_loader.*--format.*CI::Reporter::Cucumber/
+    ENV["CUCUMBER_OPTS"].should =~ /somevalue.*\s--format\s+CI::Reporter::Cucumber/
   end
 end
