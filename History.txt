@@ -1,3 +1,8 @@
+== 1.9.0 (07/02/13)
+
+- Merge PR #102 (thanks docwhat)
+- Drop 1.8 support from travis/build scripts
+
 == 1.8.4 (01/25/13)
 
 - Fixing LoadError for rspec/version for apps that use rspec-rails (thanks
