@@ -2,3 +2,4 @@ coverage*
 acceptance/reports
 pkg
 doc
+/.bundle/
