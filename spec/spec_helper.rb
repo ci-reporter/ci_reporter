@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -20,4 +20,5 @@ require 'ci/reporter/core'
 require 'ci/reporter/test_unit'
 require 'ci/reporter/rspec'
 
+Test::Unit.run = true
 REPORTS_DIR = File.dirname(__FILE__) + "/reports" unless defined?(REPORTS_DIR)

@@ -14,7 +14,7 @@ begin
     p.version = CI::Reporter::VERSION
     p.rubyforge_name = "caldersphere"
     p.readme_file = "README.rdoc"
-    p.url = "http://caldersphere.rubyforge.org/ci_reporter"
+    p.urls = ["http://caldersphere.rubyforge.org/ci_reporter"]
     p.author = "Nick Sieger"
     p.email = "nick@nicksieger.com"
     p.readme_file = 'README.rdoc'
@@ -43,31 +43,6 @@ rescue LoadError
   puts "You really need Hoe installed to be able to package this gem"
 end
 
-# Hoe insists on setting task :default => :test
-# !@#$ no easy way to empty the default list of prerequisites
-# Leave my tasks alone, Hoe
-%w(default spec).each do |task|
-  next unless Rake::Task.task_defined?(task)
-  Rake::Task[task].prerequisites.clear
-  Rake::Task[task].actions.clear
-end
-
-task :default => :spec
-
-RSpecTask = begin
-  require 'rspec/core/rake_task'
-  @spec_bin = 'rspec'
-  RSpec::Core::RakeTask
-rescue LoadError
-  require 'spec/rake/spectask'
-  @spec_bin = 'spec'
-  Spec::Rake::SpecTask
-end
-
-RSpecTask.new do |t|
-  t.rspec_opts = "--color"
-end
-
 task :generate_output do
   rm_rf "acceptance/reports"
   ENV['CI_REPORTS'] = "acceptance/reports"
@@ -77,17 +52,20 @@ task :generate_output do
   else
     opts = "-rubygems"
   end
+  rspec = "#{Gem.loaded_specs['rspec-core'].gem_dir}/exe/rspec"
+  cucumber = "#{Gem.loaded_specs['cucumber'].gem_dir}/bin/cucumber"
   begin
     result_proc = proc {|ok,*| puts "Failures above are expected." unless ok }
     ruby "-Ilib #{opts} -rci/reporter/rake/test_unit_loader acceptance/test_unit_example_test.rb", &result_proc
     ruby "-Ilib #{opts} -rci/reporter/rake/minitest_loader acceptance/minitest_example_test.rb", &result_proc
-    ruby "-Ilib #{opts} -S #{@spec_bin} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb", &result_proc
-    ruby "-Ilib #{opts} -rci/reporter/rake/cucumber_loader -S cucumber --format CI::Reporter::Cucumber acceptance/cucumber", &result_proc
+    ruby "-Ilib #{opts} -S #{rspec} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb", &result_proc
+    ruby "-Ilib #{opts} -rci/reporter/rake/cucumber_loader -S #{cucumber} --format CI::Reporter::Cucumber acceptance/cucumber", &result_proc
     Dir.chdir 'acceptance/spinach' do
       Bundler.with_clean_env do
         ENV['CI_REPORTS'] = "../reports/spinach"
-        ruby "-S bundle"
-        ruby "-I../../lib #{opts} -rci/reporter/rake/spinach_loader -S spinach", &result_proc
+        sh "bundle"
+        spinach = "#{Gem.loaded_specs['spinach'].gem_dir}/bin/spinach"
+        ruby "-I../../lib #{opts} -rci/reporter/rake/spinach_loader -S #{spinach}", &result_proc
       end
     end
   ensure
@@ -97,7 +75,8 @@ task :generate_output do
 end
 task :acceptance => :generate_output
 
-RSpecTask.new(:acceptance_spec) do |t|
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:acceptance_spec) do |t|
   t.pattern = FileList['acceptance/verification_spec.rb']
   t.rspec_opts = "--color"
 end

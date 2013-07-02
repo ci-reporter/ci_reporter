@@ -1,16 +1,18 @@
 PATH
   remote: ../..
   specs:
-    ci_reporter (1.8.3)
+    ci_reporter (1.8.4)
       builder (>= 2.1.2)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
-    builder (3.1.4)
+    builder (3.2.2)
     colorize (0.5.8)
     diff-lcs (1.1.3)
-    gherkin-ruby (0.2.1)
+    gherkin (2.5.4)
+      json (>= 1.4.6)
+    json (1.8.0)
     rspec (2.8.0)
       rspec-core (~> 2.8.0)
       rspec-expectations (~> 2.8.0)
@@ -19,9 +21,9 @@ GEM
     rspec-expectations (2.8.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.8.0)
-    spinach (0.6.0)
+    spinach (0.1.5.4)
       colorize
-      gherkin-ruby (~> 0.2.0)
+      gherkin (= 2.5.4)
 
 PLATFORMS
   java
@@ -30,4 +32,4 @@ PLATFORMS
 DEPENDENCIES
   ci_reporter!
   rspec
-  spinach
+  spinach (< 0.2)
