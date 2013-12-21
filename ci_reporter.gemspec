@@ -58,4 +58,5 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<spinach>, ["< 0.2"])
     s.add_dependency(%q<hoe>, ["~> 3.6"])
   end
+  s.license = "MIT"
 end
