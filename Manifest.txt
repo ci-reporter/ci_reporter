@@ -1,6 +1,7 @@
 .gemtest
 .hoerc
 .rspec
+.travis.before_install.sh
 .travis.yml
 Gemfile
 History.txt

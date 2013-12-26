@@ -1,3 +1,10 @@
+== 1.9.1 (12/26/13)
+
+- GH #111: Add MIT license in gemspec (Dave Golombek)
+- GH #84: Fix for filename too long on ecryptfs (Gintaras Sakalauskas)
+- Upgrade RSpec, Cucumber and Spinach deps and fix deprecations
+- Get Travis build green again for 1.9.3, 2.0.0 and JRuby
+
 == 1.9.0 (07/02/13)
 
 - Merge PR #102 (thanks docwhat)
