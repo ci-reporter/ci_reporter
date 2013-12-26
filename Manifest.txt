@@ -1,6 +1,8 @@
+.gemtest
+.hoerc
+.rspec
 .travis.yml
 Gemfile
-Gemfile.lock
 History.txt
 LICENSE.txt
 Manifest.txt
@@ -10,10 +12,8 @@ acceptance/cucumber/cucumber_example.feature
 acceptance/cucumber/step_definitions/development_steps.rb
 acceptance/minitest_example_test.rb
 acceptance/rspec_example_spec.rb
-acceptance/spinach/Gemfile
-acceptance/spinach/Gemfile.lock
 acceptance/spinach/features/spinach_example.feature
-acceptance/spinach/features/steps/example_steps.rb
+acceptance/spinach/features/steps/example_spinach_feature.rb
 acceptance/test_unit_example_test.rb
 acceptance/verification_spec.rb
 ci_reporter.gemspec

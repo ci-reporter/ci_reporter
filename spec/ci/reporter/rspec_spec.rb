@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -7,17 +7,17 @@ require 'stringio'
 
 describe "The RSpec reporter" do
   before(:each) do
-    @error = mock("error")
-    @error.stub!(:expectation_not_met?).and_return(false)
-    @error.stub!(:pending_fixed?).and_return(false)
-    @error.stub!(:exception).and_return(StandardError.new)
-    @report_mgr = mock("report manager")
-    @options = mock("options")
+    @error = double("error")
+    @error.stub(:expectation_not_met?).and_return(false)
+    @error.stub(:pending_fixed?).and_return(false)
+    @error.stub(:exception).and_return(StandardError.new)
+    @report_mgr = double("report manager")
+    @options = double("options")
     @args = [@options, StringIO.new("")]
     @args.shift unless defined?(::Spec) && ::Spec::VERSION::MAJOR == 1 && ::Spec::VERSION::MINOR >= 1
     @fmt = CI::Reporter::RSpec.new *@args
     @fmt.report_manager = @report_mgr
-    @formatter = mock("formatter")
+    @formatter = double("formatter")
     @fmt.formatter = @formatter
   end
 
@@ -40,8 +40,8 @@ describe "The RSpec reporter" do
       suite.testcases[2].name.should =~ /\(PENDING\)/
     end
 
-    example_group = mock "example group"
-    example_group.stub!(:description).and_return "A context"
+    example_group = double "example group"
+    example_group.stub(:description).and_return "A context"
 
     @formatter.should_receive(:start).with(3)
     @formatter.should_receive(:example_group_started).with(example_group)
@@ -65,7 +65,7 @@ describe "The RSpec reporter" do
     @fmt.example_started("should be pending")
     @fmt.example_pending("A context", "should be pending", "Not Yet Implemented")
     @fmt.start_dump
-    @fmt.dump_failure(1, mock("failure"))
+    @fmt.dump_failure(1, double("failure"))
     @fmt.dump_summary(0.1, 3, 1, 1)
     @fmt.dump_pending
     @fmt.close
@@ -88,10 +88,10 @@ describe "The RSpec reporter" do
   end
 
   it "should use the example #description method when available" do
-    group = mock "example group"
-    group.stub!(:description).and_return "group description"
-    example = mock "example"
-    example.stub!(:description).and_return "should do something"
+    group = double "example group"
+    group.stub(:description).and_return "group description"
+    example = double "example"
+    example.stub(:description).and_return "should do something"
 
     @formatter.should_receive(:start)
     @formatter.should_receive(:example_group_started).with(group)
@@ -111,8 +111,8 @@ describe "The RSpec reporter" do
   end
 
   it "should create a test suite with failure in before(:all)" do
-    example_group = mock "example group"
-    example_group.stub!(:description).and_return "A context"
+    example_group = double "example group"
+    example_group.stub(:description).and_return "A context"
 
     @formatter.should_receive(:start)
     @formatter.should_receive(:example_group_started).with(example_group)
@@ -130,12 +130,12 @@ describe "The RSpec reporter" do
 
   describe 'RSpec2Failure' do
     before(:each) do
-      @formatter = mock "formatter"
+      @formatter = double "formatter"
       @formatter.should_receive(:format_backtrace).and_return("backtrace")
-      @rspec20_example = mock('RSpec2.0 Example',
+      @rspec20_example = double('RSpec2.0 Example',
                               :execution_result => {:exception_encountered => StandardError.new('rspec2.0 ftw')},
                               :metadata => {})
-      @rspec22_example = mock('RSpec2.2 Example',
+      @rspec22_example = double('RSpec2.2 Example',
                               :execution_result => {:exception => StandardError.new('rspec2.2 ftw')},
                               :metadata => {})
     end

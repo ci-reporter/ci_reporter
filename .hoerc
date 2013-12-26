@@ -1,0 +1,2 @@
+---
+exclude: !ruby/regexp /tmp$|CVS|TAGS|\.(svn|git|DS_Store)|Gemfile.lock/

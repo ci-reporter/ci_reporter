@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -15,7 +15,7 @@ describe "A TestSuite" do
     @suite.finish
     @suite.time.should >= 0
   end
-  
+
   it "should aggregate tests" do
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
@@ -28,15 +28,15 @@ describe "A TestSuite" do
     def name.to_s; "object name"; end
     CI::Reporter::TestSuite.new(name).name.should == "object name"
   end
-  
-  it "should indicate number of failures and errors" do
-    failure = mock("failure")
-    failure.stub!(:failure?).and_return true
-    failure.stub!(:error?).and_return false
 
-    error = mock("error")
-    error.stub!(:failure?).and_return false
-    error.stub!(:error?).and_return true
+  it "should indicate number of failures and errors" do
+    failure = double("failure")
+    failure.stub(:failure?).and_return true
+    failure.stub(:error?).and_return false
+
+    error = double("error")
+    error.stub(:failure?).and_return false
+    error.stub(:error?).and_return true
 
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
@@ -72,19 +72,19 @@ describe "TestSuite xml" do
   end
 
   it "should contain Ant/JUnit-formatted description of entire suite" do
-    failure = mock("failure")
-    failure.stub!(:failure?).and_return true
-    failure.stub!(:error?).and_return false
-    failure.stub!(:name).and_return "failure"
-    failure.stub!(:message).and_return "There was a failure"
-    failure.stub!(:location).and_return @exception.backtrace.join("\n")
+    failure = double("failure")
+    failure.stub(:failure?).and_return true
+    failure.stub(:error?).and_return false
+    failure.stub(:name).and_return "failure"
+    failure.stub(:message).and_return "There was a failure"
+    failure.stub(:location).and_return @exception.backtrace.join("\n")
 
-    error = mock("error")
-    error.stub!(:failure?).and_return false
-    error.stub!(:error?).and_return true
-    error.stub!(:name).and_return "error"
-    error.stub!(:message).and_return "There was a error"
-    error.stub!(:location).and_return @exception.backtrace.join("\n")
+    error = double("error")
+    error.stub(:failure?).and_return false
+    error.stub(:error?).and_return true
+    error.stub(:name).and_return "error"
+    error.stub(:message).and_return "There was a error"
+    error.stub(:location).and_return @exception.backtrace.join("\n")
 
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
@@ -108,12 +108,12 @@ describe "TestSuite xml" do
   end
 
   it "should contain full exception type and message in location element" do
-    failure = mock("failure")
-    failure.stub!(:failure?).and_return true
-    failure.stub!(:error?).and_return false
-    failure.stub!(:name).and_return "failure"
-    failure.stub!(:message).and_return "There was a failure"
-    failure.stub!(:location).and_return @exception.backtrace.join("\n")
+    failure = double("failure")
+    failure.stub(:failure?).and_return true
+    failure.stub(:error?).and_return false
+    failure.stub(:name).and_return "failure"
+    failure.stub(:message).and_return "There was a failure"
+    failure.stub(:location).and_return @exception.backtrace.join("\n")
 
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("example test")
@@ -130,12 +130,12 @@ describe "TestSuite xml" do
   end
 
   it "should filter attributes properly for invalid characters" do
-    failure = mock("failure")
-    failure.stub!(:failure?).and_return true
-    failure.stub!(:error?).and_return false
-    failure.stub!(:name).and_return "failure"
-    failure.stub!(:message).and_return "There was a <failure>\nReason: blah"
-    failure.stub!(:location).and_return @exception.backtrace.join("\n")
+    failure = double("failure")
+    failure.stub(:failure?).and_return true
+    failure.stub(:error?).and_return false
+    failure.stub(:name).and_return "failure"
+    failure.stub(:message).and_return "There was a <failure>\nReason: blah"
+    failure.stub(:location).and_return @exception.backtrace.join("\n")
 
     @suite.start
     @suite.testcases << CI::Reporter::TestCase.new("failure test")

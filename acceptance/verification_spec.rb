@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 #++
@@ -109,15 +109,15 @@ describe "RSpec acceptance" do
 end
 
 describe "Cucumber acceptance" do
-  it "should generate three XML files" do
-    File.exist?(File.join(REPORTS_DIR, 'FEATURES-Example-feature.xml')).should == true
+  it "should generate one XML file" do
+    File.exist?(File.join(REPORTS_DIR, 'FEATURES-Example-Cucumber-feature.xml')).should == true
 
-    Dir["#{REPORTS_DIR}/FEATURES-*.xml"].length.should == 1
+    Dir["#{REPORTS_DIR}/FEATURES-*Cucumber*.xml"].length.should == 1
   end
 
   context "FEATURES report file" do
     before :each do
-      @doc = File.open(File.join(REPORTS_DIR, 'FEATURES-Example-feature.xml')) do |f|
+      @doc = File.open(File.join(REPORTS_DIR, 'FEATURES-Example-Cucumber-feature.xml')) do |f|
         REXML::Document.new(f)
       end
     end
@@ -143,18 +143,16 @@ describe "Cucumber acceptance" do
   end
 end
 
-SPINACH_REPORTS_DIR = File.expand_path('spinach', REPORTS_DIR)
-
 describe "Spinach acceptance" do
-  it "should generate three XML files" do
-    File.exist?(File.join(SPINACH_REPORTS_DIR, 'FEATURES-Example-feature.xml')).should == true
+  it "should generate one XML file" do
+    File.exist?(File.join(REPORTS_DIR, 'FEATURES-Example-Spinach-feature.xml')).should == true
 
-    Dir["#{SPINACH_REPORTS_DIR}/FEATURES-*.xml"].length.should == 1
+    Dir["#{REPORTS_DIR}/FEATURES-*Spinach*.xml"].length.should == 1
   end
 
   context "SPINACH report file" do
     before :each do
-      @doc = File.open(File.join(SPINACH_REPORTS_DIR, 'FEATURES-Example-feature.xml')) do |f|
+      @doc = File.open(File.join(REPORTS_DIR, 'FEATURES-Example-Spinach-feature.xml')) do |f|
         REXML::Document.new(f)
       end
     end

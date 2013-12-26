@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -6,10 +6,10 @@ require File.dirname(__FILE__) + "/../../spec_helper.rb"
 
 describe "The TestUnit reporter" do
   before(:each) do
-    @report_mgr = mock("report manager")
+    @report_mgr = double("report manager")
     @testunit = CI::Reporter::TestUnit.new(nil, @report_mgr)
-    @result = mock("result")
-    @result.stub!(:assertion_count).and_return(7)
+    @result = double("result")
+    @result.stub(:assertion_count).and_return(7)
   end
 
   it "should build suites based on adjacent tests with the same class name" do
@@ -32,7 +32,7 @@ describe "The TestUnit reporter" do
     @suite.testcases.last.should_not be_failure
     @suite.testcases.last.should_not be_error
   end
-  
+
   it "should build two suites when encountering different class names" do
     @suites = []
     @report_mgr.should_receive(:write_report).twice.and_return {|suite| @suites << suite }
@@ -54,7 +54,7 @@ describe "The TestUnit reporter" do
     @suites.last.testcases.first.name.should == "test_two"
     @suites.last.testcases.first.assertions.should == 0
   end
-  
+
   it "should record assertion counts during test run" do
     @suite = nil
     @report_mgr.should_receive(:write_report).and_return {|suite| @suite = suite }
@@ -67,7 +67,7 @@ describe "The TestUnit reporter" do
     @suite.assertions.should == 7
     @suite.testcases.last.assertions.should == 7
   end
-  
+
   it "should add failures to testcases when encountering a fault" do
     @failure = Test::Unit::Failure.new("test_one(TestCaseClass)", "somewhere:10", "it failed")
 
@@ -113,7 +113,7 @@ describe "The TestUnit reporter" do
     @suite.testcases.last.should_not be_failure
     @suite.testcases.last.should be_error
   end
-  
+
   it "should add multiple failures to a testcase" do
     @failure1 = Test::Unit::Failure.new("test_one(TestCaseClass)", "somewhere:10", "it failed")
     @failure2 = Test::Unit::Failure.new("test_one(TestCaseClass)", "somewhere:12", "it failed again in teardown")

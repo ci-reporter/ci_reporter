@@ -4,7 +4,8 @@ require 'spinach'
 module CI
   module Reporter
     class Spinach < ::Spinach::Reporter
-      def initialize
+      def initialize(options = nil)
+        @options = options
         @report_manager = ReportManager.new('features')
       end
 
@@ -72,4 +73,8 @@ module CI
       end
     end
   end
+end
+
+class Spinach::Reporter
+  CiReporter = ::CI::Reporter::Spinach
 end

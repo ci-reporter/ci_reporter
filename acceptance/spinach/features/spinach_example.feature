@@ -1,4 +1,4 @@
-Feature: Example feature
+Feature: Example Spinach feature
   As a conscientious developer who writes features
   I want to be able to see my features passing on the CI Server
   So that I can bask in the glow of a green bar

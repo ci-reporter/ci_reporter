@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
@@ -8,16 +8,16 @@ require 'ci/reporter/cucumber'
 describe "The Cucumber reporter" do
   describe CI::Reporter::CucumberFailure do
     before(:each) do
-      @klass = mock("class")
-      @klass.stub!(:name).and_return("Exception name")
+      @klass = double("class")
+      @klass.stub(:name).and_return("Exception name")
 
-      @exception = mock("exception")
-      @exception.stub!(:class).and_return(@klass)
-      @exception.stub!(:message).and_return("Exception message")
-      @exception.stub!(:backtrace).and_return(["First line", "Second line"])
+      @exception = double("exception")
+      @exception.stub(:class).and_return(@klass)
+      @exception.stub(:message).and_return("Exception message")
+      @exception.stub(:backtrace).and_return(["First line", "Second line"])
 
-      @step = mock("step")
-      @step.stub!(:exception).and_return(@exception)
+      @step = double("step")
+      @step.stub(:exception).and_return(@exception)
 
       @cucumber_failure = CI::Reporter::CucumberFailure.new(@step)
     end
@@ -55,11 +55,11 @@ describe "The Cucumber reporter" do
 
   describe CI::Reporter::Cucumber do
     before(:each) do
-      @step_mother = mock("step_mother")
-      @io = mock("io")
+      @step_mother = double("step_mother")
+      @io = double("io")
 
-      @report_manager = mock("report_manager")
-      CI::Reporter::ReportManager.stub!(:new).and_return(@report_manager)
+      @report_manager = double("report_manager")
+      CI::Reporter::ReportManager.stub(:new).and_return(@report_manager)
     end
 
     def new_instance
@@ -88,12 +88,12 @@ describe "The Cucumber reporter" do
         @cucumber = new_instance
         @cucumber.feature_name(nil, "Demo feature")
 
-        @test_suite = mock("test_suite", :start => nil, :finish => nil, :name= => nil)
-        CI::Reporter::TestSuite.stub!(:new).and_return(@test_suite)
+        @test_suite = double("test_suite", :start => nil, :finish => nil, :name= => nil)
+        CI::Reporter::TestSuite.stub(:new).and_return(@test_suite)
 
-        @feature = mock("feature")
+        @feature = double("feature")
 
-        @report_manager.stub!(:write_report)
+        @report_manager.stub(:write_report)
       end
 
       context "before" do
@@ -113,12 +113,12 @@ describe "The Cucumber reporter" do
           @cucumber = new_instance
           @cucumber.feature_name(nil, "Demo feature")
 
-          @test_suite = mock("test_suite", :start => nil, :finish => nil, :name= => nil)
-          CI::Reporter::TestSuite.stub!(:new).and_return(@test_suite)
+          @test_suite = double("test_suite", :start => nil, :finish => nil, :name= => nil)
+          CI::Reporter::TestSuite.stub(:new).and_return(@test_suite)
 
-          @feature = mock("feature")
+          @feature = double("feature")
 
-          @report_manager.stub!(:write_report)
+          @report_manager.stub(:write_report)
 
           @cucumber.before_feature(@feature)
         end
@@ -139,16 +139,16 @@ describe "The Cucumber reporter" do
       before(:each) do
         @testcases = []
 
-        @test_suite = mock("test_suite", :testcases => @testcases)
+        @test_suite = double("test_suite", :testcases => @testcases)
 
         @cucumber = new_instance
-        @cucumber.stub!(:test_suite).and_return(@test_suite)
+        @cucumber.stub(:test_suite).and_return(@test_suite)
 
-        @test_case = mock("test_case", :start => nil, :finish => nil, :name => "Step Name")
-        CI::Reporter::TestCase.stub!(:new).and_return(@test_case)
+        @test_case = double("test_case", :start => nil, :finish => nil, :name => "Step Name")
+        CI::Reporter::TestCase.stub(:new).and_return(@test_case)
 
-        @step = mock("step", :status => :passed)
-        @step.stub!(:name).and_return("Step Name")
+        @step = double("step", :status => :passed)
+        @step.stub(:name).and_return("Step Name")
       end
 
       context "before steps" do
@@ -182,19 +182,19 @@ describe "The Cucumber reporter" do
         end
 
         it "should alter the name of a test case that is pending to include '(PENDING)'" do
-          @step.stub!(:status).and_return(:pending)
+          @step.stub(:status).and_return(:pending)
           @test_case.should_receive(:name=).with("Step Name (PENDING)")
           @cucumber.after_steps(@step)
         end
 
         it "should alter the name of a test case that is undefined to include '(PENDING)'" do
-          @step.stub!(:status).and_return(:undefined)
+          @step.stub(:status).and_return(:undefined)
           @test_case.should_receive(:name=).with("Step Name (PENDING)")
           @cucumber.after_steps(@step)
         end
 
         it "should alter the name of a test case that was skipped to include '(SKIPPED)'" do
-          @step.stub!(:status).and_return(:skipped)
+          @step.stub(:status).and_return(:skipped)
           @test_case.should_receive(:name=).with("Step Name (SKIPPED)")
           @cucumber.after_steps(@step)
         end
@@ -202,15 +202,15 @@ describe "The Cucumber reporter" do
 
       describe "that fails" do
         before(:each) do
-          @step.stub!(:status).and_return(:failed)
+          @step.stub(:status).and_return(:failed)
 
           @failures = []
-          @test_case.stub!(:failures).and_return(@failures)
+          @test_case.stub(:failures).and_return(@failures)
 
           @cucumber.before_steps(@step)
 
-          @cucumber_failure = mock("cucumber_failure")
-          CI::Reporter::CucumberFailure.stub!(:new).and_return(@cucumber_failure)
+          @cucumber_failure = double("cucumber_failure")
+          CI::Reporter::CucumberFailure.stub(:new).and_return(@cucumber_failure)
         end
 
         it "should create a new cucumber failure with that step" do
