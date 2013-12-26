@@ -29,6 +29,15 @@ cucumber and spinach.
     rake ci:setup:rspec spec
     rake ci:setup:cucumber features
     rake ci:setup:spinach features
+    
+=== RSpec Formatters
+
+CI::Reporter has seperate Rake tasks for each builtin RSpec formatter. Depending upon which formatter you would like, call the following corresponding task.
+
+Progress (default)  ::  ci:setup:rspec
+Base                ::  ci:setup:rspecbase
+Documentation       ::  ci:setup:rspecdoc
+
 
 == Jenkins setup
 
