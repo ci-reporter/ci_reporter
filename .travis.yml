@@ -5,3 +5,5 @@ rvm:
 branches:
   only:
     - master
+before_install:
+  - ./.travis.before_install.sh
