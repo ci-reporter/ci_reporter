@@ -8,7 +8,7 @@ require 'bundler/setup'
 
 begin
   require 'hoe'
-  Hoe.plugin :rubyforge, :git
+  Hoe.plugin :git
   require File.dirname(__FILE__) + '/lib/ci/reporter/version'
   hoe = Hoe.spec("ci_reporter") do |p|
     p.version = CI::Reporter::VERSION
