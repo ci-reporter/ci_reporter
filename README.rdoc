@@ -8,7 +8,7 @@ CI::Reporter is available as a gem. To install the gem, use the usual gem comman
 
 == Usage
 
-CI::Reporter works best with projects that use a +Rakefile+ along with the standard <code>Rake::TestTask</code> or <code>Spec::Rake::SpecTask/RSpec::Core::RakeTask</code> tasks for running tests or examples, respectively. In this fashion, it hooks into <code>Test::Unit</code> or +RSpec+ using environment variables recognized by these custom tasks to inject the CI::Reporter code into the test or spec runs.  If you're using the Rails plugin, step 1 is unnecessary; skip to step 2.
+CI::Reporter works best with projects that use a +Rakefile+ along with the standard <code>Rake::TestTask</code> or <code>Spec::Rake::SpecTask/RSpec::Core::RakeTask</code> tasks for running tests or examples, respectively. In this fashion, it hooks into <code>Test::Unit</code> or +RSpec+ using environment variables recognized by these custom tasks to inject the CI::Reporter code into the test or spec runs.  If you're using the Rails skip to next section.
 
 1. To use CI::Reporter, simply add one of the following lines to your Rakefile:
 
@@ -29,7 +29,20 @@ cucumber and spinach.
     rake ci:setup:rspec spec
     rake ci:setup:cucumber features
     rake ci:setup:spinach features
-    
+
+=== Rails
+
+If you use rails-rspec gem all you need to do is to create new rake task lib/tasks/ci_reporter.rake:
+
+    if ENV['GENERATE_REPORTS'] == 'true'
+        require 'ci/reporter/rake/rspec'
+        task :spec => 'ci:setup:rspec'
+    end
+
+And then you can either inject this variable in you CI or simply call rspec passing this as one of the parameters:
+
+    rspec ... GENERATE_REPORTS=true
+
 === RSpec Formatters
 
 CI::Reporter has seperate Rake tasks for each builtin RSpec formatter. Depending upon which formatter you would like, call the following corresponding task.
