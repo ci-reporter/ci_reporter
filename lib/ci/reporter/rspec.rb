@@ -92,8 +92,87 @@ module CI
       end
     end
 
+    class RSpecFormatter < ::RSpec::Core::Formatters::BaseFormatter
+      attr_accessor :suite, :report_manager
+      if ::RSpec::Core::Formatters.respond_to?(:register)
+        ::RSpec::Core::Formatters.register self, :example_group_started,
+                                          :example_started, :example_passed, :example_failed,
+                                          :example_pending, :dump_summary
+      end
+
+      def initialize(output)
+        super
+        @report_manager = ReportManager.new("spec")
+      end
+
+      def example_group_started(notification)
+        super
+        new_suite(description_for(notification.group))
+      end
+
+      def example_started(notification)
+        super
+        spec = TestCase.new
+        @suite.testcases << spec
+        spec.start
+      end
+
+      def example_passed(notification)
+        spec = @suite.testcases.last
+        spec.finish
+        spec.name = description_for(notification.example)
+      end
+
+
+      def example_failed(notification, *rest)
+        super
+        output.puts notification.example.execution_result
+        #
+        # In case we fail in before(:all)
+        example_started(notification) if @suite.testcases.empty?
+        failure = RSpec2Failure.new(notification.example, self)
+
+        spec = @suite.testcases.last
+        spec.finish
+        spec.name = description_for(notification.example)
+        spec.failures << failure
+      end
+
+
+      def dump_summary(summary)
+        write_report
+      end
+
+      def write_report
+        suite.finish
+        report_manager.write_report(suite)
+      end
+
+      def new_suite(name)
+        write_report if @suite
+        @suite = TestSuite.new name
+        @suite.start
+      end
+
+      private
+      def description_for(name_or_example)
+        if name_or_example.respond_to?(:full_description)
+          name_or_example.full_description
+        elsif name_or_example.respond_to?(:metadata)
+          name_or_example.metadata[:example_group][:full_description]
+        elsif name_or_example.respond_to?(:description)
+          name_or_example.description
+        else
+          "UNKNOWN"
+        end
+      end
+
+
+
+    end
+
     # Custom +RSpec+ formatter used to hook into the spec runs and capture results.
-    class RSpec
+    class LegacyRSpecFormatter
       attr_accessor :report_manager
       attr_accessor :formatter
       def initialize(*args)
@@ -203,6 +282,13 @@ module CI
       end
     end
 
+
+    if RSpec::Core::Version::STRING.split(".").first == '3'
+      RSpec = RSpecFormatter
+    else
+      RSpec = LegacyRSpecFormatter
+    end
+
     class RSpecDoc < RSpec
       def initialize(*args)
         @formatter = RSpecFormatters::DocFormatter.new(*args)
@@ -216,5 +302,6 @@ module CI
         super
       end
     end
+
   end
 end
