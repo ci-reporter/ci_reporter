@@ -92,7 +92,7 @@ module CI
       end
     end
 
-    class RSpecFormatter < ::RSpec::Core::Formatters::BaseFormatter
+    class RSpecFormatter < ::RSpec::Core::Formatters::ProgressFormatter
       attr_accessor :suite, :report_manager
       if ::RSpec::Core::Formatters.respond_to?(:register)
         ::RSpec::Core::Formatters.register self, :example_group_started,
@@ -118,6 +118,7 @@ module CI
       end
 
       def example_passed(notification)
+        super
         spec = @suite.testcases.last
         spec.finish
         spec.name = description_for(notification.example)
