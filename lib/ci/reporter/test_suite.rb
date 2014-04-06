@@ -51,7 +51,7 @@ module CI
     end
 
     # Basic structure representing the running of a test suite.  Used to time tests and store results.
-    class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors, :skipped, :assertions)
+    class TestSuite < Struct.new(:name, :timestamp, :tests, :time, :failures, :errors, :skipped, :assertions)
       attr_accessor :testcases
       attr_accessor :stdout, :stderr
       def initialize(name)
@@ -72,6 +72,7 @@ module CI
       def finish
         self.tests = testcases.size
         self.time = Time.now - @start
+        self.timestamp = @start.iso8601
         self.failures = testcases.inject(0) {|sum,tc| sum += tc.failures.select{|f| f.failure? }.size }
         self.errors = testcases.inject(0) {|sum,tc| sum += tc.failures.select{|f| f.error? }.size }
         self.skipped = testcases.inject(0) {|sum,tc| sum += (tc.skipped? ? 1 : 0) }
