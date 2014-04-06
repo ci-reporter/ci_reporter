@@ -1,9 +1,10 @@
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2012, 2014 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
 require 'delegate'
 require 'stringio'
+require 'time'
 
 module CI
   module Reporter
@@ -51,7 +52,7 @@ module CI
     end
 
     # Basic structure representing the running of a test suite.  Used to time tests and store results.
-    class TestSuite < Struct.new(:name, :timestamp, :tests, :time, :failures, :errors, :skipped, :assertions)
+    class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors, :skipped, :assertions, :timestamp)
       attr_accessor :testcases
       attr_accessor :stdout, :stderr
       def initialize(name)
