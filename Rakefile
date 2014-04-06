@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
+# Copyright (c) 2006-2014 Nick Sieger <nicksieger@gmail.com>
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 #++
@@ -12,9 +12,9 @@ begin
   require File.dirname(__FILE__) + '/lib/ci/reporter/version'
   hoe = Hoe.spec("ci_reporter") do |p|
     p.version = CI::Reporter::VERSION
-    p.rubyforge_name = "caldersphere"
+    p.group_name = "caldersphere"
     p.readme_file = "README.rdoc"
-    p.urls = ["http://caldersphere.rubyforge.org/ci_reporter"]
+    p.urls = ["https://github.com/nicksieger/ci_reporter"]
     p.author = "Nick Sieger"
     p.email = "nick@nicksieger.com"
     p.readme_file = 'README.rdoc'
