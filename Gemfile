@@ -10,7 +10,6 @@ gem 'builder'
 group :development do
   gem 'hoe'
   gem 'hoe-git', '~> 1.5.0'
-  gem 'rubyforge'
   gem 'cucumber'
   gem 'spinach', '< 0.2'
   gem 'rspec', '> 2.0.0'

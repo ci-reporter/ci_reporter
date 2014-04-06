@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.homepage = "http://caldersphere.rubyforge.org/ci_reporter"
   s.rdoc_options = ["--main", "README.rdoc", "-SHN", "-f", "darkfish"]
   s.require_paths = ["lib"]
-  s.rubyforge_project = "caldersphere"
   s.rubygems_version = "1.8.23"
   s.summary = "CI::Reporter allows you to generate reams of XML for use with continuous integration systems."
   s.test_files = ["spec/ci/reporter/cucumber_spec.rb", "spec/ci/reporter/output_capture_spec.rb", "spec/ci/reporter/rake/rake_tasks_spec.rb", "spec/ci/reporter/report_manager_spec.rb", "spec/ci/reporter/rspec_spec.rb", "spec/ci/reporter/test_suite_spec.rb", "spec/ci/reporter/test_unit_spec.rb"]
@@ -24,7 +23,6 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<builder>, [">= 2.1.2"])
-      s.add_development_dependency(%q<rubyforge>, [">= 2.0.4"])
       s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
       s.add_development_dependency(%q<hoe-git>, ["~> 1.5.0"])
       s.add_development_dependency(%q<cucumber>, ["~> 0.10.0"])
@@ -35,7 +33,6 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<hoe>, ["~> 3.6"])
     else
       s.add_dependency(%q<builder>, [">= 2.1.2"])
-      s.add_dependency(%q<rubyforge>, [">= 2.0.4"])
       s.add_dependency(%q<rdoc>, ["~> 4.0"])
       s.add_dependency(%q<hoe-git>, ["~> 1.5.0"])
       s.add_dependency(%q<cucumber>, ["~> 0.10.0"])
@@ -47,7 +44,6 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<builder>, [">= 2.1.2"])
-    s.add_dependency(%q<rubyforge>, [">= 2.0.4"])
     s.add_dependency(%q<rdoc>, ["~> 4.0"])
     s.add_dependency(%q<hoe-git>, ["~> 1.5.0"])
     s.add_dependency(%q<cucumber>, ["~> 0.10.0"])
