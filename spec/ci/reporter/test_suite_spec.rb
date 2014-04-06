@@ -102,6 +102,7 @@ describe "TestSuite xml" do
     testsuite = testsuite.first
     testsuite.attributes["name"].should == "example suite"
     testsuite.attributes["assertions"].should == "11"
+    testsuite.attributes["timestamp"].should match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/)
 
     testcases = testsuite.elements.to_a("testcase")
     testcases.length.should == 4
