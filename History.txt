@@ -1,3 +1,9 @@
+== 1.9.2 (04/06/14)
+
+- GH #119: add timestamp attribute (Shawn Zhu)
+- GH #118: yank rubyforge guts (Shawn Zhu)
+- GH #115: README doc additions (Piotr Kuczynski)
+
 == 1.9.1 (12/26/13)
 
 - GH #111: Add MIT license in gemspec (Dave Golombek)
