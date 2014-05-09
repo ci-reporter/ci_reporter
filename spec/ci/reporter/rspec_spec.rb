@@ -83,22 +83,6 @@ describe "The RSpec reporter" do
     @fmt.close
   end
 
-  it "should support RSpec 1.0.8 #add_behavior" do
-    @formatter.should_receive(:start)
-    @formatter.should_receive(:add_behaviour).with("A context")
-    @formatter.should_receive(:example_started).once
-    @formatter.should_receive(:example_passed).once
-    @formatter.should_receive(:dump_summary)
-    @formatter.should_receive(:dump_failures).once
-    @report_mgr.should_receive(:write_report)
-
-    @fmt.start(2)
-    @fmt.add_behaviour("A context")
-    @fmt.example_started("should pass")
-    @fmt.example_passed("should pass")
-    @fmt.dump_summary(0.1, 1, 0, 0)
-  end
-
   it "should use the example #description method when available" do
     group = double "example group"
     group.stub(:description).and_return "group description"
