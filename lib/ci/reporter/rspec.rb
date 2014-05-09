@@ -33,27 +33,9 @@ module CI
     end
 
     # Wrapper around a <code>RSpec</code> error or failure to be used by the test suite to interpret results.
-    class RSpecFailure
+    class RSpec2Failure
       attr_reader :exception
-      def initialize(failure)
-        @failure = failure
-        @exception = failure.exception
-      end
 
-      def failure?
-        @failure.expectation_not_met?
-      end
-
-      def error?
-        !failure?
-      end
-
-      def name() exception.class.name end
-      def message() exception.message end
-      def location() (exception.backtrace || ["No backtrace available"]).join("\n") end
-    end
-
-    class RSpec2Failure < RSpecFailure
       def initialize(example, formatter)
         @formatter = formatter
         @example = example
@@ -74,6 +56,10 @@ module CI
 
       def failure?
         exception.is_a?(::RSpec::Expectations::ExpectationNotMetError)
+      end
+
+      def error?
+        !failure?
       end
 
       def location
@@ -120,11 +106,7 @@ module CI
         # In case we fail in before(:all)
         example_started(name_or_example) if @suite.testcases.empty?
 
-        if name_or_example.respond_to?(:execution_result) # RSpec 2
-          failure = RSpec2Failure.new(name_or_example, @formatter)
-        else
-          failure = RSpecFailure.new(rest[1]) # example_failed(name, counter, failure) in RSpec 1
-        end
+        failure = RSpec2Failure.new(name_or_example, @formatter)
 
         spec = @suite.testcases.last
         spec.finish
