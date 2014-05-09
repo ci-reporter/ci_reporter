@@ -31,6 +31,18 @@ describe "The RSpec reporter" do
     fmt.formatter.should be_instance_of(CI::Reporter::RSpecFormatters::DocFormatter)
   end
 
+  def rspec2_failing_example(exception_text)
+    double('RSpec2.2 Example',
+           :execution_result => {
+             :exception => StandardError.new(exception_text)
+           },
+           :metadata => {
+             :example_group => {
+               :full_description => "description"
+             }
+           })
+  end
+
   it "should create a test suite with one success, one failure, and one pending" do
     @report_mgr.should_receive(:write_report).and_return do |suite|
       suite.testcases.length.should == 3
@@ -61,7 +73,7 @@ describe "The RSpec reporter" do
     @fmt.example_started("should pass")
     @fmt.example_passed("should pass")
     @fmt.example_started("should fail")
-    @fmt.example_failed("should fail", 1, @error)
+    @fmt.example_failed(rspec2_failing_example("should fail"), 1, @error)
     @fmt.example_started("should be pending")
     @fmt.example_pending("A context", "should be pending", "Not Yet Implemented")
     @fmt.start_dump
@@ -124,7 +136,7 @@ describe "The RSpec reporter" do
 
     @fmt.start(2)
     @fmt.example_group_started(example_group)
-    @fmt.example_failed("should fail", 1, @error)
+    @fmt.example_failed(rspec2_failing_example("should fail"), 1, @error)
     @fmt.dump_summary(0.1, 1, 0, 0)
   end
 
@@ -135,9 +147,8 @@ describe "The RSpec reporter" do
       @rspec20_example = double('RSpec2.0 Example',
                               :execution_result => {:exception_encountered => StandardError.new('rspec2.0 ftw')},
                               :metadata => {})
-      @rspec22_example = double('RSpec2.2 Example',
-                              :execution_result => {:exception => StandardError.new('rspec2.2 ftw')},
-                              :metadata => {})
+
+      @rspec22_example = rspec2_failing_example('rspec2.2 ftw')
     end
 
     it 'should handle rspec (< 2.2) execution results' do
