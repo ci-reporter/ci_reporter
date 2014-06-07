@@ -1,10 +1,10 @@
-rvm:
-  - 1.9.3
-  - 2.0
-  - 2.1
-  - jruby
+matrix:
+  include:
+    - rvm: 1.9.3
+    - rvm: 2.0
+    - rvm: 2.1
+    - rvm: jruby
+      env: CI_REPORTER_NO_SPINACH=1
 branches:
   only:
     - master
-before_install:
-  - ./.travis.before_install.sh

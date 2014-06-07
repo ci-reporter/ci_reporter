@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = "CI::Reporter is an add-on to Test::Unit, RSpec and Cucumber that allows you to generate XML reports of your test, spec and/or feature runs. The resulting files can be read by a continuous integration system that understands Ant's JUnit report XML format, thus allowing your CI system to track test/spec successes and failures."
   s.email = "nick@nicksieger.com"
   s.extra_rdoc_files = ["History.txt", "LICENSE.txt", "Manifest.txt", "README.rdoc"]
-  s.files = [".gemtest", ".hoerc", ".rspec", ".travis.before_install.sh", ".travis.yml", "Gemfile", "History.txt", "LICENSE.txt", "Manifest.txt", "README.rdoc", "Rakefile", "acceptance/cucumber/cucumber_example.feature", "acceptance/cucumber/step_definitions/development_steps.rb", "acceptance/minitest_example_test.rb", "acceptance/rspec_example_spec.rb", "acceptance/spinach/features/spinach_example.feature", "acceptance/spinach/features/steps/example_spinach_feature.rb", "acceptance/test_unit_example_test.rb", "acceptance/verification_spec.rb", "ci_reporter.gemspec", "lib/ci/reporter/core.rb", "lib/ci/reporter/cucumber.rb", "lib/ci/reporter/minitest.rb", "lib/ci/reporter/rake/cucumber.rb", "lib/ci/reporter/rake/cucumber_loader.rb", "lib/ci/reporter/rake/minitest.rb", "lib/ci/reporter/rake/minitest_loader.rb", "lib/ci/reporter/rake/rspec.rb", "lib/ci/reporter/rake/rspec_loader.rb", "lib/ci/reporter/rake/spinach.rb", "lib/ci/reporter/rake/spinach_loader.rb", "lib/ci/reporter/rake/test_unit.rb", "lib/ci/reporter/rake/test_unit_loader.rb", "lib/ci/reporter/rake/utils.rb", "lib/ci/reporter/report_manager.rb", "lib/ci/reporter/rspec.rb", "lib/ci/reporter/spinach.rb", "lib/ci/reporter/test_suite.rb", "lib/ci/reporter/test_unit.rb", "lib/ci/reporter/version.rb", "spec/ci/reporter/cucumber_spec.rb", "spec/ci/reporter/output_capture_spec.rb", "spec/ci/reporter/rake/rake_tasks_spec.rb", "spec/ci/reporter/report_manager_spec.rb", "spec/ci/reporter/rspec_spec.rb", "spec/ci/reporter/test_suite_spec.rb", "spec/ci/reporter/test_unit_spec.rb", "spec/spec_helper.rb", "stub.rake", "tasks/ci_reporter.rake"]
+  s.files = [".gemtest", ".hoerc", ".rspec", ".travis.yml", "Gemfile", "History.txt", "LICENSE.txt", "Manifest.txt", "README.rdoc", "Rakefile", "acceptance/cucumber/cucumber_example.feature", "acceptance/cucumber/step_definitions/development_steps.rb", "acceptance/minitest_example_test.rb", "acceptance/rspec_example_spec.rb", "acceptance/spinach/features/spinach_example.feature", "acceptance/spinach/features/steps/example_spinach_feature.rb", "acceptance/test_unit_example_test.rb", "acceptance/verification_spec.rb", "ci_reporter.gemspec", "lib/ci/reporter/core.rb", "lib/ci/reporter/cucumber.rb", "lib/ci/reporter/minitest.rb", "lib/ci/reporter/rake/cucumber.rb", "lib/ci/reporter/rake/cucumber_loader.rb", "lib/ci/reporter/rake/minitest.rb", "lib/ci/reporter/rake/minitest_loader.rb", "lib/ci/reporter/rake/rspec.rb", "lib/ci/reporter/rake/rspec_loader.rb", "lib/ci/reporter/rake/spinach.rb", "lib/ci/reporter/rake/spinach_loader.rb", "lib/ci/reporter/rake/test_unit.rb", "lib/ci/reporter/rake/test_unit_loader.rb", "lib/ci/reporter/rake/utils.rb", "lib/ci/reporter/report_manager.rb", "lib/ci/reporter/rspec.rb", "lib/ci/reporter/spinach.rb", "lib/ci/reporter/test_suite.rb", "lib/ci/reporter/test_unit.rb", "lib/ci/reporter/version.rb", "spec/ci/reporter/cucumber_spec.rb", "spec/ci/reporter/output_capture_spec.rb", "spec/ci/reporter/rake/rake_tasks_spec.rb", "spec/ci/reporter/report_manager_spec.rb", "spec/ci/reporter/rspec_spec.rb", "spec/ci/reporter/test_suite_spec.rb", "spec/ci/reporter/test_unit_spec.rb", "spec/spec_helper.rb", "stub.rake", "tasks/ci_reporter.rake"]
   s.homepage = "https://github.com/nicksieger/ci_reporter"
   s.licenses = ["MIT"]
   s.rdoc_options = ["--main", "README.rdoc", "-SHN", "-f", "darkfish"]
@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rspec>, ["~> 2.0"])
       s.add_development_dependency(%q<test-unit>, ["> 2.4.9"])
       s.add_development_dependency(%q<minitest>, ["~> 2.2.0"])
-      s.add_development_dependency(%q<spinach>, [">= 0.8.7"])
+      s.add_development_dependency(%q<spinach>, [">= 0.8.7"]) unless ENV['CI_REPORTER_NO_SPINACH']
       s.add_development_dependency(%q<hoe>, ["~> 3.7"])
     else
       s.add_dependency(%q<builder>, [">= 2.1.2"])
@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rspec>, ["~> 2.0"])
       s.add_dependency(%q<test-unit>, ["> 2.4.9"])
       s.add_dependency(%q<minitest>, ["~> 2.2.0"])
-      s.add_dependency(%q<spinach>, [">= 0.8.7"])
+      s.add_dependency(%q<spinach>, [">= 0.8.7"]) unless ENV['CI_REPORTER_NO_SPINACH']
       s.add_dependency(%q<hoe>, ["~> 3.7"])
     end
   else
@@ -51,7 +51,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rspec>, ["~> 2.0"])
     s.add_dependency(%q<test-unit>, ["> 2.4.9"])
     s.add_dependency(%q<minitest>, ["~> 2.2.0"])
-    s.add_dependency(%q<spinach>, [">= 0.8.7"])
+    s.add_dependency(%q<spinach>, [">= 0.8.7"]) unless ENV['CI_REPORTER_NO_SPINACH']
     s.add_dependency(%q<hoe>, ["~> 3.7"])
   end
 end
