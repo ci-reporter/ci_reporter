@@ -80,8 +80,10 @@ namespace :generate do
   end
 
   task :spinach do
+    unless ENV['CI_REPORTER_NO_SPINACH']
     spinach = "#{Gem.loaded_specs['spinach'].gem_dir}/bin/spinach"
     run_ruby_acceptance "-I../../lib -rci/reporter/rake/spinach_loader -S #{spinach} -r ci_reporter -f acceptance/spinach/features"
+    end
   end
 
   task :clean do

@@ -143,6 +143,7 @@ describe "Cucumber acceptance" do
   end
 end
 
+unless ENV['CI_REPORTER_NO_SPINACH']
 describe "Spinach acceptance" do
   it "should generate one XML file" do
     File.exist?(File.join(REPORTS_DIR, 'FEATURES-Example-Spinach-feature.xml')).should == true
@@ -182,4 +183,5 @@ describe "Spinach acceptance" do
       failures.first.attributes["type"].should == "RuntimeError"
     end
   end
+end
 end
