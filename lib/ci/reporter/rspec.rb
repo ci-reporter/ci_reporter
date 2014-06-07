@@ -7,53 +7,23 @@ require 'ci/reporter/core'
 module CI
   module Reporter
     module RSpecFormatters
-      begin
-        require 'rspec/core/formatters/base_formatter'
-        require 'rspec/core/formatters/progress_formatter'
-        require 'rspec/core/formatters/documentation_formatter'
-        BaseFormatter = ::RSpec::Core::Formatters::BaseFormatter
-        ProgressFormatter = ::RSpec::Core::Formatters::ProgressFormatter
-        DocFormatter = ::RSpec::Core::Formatters::DocumentationFormatter
-        # See https://github.com/nicksieger/ci_reporter/issues/76 and
-        #     https://github.com/nicksieger/ci_reporter/issues/80
-        require 'rspec/core/version'
-        RSpec_2_12_0_bug = (::RSpec::Core::Version::STRING == '2.12.0' &&
-                            !BaseFormatter.instance_methods(false).map(&:to_s).include?("format_backtrace"))
-      rescue LoadError => first_error
-        begin
-          require 'spec/runner/formatter/progress_bar_formatter'
-          require 'spec/runner/formatter/specdoc_formatter'
-          BaseFormatter = ::Spec::Runner::Formatter::BaseFormatter
-          ProgressFormatter = ::Spec::Runner::Formatter::ProgressBarFormatter
-          DocFormatter = ::Spec::Runner::Formatter::SpecdocFormatter
-        rescue LoadError
-          raise first_error
-        end
-      end
+      require 'rspec/core/formatters/base_formatter'
+      require 'rspec/core/formatters/progress_formatter'
+      require 'rspec/core/formatters/documentation_formatter'
+      BaseFormatter = ::RSpec::Core::Formatters::BaseFormatter
+      ProgressFormatter = ::RSpec::Core::Formatters::ProgressFormatter
+      DocFormatter = ::RSpec::Core::Formatters::DocumentationFormatter
+      # See https://github.com/nicksieger/ci_reporter/issues/76 and
+      #     https://github.com/nicksieger/ci_reporter/issues/80
+      require 'rspec/core/version'
+      RSpec_2_12_0_bug = (::RSpec::Core::Version::STRING == '2.12.0' &&
+                          !BaseFormatter.instance_methods(false).map(&:to_s).include?("format_backtrace"))
     end
 
     # Wrapper around a <code>RSpec</code> error or failure to be used by the test suite to interpret results.
-    class RSpecFailure
+    class RSpec2Failure
       attr_reader :exception
-      def initialize(failure)
-        @failure = failure
-        @exception = failure.exception
-      end
 
-      def failure?
-        @failure.expectation_not_met?
-      end
-
-      def error?
-        !failure?
-      end
-
-      def name() exception.class.name end
-      def message() exception.message end
-      def location() (exception.backtrace || ["No backtrace available"]).join("\n") end
-    end
-
-    class RSpec2Failure < RSpecFailure
       def initialize(example, formatter)
         @formatter = formatter
         @example = example
@@ -74,6 +44,10 @@ module CI
 
       def failure?
         exception.is_a?(::RSpec::Expectations::ExpectationNotMetError)
+      end
+
+      def error?
+        !failure?
       end
 
       def location
@@ -102,19 +76,6 @@ module CI
         @suite = nil
       end
 
-      # rspec 0.9
-      def add_behaviour(name)
-        @formatter.add_behaviour(name)
-        new_suite(name)
-      end
-
-      # Compatibility with rspec < 1.2.4
-      def add_example_group(example_group)
-        @formatter.add_example_group(example_group)
-        new_suite(description_for(example_group))
-      end
-
-      # rspec >= 1.2.4
       def example_group_started(example_group)
         @formatter.example_group_started(example_group)
         new_suite(description_for(example_group))
@@ -133,11 +94,7 @@ module CI
         # In case we fail in before(:all)
         example_started(name_or_example) if @suite.testcases.empty?
 
-        if name_or_example.respond_to?(:execution_result) # RSpec 2
-          failure = RSpec2Failure.new(name_or_example, @formatter)
-        else
-          failure = RSpecFailure.new(rest[1]) # example_failed(name, counter, failure) in RSpec 1
-        end
+        failure = RSpec2Failure.new(name_or_example, @formatter)
 
         spec = @suite.testcases.last
         spec.finish
