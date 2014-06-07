@@ -32,16 +32,16 @@ cucumber and spinach.
 
 === Rails
 
-If you use rails-rspec gem all you need to do is to create new rake task lib/tasks/ci_reporter.rake:
+If you use the rspec-rails gem all you need to do is to create new rake task lib/tasks/ci_reporter.rake:
 
     if ENV['GENERATE_REPORTS'] == 'true'
         require 'ci/reporter/rake/rspec'
         task :spec => 'ci:setup:rspec'
     end
 
-And then you can either inject this variable in you CI or simply call rspec passing this as one of the parameters:
+And then you can either inject this variable in your CI or simply call rake spec passing this as one of the parameters:
 
-    rspec ... GENERATE_REPORTS=true
+    rake spec GENERATE_REPORTS=true
 
 === RSpec Formatters
 
