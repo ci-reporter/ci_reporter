@@ -19,11 +19,7 @@ module CI
       end
 
       def self.wrap(io, &assign)
-        if defined?(RUBY_ENGINE) # JRuby, Ruby 1.9, etc.
-          Delegate.new(io, &assign)
-        else          # Ruby 1.8 requires streams to be subclass of IO
-          IO.new(io.fileno, "w").tap {|x| x.extend self; x.capture(io, &assign) }
-        end
+        Delegate.new(io, &assign)
       end
 
       # Start capturing IO, using the given block to assign self to the proper IO global.
