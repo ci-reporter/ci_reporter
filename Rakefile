@@ -73,20 +73,13 @@ namespace :generate do
     end
   end
 
-  task :rspec do
-    if Gem.loaded_specs['rspec-core']
-    rspec = "#{Gem.loaded_specs['rspec-core'].gem_dir}/exe/rspec"
-    run_ruby_acceptance "-S #{rspec} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb"
-    end
-  end
-
   task :clean do
     rm_rf "acceptance/reports"
   end
 
-  deps = [:clean, :test_unit, :minitest, :rspec]
+  deps = [:clean, :test_unit, :minitest]
 
-  ['cucumber', 'spinach'].each do |gem|
+  ['rspec-core', 'cucumber', 'spinach'].each do |gem|
     if Gem.loaded_specs[gem]
       load "Rakefile.#{gem}"
       deps << "generate:#{gem}"
