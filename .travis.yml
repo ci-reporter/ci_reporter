@@ -8,7 +8,6 @@ gemfile:
   - Gemfile
   - gemfiles/Gemfile.minitest
   - gemfiles/Gemfile.test-unit
-  - gemfiles/Gemfile.cucumber
   - gemfiles/Gemfile.rspec
 
 branches:

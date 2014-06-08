@@ -9,6 +9,6 @@ require 'ci/reporter/internal'
 include CI::Reporter::Internal
 
 THIS_SPEC_DIR = File.dirname(__FILE__)
-['test-unit', 'rspec-core', 'cucumber'].each do |gem|
+['test-unit', 'rspec-core'].each do |gem|
   load THIS_SPEC_DIR + "/rake_tasks_spec_#{gem}.rb"
 end

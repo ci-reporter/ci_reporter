@@ -25,7 +25,6 @@ begin
     p.test_globs = ["spec/**/*_spec.rb"]
     p.extra_deps     << [ 'builder',   '>= 2.1.2'  ]
     p.extra_dev_deps << [ 'hoe-git',   '~> 1.5.0'  ]
-    p.extra_dev_deps << [ 'cucumber',  '>= 1.3.3'  ]
     p.extra_dev_deps << [ 'rspec',     '> 2.0.0'   ]
     p.extra_dev_deps << [ 'test-unit', '> 2.4.9'   ]
     p.extra_dev_deps << [ 'minitest',  '~> 2.2.0'  ]
@@ -48,7 +47,7 @@ namespace :generate do
 
   deps = [:clean]
 
-  ['test-unit', 'minitest', 'rspec-core', 'cucumber'].each do |gem|
+  ['test-unit', 'minitest', 'rspec-core'].each do |gem|
     if Gem.loaded_specs[gem]
       load "Rakefile.#{gem}"
       deps << "generate:#{gem}"
