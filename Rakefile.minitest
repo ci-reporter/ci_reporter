@@ -1,0 +1,5 @@
+namespace :generate do
+  task :minitest do
+    run_ruby_acceptance "-rci/reporter/rake/minitest_loader acceptance/minitest_example_test.rb"
+  end
+end

@@ -1,23 +1,11 @@
-#--
-# Copyright (c) 2006-2013 Nick Sieger <nicksieger@gmail.com>
-# See the file LICENSE.txt included with the distribution for
-# software license details.
-#++
-
-require 'rexml/document'
-
-ACCEPTANCE_DIR = File.dirname(__FILE__)
-REPORTS_DIR = ACCEPTANCE_DIR + '/reports'
-
-if Gem.loaded_specs['test-unit']
-describe "Test::Unit acceptance" do
+describe "MiniTest::Unit acceptance" do
   it "should generate two XML files" do
-    File.exist?(File.join(REPORTS_DIR, 'TEST-TestUnitExampleTestOne.xml')).should == true
-    File.exist?(File.join(REPORTS_DIR, 'TEST-TestUnitExampleTestTwo.xml')).should == true
+    File.exist?(File.join(REPORTS_DIR, 'TEST-MiniTestExampleTestOne.xml')).should == true
+    File.exist?(File.join(REPORTS_DIR, 'TEST-MiniTestExampleTestTwo.xml')).should == true
   end
 
-  it "should have one error and one failure for TestUnitExampleTestOne" do
-    doc = File.open(File.join(REPORTS_DIR, 'TEST-TestUnitExampleTestOne.xml')) do |f|
+  it "should have one error and one failure for MiniTestExampleTestOne" do
+    doc = File.open(File.join(REPORTS_DIR, 'TEST-MiniTestExampleTestOne.xml')) do |f|
       REXML::Document.new(f)
     end
     doc.root.attributes["errors"].should == "1"
@@ -32,8 +20,8 @@ describe "Test::Unit acceptance" do
     end.strip.should == "Some <![CDATA[on stdout]]>"
   end
 
-  it "should have no errors or failures for TestUnitExampleTestTwo" do
-    doc = File.open(File.join(REPORTS_DIR, 'TEST-TestUnitExampleTestTwo.xml')) do |f|
+  it "should have no errors or failures for MiniTestExampleTestTwo" do
+    doc = File.open(File.join(REPORTS_DIR, 'TEST-MiniTestExampleTestTwo.xml')) do |f|
       REXML::Document.new(f)
     end
     doc.root.attributes["errors"].should == "0"
@@ -43,9 +31,4 @@ describe "Test::Unit acceptance" do
     doc.root.elements.to_a("/testsuite/testcase").size.should == 1
     doc.root.elements.to_a("/testsuite/testcase/failure").size.should == 0
   end
-end
-end
-
-['minitest', 'rspec-core', 'cucumber', 'spinach'].each do |gem|
-  load ACCEPTANCE_DIR + "/verification_spec_#{gem}.rb" if Gem.loaded_specs[gem]
 end
