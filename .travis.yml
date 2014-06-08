@@ -4,10 +4,6 @@ rvm:
   - 2.1
   - jruby
 
-gemfile:
-  - Gemfile
-  - gemfiles/Gemfile.test-unit
-
 branches:
   only:
     - master
