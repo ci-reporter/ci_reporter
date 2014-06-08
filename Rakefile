@@ -29,7 +29,6 @@ begin
     p.extra_dev_deps << [ 'rspec',     '> 2.0.0'   ]
     p.extra_dev_deps << [ 'test-unit', '> 2.4.9'   ]
     p.extra_dev_deps << [ 'minitest',  '~> 2.2.0'  ]
-    p.extra_dev_deps << [ 'spinach',   '>= 0.8.7'  ]
     p.clean_globs += ["spec/reports", "acceptance/reports"]
     p.license 'MIT'
   end
@@ -49,7 +48,7 @@ namespace :generate do
 
   deps = [:clean]
 
-  ['test-unit', 'minitest', 'rspec-core', 'cucumber', 'spinach'].each do |gem|
+  ['test-unit', 'minitest', 'rspec-core', 'cucumber'].each do |gem|
     if Gem.loaded_specs[gem]
       load "Rakefile.#{gem}"
       deps << "generate:#{gem}"

@@ -6,16 +6,10 @@ rvm:
 
 gemfile:
   - Gemfile
-  - gemfiles/Gemfile.spinach
   - gemfiles/Gemfile.minitest
   - gemfiles/Gemfile.test-unit
   - gemfiles/Gemfile.cucumber
   - gemfiles/Gemfile.rspec
-
-matrix:
-  exclude:
-    - rvm: jruby
-      gemfile: gemfiles/Gemfile.spinach
 
 branches:
   only:
