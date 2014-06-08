@@ -61,19 +61,13 @@ end
 
 
 namespace :generate do
-  task :test_unit do
-    if Gem.loaded_specs['test-unit']
-    run_ruby_acceptance "-rci/reporter/rake/test_unit_loader acceptance/test_unit_example_test.rb"
-    end
-  end
-
   task :clean do
     rm_rf "acceptance/reports"
   end
 
-  deps = [:clean, :test_unit]
+  deps = [:clean]
 
-  ['minitest', 'rspec-core', 'cucumber', 'spinach'].each do |gem|
+  ['test-unit', 'minitest', 'rspec-core', 'cucumber', 'spinach'].each do |gem|
     if Gem.loaded_specs[gem]
       load "Rakefile.#{gem}"
       deps << "generate:#{gem}"
