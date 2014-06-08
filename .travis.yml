@@ -6,7 +6,6 @@ rvm:
 
 gemfile:
   - Gemfile
-  - gemfiles/Gemfile.minitest
   - gemfiles/Gemfile.test-unit
 
 branches:

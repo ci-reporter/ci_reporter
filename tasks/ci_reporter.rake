@@ -8,9 +8,7 @@ rescue Gem::LoadError
   $: << File.dirname(__FILE__) + "/../lib"
 end
 require 'ci/reporter/rake/test_unit'
-require 'ci/reporter/rake/minitest'
 
 namespace :ci do
   task :setup_testunit => "ci:setup:testunit"
-  task :setup_minitest => "ci:setup:minitest"
 end
