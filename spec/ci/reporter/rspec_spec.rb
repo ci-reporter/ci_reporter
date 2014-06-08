@@ -2,7 +2,10 @@
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
+if Gem.loaded_specs['rspec-core']
+
 require File.dirname(__FILE__) + "/../../spec_helper.rb"
+require 'ci/reporter/rspec'
 require 'stringio'
 
 describe "The RSpec reporter" do
@@ -148,4 +151,5 @@ describe "The RSpec reporter" do
       failure.location.should_not be_nil
     end
   end
+end
 end

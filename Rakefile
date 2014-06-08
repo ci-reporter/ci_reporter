@@ -62,25 +62,33 @@ end
 
 namespace :generate do
   task :test_unit do
+    if Gem.loaded_specs['test-unit']
     run_ruby_acceptance "-rci/reporter/rake/test_unit_loader acceptance/test_unit_example_test.rb"
+    end
   end
 
   task :minitest do
+    if Gem.loaded_specs['minitest']
     run_ruby_acceptance "-rci/reporter/rake/minitest_loader acceptance/minitest_example_test.rb"
+    end
   end
 
   task :rspec do
+    if Gem.loaded_specs['rspec-core']
     rspec = "#{Gem.loaded_specs['rspec-core'].gem_dir}/exe/rspec"
     run_ruby_acceptance "-S #{rspec} --require ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec acceptance/rspec_example_spec.rb"
+    end
   end
 
   task :cucumber do
+    if Gem.loaded_specs['cucumber']
     cucumber = "#{Gem.loaded_specs['cucumber'].gem_dir}/bin/cucumber"
     run_ruby_acceptance "-rci/reporter/rake/cucumber_loader -S #{cucumber} --format CI::Reporter::Cucumber acceptance/cucumber"
+    end
   end
 
   task :spinach do
-    unless ENV['CI_REPORTER_NO_SPINACH']
+    if Gem.loaded_specs['spinach']
     spinach = "#{Gem.loaded_specs['spinach'].gem_dir}/bin/spinach"
     run_ruby_acceptance "-I../../lib -rci/reporter/rake/spinach_loader -S #{spinach} -r ci_reporter -f acceptance/spinach/features"
     end

@@ -1,10 +1,22 @@
+rvm:
+  - 1.9.3
+  - 2.0
+  - 2.1
+  - jruby
+
+gemfile:
+  - Gemfile
+  - gemfiles/Gemfile.spinach
+  - gemfiles/Gemfile.minitest
+  - gemfiles/Gemfile.test-unit
+  - gemfiles/Gemfile.cucumber
+  - gemfiles/Gemfile.rspec
+
 matrix:
-  include:
-    - rvm: 1.9.3
-    - rvm: 2.0
-    - rvm: 2.1
+  exclude:
     - rvm: jruby
-      env: CI_REPORTER_NO_SPINACH=1
+      gemfile: gemfiles/Gemfile.spinach
+
 branches:
   only:
     - master
