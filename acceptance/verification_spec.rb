@@ -9,6 +9,6 @@ require 'rexml/document'
 ACCEPTANCE_DIR = File.dirname(__FILE__)
 REPORTS_DIR = ACCEPTANCE_DIR + '/reports'
 
-['test-unit', 'minitest', 'rspec-core'].each do |gem|
+['test-unit', 'minitest'].each do |gem|
   load ACCEPTANCE_DIR + "/verification_spec_#{gem}.rb" if Gem.loaded_specs[gem]
 end

@@ -8,7 +8,6 @@
 #   rake -f /path/to/ci_reporter/lib/ci/reporter/rake/stub.rake ci:setup:rspec default
 #
 
-load File.dirname(__FILE__) + '/lib/ci/reporter/rake/rspec.rb'
 load File.dirname(__FILE__) + '/lib/ci/reporter/rake/test_unit.rb'
 load File.dirname(__FILE__) + '/lib/ci/reporter/rake/minitest.rb'
 load 'Rakefile'
