@@ -16,7 +16,7 @@ class Spinach::Features::ExampleSpinachFeature < Spinach::FeatureSteps
   end
 
   step 'I don\'t bother writing cucumber features' do
-    false.should be_true
+    false.should be true
   end
 
   step 'I should be fired' do

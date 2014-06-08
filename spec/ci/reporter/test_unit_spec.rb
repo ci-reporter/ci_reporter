@@ -14,7 +14,7 @@ describe "The TestUnit reporter" do
 
   it "should build suites based on adjacent tests with the same class name" do
     @suite = nil
-    @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
+    @report_mgr.should_receive(:write_report).once {|suite| @suite = suite }
 
     @testunit.started(@result)
     @testunit.test_started("test_one(TestCaseClass)")
@@ -35,7 +35,7 @@ describe "The TestUnit reporter" do
 
   it "should build two suites when encountering different class names" do
     @suites = []
-    @report_mgr.should_receive(:write_report).twice.and_return {|suite| @suites << suite }
+    @report_mgr.should_receive(:write_report).twice {|suite| @suites << suite }
 
     @testunit.started(@result)
     @testunit.test_started("test_one(TestCaseClass)")
@@ -57,7 +57,7 @@ describe "The TestUnit reporter" do
 
   it "should record assertion counts during test run" do
     @suite = nil
-    @report_mgr.should_receive(:write_report).and_return {|suite| @suite = suite }
+    @report_mgr.should_receive(:write_report) {|suite| @suite = suite }
 
     @testunit.started(@result)
     @testunit.test_started("test_one(TestCaseClass)")
@@ -72,7 +72,7 @@ describe "The TestUnit reporter" do
     @failure = Test::Unit::Failure.new("test_one(TestCaseClass)", "somewhere:10", "it failed")
 
     @suite = nil
-    @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
+    @report_mgr.should_receive(:write_report).once {|suite| @suite = suite }
 
     @testunit.started(@result)
     @testunit.test_started("test_one(TestCaseClass)")
@@ -94,7 +94,7 @@ describe "The TestUnit reporter" do
     end
 
     @suite = nil
-    @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
+    @report_mgr.should_receive(:write_report).once {|suite| @suite = suite }
 
     @testunit.started(@result)
     @testunit.test_started("test_one(TestCaseClass)")
@@ -119,7 +119,7 @@ describe "The TestUnit reporter" do
     @failure2 = Test::Unit::Failure.new("test_one(TestCaseClass)", "somewhere:12", "it failed again in teardown")
 
     @suite = nil
-    @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
+    @report_mgr.should_receive(:write_report).once {|suite| @suite = suite }
 
     @testunit.started(@result)
     @testunit.test_started("test_one(TestCaseClass)")
@@ -138,7 +138,7 @@ describe "The TestUnit reporter" do
 
   it "should count test case names that don't conform to the standard pattern" do
     @suite = nil
-    @report_mgr.should_receive(:write_report).once.and_return {|suite| @suite = suite }
+    @report_mgr.should_receive(:write_report).once {|suite| @suite = suite }
 
     @testunit.started(@result)
     @testunit.test_started("some unknown test")
