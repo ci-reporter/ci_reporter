@@ -17,14 +17,14 @@ describe "The ReportManager" do
 
   it "should create the report directory according to the given prefix" do
     CI::Reporter::ReportManager.new("spec")
-    File.directory?(@reports_dir).should be_true
+    File.directory?(@reports_dir).should be true
   end
 
   it "should create the report directory based on CI_REPORTS environment variable if set" do
     @reports_dir = "#{Dir.getwd}/dummy"
     ENV["CI_REPORTS"] = @reports_dir
     CI::Reporter::ReportManager.new("spec")
-    File.directory?(@reports_dir).should be_true
+    File.directory?(@reports_dir).should be true
   end
 
   it "should write reports based on name and xml content of a test suite" do
@@ -34,7 +34,7 @@ describe "The ReportManager" do
     suite.should_receive(:to_xml).and_return("<xml></xml>")
     reporter.write_report(suite)
     filename = "#{REPORTS_DIR}/SPEC-some-test-suite-name.xml"
-    File.exist?(filename).should be_true
+    File.exist?(filename).should be true
     File.open(filename) {|f| f.read.should == "<xml></xml>"}
   end
 
@@ -47,7 +47,7 @@ describe "The ReportManager" do
     reporter.write_report(suite)
     filename = "#{REPORTS_DIR}/SPEC-#{very_long_name}"[0..CI::Reporter::ReportManager::MAX_FILENAME_SIZE].gsub(/\s/, '-') + ".xml"
     filename.length.should be <= 255
-    File.exist?(filename).should be_true
+    File.exist?(filename).should be true
     File.open(filename) {|f| f.read.should == "<xml></xml>"}
   end
 
@@ -61,7 +61,7 @@ describe "The ReportManager" do
     reporter.write_report(suite)
     filename = "#{REPORTS_DIR}/SPEC-#{very_long_name}"[0..170].gsub(/\s/, '-') + ".xml"
     filename.length.should be <= 188
-    File.exist?(filename).should be_true
+    File.exist?(filename).should be true
     File.open(filename) {|f| f.read.should == "<xml></xml>"}
   end
 
@@ -74,6 +74,6 @@ describe "The ReportManager" do
     suite.should_receive(:name).and_return("colliding test suite name")
     suite.should_receive(:to_xml).and_return("<xml></xml>")
     reporter.write_report(suite)
-    File.exist?(filename.sub('.xml', '.0.xml')).should be_true
+    File.exist?(filename.sub('.xml', '.0.xml')).should be true
   end
 end

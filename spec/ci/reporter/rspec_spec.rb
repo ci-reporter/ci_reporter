@@ -44,7 +44,7 @@ describe "The RSpec reporter" do
   end
 
   it "should create a test suite with one success, one failure, and one pending" do
-    @report_mgr.should_receive(:write_report).and_return do |suite|
+    @report_mgr.should_receive(:write_report) do |suite|
       suite.testcases.length.should == 3
       suite.testcases[0].should_not be_failure
       suite.testcases[0].should_not be_error
@@ -95,7 +95,7 @@ describe "The RSpec reporter" do
     @formatter.should_receive(:example_passed).once
     @formatter.should_receive(:dump_summary)
     @formatter.should_receive(:dump_failures).once
-    @report_mgr.should_receive(:write_report).and_return do |suite|
+    @report_mgr.should_receive(:write_report) do |suite|
       suite.testcases.last.name.should == "should do something"
     end
 
