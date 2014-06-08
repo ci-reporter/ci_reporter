@@ -1,3 +1,6 @@
+require 'ci/reporter/internal'
+include CI::Reporter::Internal
+
 namespace :generate do
   task 'rspec-core' do
     rspec = "#{Gem.loaded_specs['rspec-core'].gem_dir}/exe/rspec"

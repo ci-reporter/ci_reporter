@@ -5,13 +5,8 @@
 require File.dirname(__FILE__) + "/../../../spec_helper.rb"
 require 'rake'
 
-def save_env(v)
-  ENV["PREV_#{v}"] = ENV[v]
-end
-def restore_env(v)
-  ENV[v] = ENV["PREV_#{v}"]
-  ENV.delete("PREV_#{v}")
-end
+require 'ci/reporter/internal'
+include CI::Reporter::Internal
 
 THIS_SPEC_DIR = File.dirname(__FILE__)
 ['test-unit', 'rspec-core', 'cucumber'].each do |gem|

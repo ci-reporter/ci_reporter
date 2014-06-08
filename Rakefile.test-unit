@@ -1,3 +1,6 @@
+require 'ci/reporter/internal'
+include CI::Reporter::Internal
+
 namespace :generate do
   task 'test-unit' do
     run_ruby_acceptance "-rci/reporter/rake/test_unit_loader acceptance/test_unit_example_test.rb"

@@ -1,3 +1,6 @@
+require 'ci/reporter/internal'
+include CI::Reporter::Internal
+
 namespace :generate do
   task :cucumber do
     cucumber = "#{Gem.loaded_specs['cucumber'].gem_dir}/bin/cucumber"

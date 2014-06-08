@@ -1,3 +1,6 @@
+require 'ci/reporter/internal'
+include CI::Reporter::Internal
+
 namespace :generate do
   task :spinach do
     spinach = "#{Gem.loaded_specs['spinach'].gem_dir}/bin/spinach"
