@@ -87,18 +87,18 @@ namespace :generate do
     end
   end
 
-  task :spinach do
-    if Gem.loaded_specs['spinach']
-    spinach = "#{Gem.loaded_specs['spinach'].gem_dir}/bin/spinach"
-    run_ruby_acceptance "-I../../lib -rci/reporter/rake/spinach_loader -S #{spinach} -r ci_reporter -f acceptance/spinach/features"
-    end
-  end
-
   task :clean do
     rm_rf "acceptance/reports"
   end
 
-  task :all => [:clean, :test_unit, :minitest, :rspec, :cucumber, :spinach]
+  deps = [:clean, :test_unit, :minitest, :rspec, :cucumber]
+
+  if Gem.loaded_specs['spinach']
+    load 'Rakefile.spinach'
+    deps << 'generate:spinach'
+  end
+
+  task :all => deps
 end
 
 task :acceptance => "generate:all"
