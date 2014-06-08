@@ -80,22 +80,17 @@ namespace :generate do
     end
   end
 
-  task :cucumber do
-    if Gem.loaded_specs['cucumber']
-    cucumber = "#{Gem.loaded_specs['cucumber'].gem_dir}/bin/cucumber"
-    run_ruby_acceptance "-rci/reporter/rake/cucumber_loader -S #{cucumber} --format CI::Reporter::Cucumber acceptance/cucumber"
-    end
-  end
-
   task :clean do
     rm_rf "acceptance/reports"
   end
 
-  deps = [:clean, :test_unit, :minitest, :rspec, :cucumber]
+  deps = [:clean, :test_unit, :minitest, :rspec]
 
-  if Gem.loaded_specs['spinach']
-    load 'Rakefile.spinach'
-    deps << 'generate:spinach'
+  ['cucumber', 'spinach'].each do |gem|
+    if Gem.loaded_specs[gem]
+      load "Rakefile.#{gem}"
+      deps << "generate:#{gem}"
+    end
   end
 
   task :all => deps
