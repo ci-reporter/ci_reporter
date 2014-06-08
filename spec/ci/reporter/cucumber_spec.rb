@@ -2,6 +2,8 @@
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
+if Gem.loaded_specs['cucumber']
+
 require File.dirname(__FILE__) + "/../../spec_helper.rb"
 require 'ci/reporter/cucumber'
 
@@ -227,4 +229,5 @@ describe "The Cucumber reporter" do
       end
     end
   end
+end
 end

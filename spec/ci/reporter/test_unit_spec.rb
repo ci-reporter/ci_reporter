@@ -2,7 +2,11 @@
 # See the file LICENSE.txt included with the distribution for
 # software license details.
 
+if Gem.loaded_specs['test-unit']
+
 require File.dirname(__FILE__) + "/../../spec_helper.rb"
+require 'ci/reporter/test_unit'
+Test::Unit.run = true
 
 describe "The TestUnit reporter" do
   before(:each) do
@@ -149,4 +153,5 @@ describe "The TestUnit reporter" do
     @suite.testcases.length.should == 1
     @suite.testcases.first.name.should == "some unknown test"
   end
+end
 end

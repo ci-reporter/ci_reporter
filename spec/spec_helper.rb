@@ -17,8 +17,5 @@ unless defined?(CI_REPORTER_LIB)
 end
 
 require 'ci/reporter/core'
-require 'ci/reporter/test_unit'
-require 'ci/reporter/rspec'
 
-Test::Unit.run = true
 REPORTS_DIR = File.dirname(__FILE__) + "/reports" unless defined?(REPORTS_DIR)

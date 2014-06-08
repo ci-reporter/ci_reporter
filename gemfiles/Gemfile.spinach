@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'rake'
+gem 'rspec', '~> 2.0'
+gem 'spinach', '>= 0.8.7'
+gem 'ci_reporter', path: '..'

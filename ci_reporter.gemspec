@@ -26,32 +26,20 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<builder>, [">= 2.1.2"])
       s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
       s.add_development_dependency(%q<hoe-git>, ["~> 1.5.0"])
-      s.add_development_dependency(%q<cucumber>, [">= 1.3.3"])
       s.add_development_dependency(%q<rspec>, ["~> 2.0"])
-      s.add_development_dependency(%q<test-unit>, ["> 2.4.9"])
-      s.add_development_dependency(%q<minitest>, ["~> 2.2.0"])
-      s.add_development_dependency(%q<spinach>, [">= 0.8.7"]) unless ENV['CI_REPORTER_NO_SPINACH']
       s.add_development_dependency(%q<hoe>, ["~> 3.7"])
     else
       s.add_dependency(%q<builder>, [">= 2.1.2"])
       s.add_dependency(%q<rdoc>, ["~> 4.0"])
       s.add_dependency(%q<hoe-git>, ["~> 1.5.0"])
-      s.add_dependency(%q<cucumber>, [">= 1.3.3"])
       s.add_dependency(%q<rspec>, ["~> 2.0"])
-      s.add_dependency(%q<test-unit>, ["> 2.4.9"])
-      s.add_dependency(%q<minitest>, ["~> 2.2.0"])
-      s.add_dependency(%q<spinach>, [">= 0.8.7"]) unless ENV['CI_REPORTER_NO_SPINACH']
       s.add_dependency(%q<hoe>, ["~> 3.7"])
     end
   else
     s.add_dependency(%q<builder>, [">= 2.1.2"])
     s.add_dependency(%q<rdoc>, ["~> 4.0"])
     s.add_dependency(%q<hoe-git>, ["~> 1.5.0"])
-    s.add_dependency(%q<cucumber>, [">= 1.3.3"])
     s.add_dependency(%q<rspec>, ["~> 2.0"])
-    s.add_dependency(%q<test-unit>, ["> 2.4.9"])
-    s.add_dependency(%q<minitest>, ["~> 2.2.0"])
-    s.add_dependency(%q<spinach>, [">= 0.8.7"]) unless ENV['CI_REPORTER_NO_SPINACH']
     s.add_dependency(%q<hoe>, ["~> 3.7"])
   end
 end

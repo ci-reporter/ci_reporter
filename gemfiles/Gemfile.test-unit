@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'rake'
+gem 'rspec', '~> 2.0'
+gem 'test-unit', "> 2.4.9"
+gem 'ci_reporter', path: '..'

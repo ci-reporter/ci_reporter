@@ -8,6 +8,7 @@ require 'rexml/document'
 
 REPORTS_DIR = File.dirname(__FILE__) + '/reports'
 
+if Gem.loaded_specs['test-unit']
 describe "Test::Unit acceptance" do
   it "should generate two XML files" do
     File.exist?(File.join(REPORTS_DIR, 'TEST-TestUnitExampleTestOne.xml')).should == true
@@ -42,7 +43,9 @@ describe "Test::Unit acceptance" do
     doc.root.elements.to_a("/testsuite/testcase/failure").size.should == 0
   end
 end
+end
 
+if Gem.loaded_specs['minitest']
 describe "MiniTest::Unit acceptance" do
   it "should generate two XML files" do
     File.exist?(File.join(REPORTS_DIR, 'TEST-MiniTestExampleTestOne.xml')).should == true
@@ -77,7 +80,9 @@ describe "MiniTest::Unit acceptance" do
     doc.root.elements.to_a("/testsuite/testcase/failure").size.should == 0
   end
 end
+end
 
+if Gem.loaded_specs['rspec-core']
 describe "RSpec acceptance" do
   it "should generate two XML files" do
     File.exist?(File.join(REPORTS_DIR, 'SPEC-RSpec-example.xml')).should == true
@@ -107,7 +112,9 @@ describe "RSpec acceptance" do
     doc.root.elements.to_a("/testsuite/testcase").size.should == 1
   end
 end
+end
 
+if Gem.loaded_specs['cucumber']
 describe "Cucumber acceptance" do
   it "should generate one XML file" do
     File.exist?(File.join(REPORTS_DIR, 'FEATURES-Example-Cucumber-feature.xml')).should == true
@@ -142,8 +149,9 @@ describe "Cucumber acceptance" do
     end
   end
 end
+end
 
-unless ENV['CI_REPORTER_NO_SPINACH']
+if Gem.loaded_specs['spinach']
 describe "Spinach acceptance" do
   it "should generate one XML file" do
     File.exist?(File.join(REPORTS_DIR, 'FEATURES-Example-Spinach-feature.xml')).should == true
