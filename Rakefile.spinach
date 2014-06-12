@@ -1,6 +1,0 @@
-namespace :generate do
-  task :spinach do
-    spinach = "#{Gem.loaded_specs['spinach'].gem_dir}/bin/spinach"
-    run_ruby_acceptance "-I../../lib -rci/reporter/rake/spinach_loader -S #{spinach} -r ci_reporter -f acceptance/spinach/features"
-  end
-end

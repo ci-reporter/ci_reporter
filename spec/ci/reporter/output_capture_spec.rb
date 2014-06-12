@@ -1,7 +1,3 @@
-# Copyright (c) 2006-2012 Nick Sieger <nicksieger@gmail.com>
-# See the file LICENSE.txt included with the distribution for
-# software license details.
-
 require File.dirname(__FILE__) + "/../../spec_helper.rb"
 require 'rexml/document'
 
@@ -41,7 +37,7 @@ describe "Output capture" do
     $stdout.object_id.should == out.object_id
     $stderr.object_id.should == err.object_id
   end
-  
+
   it "should capture only during run of owner test suite" do
     $stdout.print "A"
     $stderr.print "A"
@@ -54,11 +50,11 @@ describe "Output capture" do
     @suite.stdout.should == "B"
     @suite.stderr.should == "B"
   end
-  
+
   it "should not barf when commands are executed with back-ticks" do
     @suite.start
     `echo "B"`
     @suite.finish
   end
-  
+
 end
