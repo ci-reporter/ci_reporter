@@ -4,7 +4,8 @@ runs. The resulting files can be read by a continuous integration
 system that understands Ant's JUnit report XML format, thus allowing
 your CI system to track test/spec successes and failures.
 
-[![Build Status](https://travis-ci.org/nicksieger/ci_reporter.svg?branch=master)](https://travis-ci.org/nicksieger/ci_reporter)
+[![Gem Version](https://badge.fury.io/rb/ci_reporter.svg)](http://badge.fury.io/rb/ci_reporter)
+[![Build Status](https://travis-ci.org/ci-reporter/ci_reporter.svg?branch=master)](https://travis-ci.org/ci-reporter/ci_reporter)
 
 ## Usage
 
