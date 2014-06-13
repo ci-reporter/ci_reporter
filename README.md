@@ -6,6 +6,8 @@ your CI system to track test/spec successes and failures.
 
 [![Gem Version](https://badge.fury.io/rb/ci_reporter.svg)](http://badge.fury.io/rb/ci_reporter)
 [![Build Status](https://travis-ci.org/ci-reporter/ci_reporter.svg?branch=master)](https://travis-ci.org/ci-reporter/ci_reporter)
+[![Dependency Status](https://gemnasium.com/ci-reporter/ci_reporter.svg)](https://gemnasium.com/ci-reporter/ci_reporter)
+[![Code Climate](https://codeclimate.com/github/ci-reporter/ci_reporter.png)](https://codeclimate.com/github/ci-reporter/ci_reporter)
 
 ## Usage
 
