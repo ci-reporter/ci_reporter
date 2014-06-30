@@ -135,7 +135,7 @@ module CI
       end
 
       def skipped?
-        return skipped
+        skipped
       end
 
       # Writes xml representing the test result to the provided builder.
@@ -143,14 +143,11 @@ module CI
         attrs = {}
         each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) unless v.nil? || v.to_s.empty?}
         builder.testcase(attrs) do
-          if skipped
+          if skipped?
             builder.skipped
           else
             failures.each do |failure|
-              tag = case failure.class.name
-                    when /TestUnitSkipped/ then :skipped
-                    when /TestUnitError/, /MiniTestError/ then :error
-                    else :failure end
+              tag = failure.error? ? :error : :failure
 
               builder.tag!(tag, :type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
                 builder.text!(failure.message + " (#{failure.name})\n")
