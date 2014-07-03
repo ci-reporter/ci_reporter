@@ -2,59 +2,56 @@ require File.dirname(__FILE__) + "/../../spec_helper.rb"
 require 'rexml/document'
 
 describe "Output capture" do
-  before(:each) do
-    @suite = CI::Reporter::TestSuite.new "test"
-  end
+  subject(:suite) { CI::Reporter::TestSuite.new "test" }
 
-  it "should save stdout and stderr messages written during the test run" do
-    @suite.start
+  it "saves stdout and stderr messages written during the test run" do
+    suite.start
     puts "Hello"
     $stderr.print "Hi"
-    @suite.finish
-    @suite.stdout.should == "Hello\n"
-    @suite.stderr.should == "Hi"
+    suite.finish
+    expect(suite.stdout).to eql "Hello\n"
+    expect(suite.stderr).to eql "Hi"
   end
 
-  it "should include system-out and system-err elements in the xml output" do
-    @suite.start
+  it "includes system-out and system-err elements in the xml output" do
+    suite.start
     puts "Hello"
     $stderr.print "Hi"
-    @suite.finish
+    suite.finish
 
-    root = REXML::Document.new(@suite.to_xml).root
-    root.elements.to_a('//system-out').length.should == 1
-    root.elements.to_a('//system-err').length.should == 1
-    root.elements.to_a('//system-out').first.texts.first.to_s.strip.should == "Hello"
-    root.elements.to_a('//system-err').first.texts.first.to_s.strip.should == "Hi"
+    root = REXML::Document.new(suite.to_xml).root
+    expect(root.elements.to_a('//system-out').length).to eql 1
+    expect(root.elements.to_a('//system-err').length).to eql 1
+    expect(root.elements.to_a('//system-out').first.texts.first.to_s.strip).to eql "Hello"
+    expect(root.elements.to_a('//system-err').first.texts.first.to_s.strip).to eql "Hi"
   end
 
-  it "should return $stdout and $stderr to original value after finish" do
+  it "returns $stdout and $stderr to original value after finish" do
     out, err = $stdout, $stderr
-    @suite.start
-    $stdout.object_id.should_not == out.object_id
-    $stderr.object_id.should_not == err.object_id
-    @suite.finish
-    $stdout.object_id.should == out.object_id
-    $stderr.object_id.should == err.object_id
+    suite.start
+    expect($stdout.object_id).to_not eql out.object_id
+    expect($stderr.object_id).to_not eql err.object_id
+    suite.finish
+    expect($stdout.object_id).to eql out.object_id
+    expect($stderr.object_id).to eql err.object_id
   end
 
-  it "should capture only during run of owner test suite" do
+  it "captures only during run of owner test suite" do
     $stdout.print "A"
     $stderr.print "A"
-    @suite.start
+    suite.start
     $stdout.print "B"
     $stderr.print "B"
-    @suite.finish
+    suite.finish
     $stdout.print "C"
     $stderr.print "C"
-    @suite.stdout.should == "B"
-    @suite.stderr.should == "B"
+    expect(suite.stdout).to eql "B"
+    expect(suite.stderr).to eql "B"
   end
 
-  it "should not barf when commands are executed with back-ticks" do
-    @suite.start
+  it "does not barf when commands are executed with back-ticks" do
+    suite.start
     `echo "B"`
-    @suite.finish
+    suite.finish
   end
-
 end
