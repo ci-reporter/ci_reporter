@@ -71,6 +71,10 @@ module CI::Reporter
         suite.assertions = 11
       end
 
+      after(:each) do
+        ENV['CI_CAPTURE'] = nil
+      end
+
       it "renders successfully with CI_CAPTURE off" do
         ENV['CI_CAPTURE'] = 'off'
         suite.start
