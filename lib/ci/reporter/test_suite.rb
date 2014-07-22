@@ -1,48 +1,8 @@
-require 'delegate'
-require 'stringio'
 require 'time'
+require 'ci/reporter/output_capture'
 
 module CI
   module Reporter
-    # Emulates/delegates IO to $stdout or $stderr in order to capture output to report in the XML file.
-    module OutputCapture
-      class Delegate < DelegateClass(IO)
-        include OutputCapture
-        def initialize(io, &assign)
-          super(io)
-          capture(io, &assign)
-        end
-      end
-
-      def self.wrap(io, &assign)
-        Delegate.new(io, &assign)
-      end
-
-      # Start capturing IO, using the given block to assign self to the proper IO global.
-      def capture(io, &assign)
-        @delegate_io = io
-        @captured_io = StringIO.new
-        @assign_block = assign
-        @assign_block.call @captured_io
-      end
-
-      # Finalize the capture and reset to the original IO object.
-      def finish
-        @assign_block.call @delegate_io
-        @captured_io.string
-      end
-
-      # setup tee methods
-      %w(<< print printf putc puts write).each do |m|
-        module_eval(<<-EOS, __FILE__, __LINE__)
-          def #{m}(*args, &block)
-            @delegate_io.send(:#{m}, *args, &block)
-            @captured_io.send(:#{m}, *args, &block)
-          end
-        EOS
-      end
-    end
-
     # Basic structure representing the running of a test suite.  Used to time tests and store results.
     class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors, :skipped, :assertions, :timestamp)
       attr_accessor :testcases
@@ -56,8 +16,10 @@ module CI
       def start
         @start = Time.now
         unless ENV['CI_CAPTURE'] == "off"
-          @capture_out = OutputCapture.wrap($stdout) {|io| $stdout = io }
-          @capture_err = OutputCapture.wrap($stderr) {|io| $stderr = io }
+          @capture_out = OutputCapture.new($stdout) {|io| $stdout = io }
+          @capture_err = OutputCapture.new($stderr) {|io| $stderr = io }
+          @capture_out.start
+          @capture_err.start
         end
       end
 
