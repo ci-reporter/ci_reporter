@@ -16,10 +16,8 @@ module CI
       def start
         @start = Time.now
         unless ENV['CI_CAPTURE'] == "off"
-          @capture_out = OutputCapture.new($stdout) {|io| $stdout = io }
-          @capture_err = OutputCapture.new($stderr) {|io| $stderr = io }
-          @capture_out.start
-          @capture_err.start
+          @capture_out = OutputCapture.wrap($stdout) {|io| $stdout = io }
+          @capture_err = OutputCapture.wrap($stderr) {|io| $stderr = io }
         end
       end
 
