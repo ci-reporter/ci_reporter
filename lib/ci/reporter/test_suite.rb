@@ -1,4 +1,5 @@
 require 'time'
+require 'builder'
 require 'ci/reporter/output_capture'
 
 module CI
@@ -56,17 +57,9 @@ module CI
         self.stderr = @capture_err.finish if @capture_err
       end
 
-      # Creates the xml builder instance used to create the report xml document.
-      def create_builder
-        require 'builder'
-        # :escape_attrs is obsolete in a newer version, but should do no harm
-        Builder::XmlMarkup.new(:indent => 2, :escape_attrs => true)
-      end
-
       # Creates an xml string containing the test suite results.
       def to_xml
-        builder = create_builder
-        # more recent version of Builder doesn't need the escaping
+        builder = Builder::XmlMarkup.new(indent: 2)
         builder.instruct!
         builder.testsuite(cleaned_attributes) do
           @testcases.each do |tc|
