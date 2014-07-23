@@ -26,16 +26,6 @@ describe "Output capture" do
     expect(root.elements.to_a('//system-err').first.texts.first.to_s.strip).to eql "Hi"
   end
 
-  it "returns $stdout and $stderr to original value after finish" do
-    out, err = $stdout, $stderr
-    suite.start
-    expect($stdout.object_id).to_not eql out.object_id
-    expect($stderr.object_id).to_not eql err.object_id
-    suite.finish
-    expect($stdout.object_id).to eql out.object_id
-    expect($stderr.object_id).to eql err.object_id
-  end
-
   it "captures only during run of owner test suite" do
     $stdout.print "A"
     $stderr.print "A"
@@ -49,9 +39,21 @@ describe "Output capture" do
     expect(suite.stderr).to eql "B"
   end
 
-  it "does not barf when commands are executed with back-ticks" do
-    suite.start
-    `echo "B"`
-    suite.finish
+  describe CI::Reporter::OutputCapture do
+    subject(:capture) { CI::Reporter::OutputCapture.new($stdout) {|x| $stdout = x } }
+
+    it "returns the IO to the original value after finish" do
+      original = $stdout
+      capture.start
+      expect($stdout.object_id).to_not eql original.object_id
+      capture.finish
+      expect($stdout.object_id).to eql original.object_id
+    end
+
+    it "does not barf when commands are executed with back-ticks" do
+      capture.start
+      `echo "B"`
+      capture.finish
+    end
   end
 end
