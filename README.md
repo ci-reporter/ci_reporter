@@ -30,6 +30,17 @@ Each supported testing framework is provided by a separate gem:
 [ci-spin]: https://github.com/ci-reporter/ci_reporter_spinach
 [ci-tu]: https://github.com/ci-reporter/ci_reporter_test_unit
 
+### Upgrading from CI::Reporter 1.x
+
+CI::Reporter 1.x supported all the different test frameworks in a
+single gem. This was convienient, but caused issues as test frameworks
+released new, sometimes incompatibile, versions. CI::Reporter 2.x has
+been split into multiple gems, allowing each gem to specify the test
+framework versions it supports.
+
+To upgrade to 2.x, remove `ci_reporter` from your Gemfile and replace
+it with one or more of the framework-specific gems above.
+
 ## Jenkins setup
 
 1. Add the "Publish JUnit test result report" post-build step
