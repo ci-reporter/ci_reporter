@@ -1,10 +1,32 @@
 require 'time'
+require 'builder'
 require 'ci/reporter/output_capture'
 
 module CI
   module Reporter
+    module StructureXmlHelpers
+      # Struct#to_h is not available in Ruby 1.9
+      def attr_hash
+        Hash[self.members.zip(self.values)]
+      end
+
+      # Removes empty attributes and truncates long attributes.
+      def cleaned_attributes
+        attr_array = attr_hash
+          .reject {|k,v| v.to_s.empty? }
+          .map    {|k,v| [k, truncate_at_newline(v)] }
+        Hash[attr_array]
+      end
+
+      def truncate_at_newline(txt)
+        txt.to_s.sub(/\n.*/m, '...')
+      end
+    end
+
     # Basic structure representing the running of a test suite.  Used to time tests and store results.
     class TestSuite < Struct.new(:name, :tests, :time, :failures, :errors, :skipped, :assertions, :timestamp)
+      include StructureXmlHelpers
+
       attr_accessor :testcases
       attr_accessor :stdout, :stderr
       def initialize(name)
@@ -35,24 +57,11 @@ module CI
         self.stderr = @capture_err.finish if @capture_err
       end
 
-      # Creates the xml builder instance used to create the report xml document.
-      def create_builder
-        require 'builder'
-        # :escape_attrs is obsolete in a newer version, but should do no harm
-        Builder::XmlMarkup.new(:indent => 2, :escape_attrs => true)
-      end
-
       # Creates an xml string containing the test suite results.
       def to_xml
-        builder = create_builder
-        # more recent version of Builder doesn't need the escaping
-        def builder.trunc!(txt)
-          txt.sub(/\n.*/m, '...')
-        end
+        builder = Builder::XmlMarkup.new(indent: 2)
         builder.instruct!
-        attrs = {}
-        each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) unless v.nil? || v.to_s.empty? }
-        builder.testsuite(attrs) do
+        builder.testsuite(cleaned_attributes) do
           @testcases.each do |tc|
             tc.to_xml(builder)
           end
@@ -68,6 +77,8 @@ module CI
 
     # Structure used to represent an individual test case.  Used to time the test and store the result.
     class TestCase < Struct.new(:name, :time, :assertions)
+      include StructureXmlHelpers
+
       attr_accessor :failures
       attr_accessor :skipped
 
@@ -102,16 +113,14 @@ module CI
 
       # Writes xml representing the test result to the provided builder.
       def to_xml(builder)
-        attrs = {}
-        each_pair {|k,v| attrs[k] = builder.trunc!(v.to_s) unless v.nil? || v.to_s.empty?}
-        builder.testcase(attrs) do
+        builder.testcase(cleaned_attributes) do
           if skipped?
             builder.skipped
           else
             failures.each do |failure|
               tag = failure.error? ? :error : :failure
 
-              builder.tag!(tag, :type => builder.trunc!(failure.name), :message => builder.trunc!(failure.message)) do
+              builder.tag!(tag, type: truncate_at_newline(failure.name), message: truncate_at_newline(failure.message)) do
                 builder.text!(failure.message + " (#{failure.name})\n")
                 builder.text!(failure.location)
               end
