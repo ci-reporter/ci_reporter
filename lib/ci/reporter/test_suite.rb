@@ -50,9 +50,9 @@ module CI
         self.tests = testcases.size
         self.time = Time.now - @start
         self.timestamp = @start.iso8601
-        self.failures = testcases.inject(0) {|sum,tc| sum += tc.failures.select{|f| f.failure? }.size }
-        self.errors = testcases.inject(0) {|sum,tc| sum += tc.failures.select{|f| f.error? }.size }
-        self.skipped = testcases.inject(0) {|sum,tc| sum += (tc.skipped? ? 1 : 0) }
+        self.failures = testcases.map(&:failure_count).reduce(&:+)
+        self.errors = testcases.map(&:error_count).reduce(&:+)
+        self.skipped = testcases.count(&:skipped?)
         self.stdout = @capture_out.finish if @capture_out
         self.stderr = @capture_err.finish if @capture_err
       end
@@ -99,12 +99,20 @@ module CI
 
       # Returns non-nil if the test failed.
       def failure?
-        !failures.empty? && failures.detect {|f| f.failure? }
+        failures.any?(&:failure?)
       end
 
       # Returns non-nil if the test had an error.
       def error?
-        !failures.empty? && failures.detect {|f| f.error? }
+        failures.any?(&:error?)
+      end
+
+      def failure_count
+        failures.count(&:failure?)
+      end
+
+      def error_count
+        failures.count(&:error?)
       end
 
       def skipped?
