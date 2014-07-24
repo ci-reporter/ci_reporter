@@ -26,6 +26,15 @@ describe "Output capture" do
     expect(root.elements.to_a('//system-err').first.texts.first.to_s.strip).to eql "Hi"
   end
 
+  it "does not include system-out or system-err elements if nothing was output" do
+    suite.start
+    suite.finish
+
+    root = REXML::Document.new(suite.to_xml).root
+    expect(root.elements.to_a('//system-out').length).to eql 0
+    expect(root.elements.to_a('//system-err').length).to eql 0
+  end
+
   it "captures only during run of owner test suite" do
     $stdout.print "A"
     $stderr.print "A"
