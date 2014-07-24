@@ -88,12 +88,12 @@ module CI
 
       # Returns non-nil if the test failed.
       def failure?
-        !failures.empty? && failures.detect {|f| f.failure? }
+        failures.any?(&:failure?)
       end
 
       # Returns non-nil if the test had an error.
       def error?
-        !failures.empty? && failures.detect {|f| f.error? }
+        failures.any?(&:error?)
       end
 
       def failure_count
