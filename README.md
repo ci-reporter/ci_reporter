@@ -46,7 +46,7 @@ it with one or more of the framework-specific gems above.
 1. Add the "Publish JUnit test result report" post-build step
 in the job configuration.
 
-2. Enter "test/reports/*.xml,spec/reports/*.xml" in the "Test report
+2. Enter "test/reports/\*.xml,spec/reports/\*.xml" in the "Test report
 XMLs" field (adjust this to suit which tests you are running)
 
 Report files are written, by default, to the
