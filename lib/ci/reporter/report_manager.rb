@@ -48,7 +48,7 @@ module CI #:nodoc:
         # if the initial filename is already in use
         # do sidesteps, beginning with SPEC-MailsController.0.xml
         i = 0
-        while File.exists?(filename) && i < MAX_SIDESTEPS
+        while File.exist?(filename) && i < MAX_SIDESTEPS
           filename = [basename, i, suffix].join(".")
           i += 1
         end

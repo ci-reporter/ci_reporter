@@ -32,6 +32,8 @@ module CI
       def initialize(name)
         super(name.to_s) # RSpec passes a "description" object instead of a string
         @testcases = []
+        @capture_out = nil
+        @capture_err = nil
       end
 
       # Starts timing the test suite.
