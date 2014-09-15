@@ -162,7 +162,9 @@ module CI
         filter = options[:filter] || '/./'
         filter = Regexp.new $1 if filter =~ /\/(.*)\//
 
-        suite.send("#{type}_methods").grep(filter)
+        suite.send("#{type}_methods").find_all do |m|
+          filter === m || filter === "#{suite}##{m}"
+        end
       end
 
       def run_test(suite, method)
