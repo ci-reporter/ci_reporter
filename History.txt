@@ -1,3 +1,7 @@
+== 1.9.3 (10/06/14)
+
+- GH #150 include the suite name when filtering test methods (Ben Dean)
+
 == 1.9.2 (04/06/14)
 
 - GH #119: add timestamp attribute (Shawn Zhu)
