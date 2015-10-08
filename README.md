@@ -33,7 +33,7 @@ Each supported testing framework is provided by a separate gem:
 ### Upgrading from CI::Reporter 1.x
 
 CI::Reporter 1.x supported all the different test frameworks in a
-single gem. This was convienient, but caused issues as test frameworks
+single gem. This was convenient, but caused issues as test frameworks
 released new, sometimes incompatibile, versions. CI::Reporter 2.x has
 been split into multiple gems, allowing each gem to specify the test
 framework versions it supports.
