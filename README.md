@@ -69,7 +69,7 @@ will be invoked:
 ```ruby
 if ENV['GENERATE_REPORTS'] == 'true'
   require 'ci/reporter/rake/rspec'
-  task :rspec => 'ci:setup:rspec'
+  task :spec => 'ci:setup:rspec'
 end
 ```
 
@@ -77,7 +77,7 @@ You can either inject this variable in your CI or simply call `rake`
 with the environment variable set:
 
 ```
-GENERATE_REPORTS=true rake rspec
+GENERATE_REPORTS=true rake spec
 ```
 
 ### With CI-specific Rake tasks
@@ -86,7 +86,7 @@ Instead of modifying your existing Rake tasks, create new ones:
 
 ```ruby
 namespace :ci do
-  task :all => ['ci:setup:rspec', 'rspec']
+  task :all => ['ci:setup:rspec', 'spec']
 end
 ```
 
