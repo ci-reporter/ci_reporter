@@ -1,6 +1,7 @@
 require 'time'
 require 'builder'
 require 'ci/reporter/output_capture'
+require 'ci/reporter/monotonic_time'
 
 module CI
   module Reporter
@@ -38,7 +39,8 @@ module CI
 
       # Starts timing the test suite.
       def start
-        @start = Time.now
+        @start_time = Time.now
+        @start = MonotonicTime.time_in_seconds
         unless ENV['CI_CAPTURE'] == "off"
           @capture_out = OutputCapture.wrap($stdout) {|io| $stdout = io }
           @capture_err = OutputCapture.wrap($stderr) {|io| $stderr = io }
@@ -48,8 +50,8 @@ module CI
       # Finishes timing the test suite.
       def finish
         self.tests = testcases.size
-        self.time = Time.now - @start
-        self.timestamp = @start.iso8601
+        self.time = MonotonicTime.time_in_seconds - @start
+        self.timestamp = @start_time.iso8601
         self.failures = testcases.map(&:failure_count).reduce(&:+)
         self.errors = testcases.map(&:error_count).reduce(&:+)
         self.skipped = testcases.count(&:skipped?)
@@ -93,12 +95,12 @@ module CI
 
       # Starts timing the test.
       def start
-        @start = Time.now
+        @start = MonotonicTime.time_in_seconds
       end
 
       # Finishes timing the test.
       def finish
-        self.time = Time.now - @start
+        self.time = MonotonicTime.time_in_seconds - @start
       end
 
       # Returns non-nil if the test failed.
