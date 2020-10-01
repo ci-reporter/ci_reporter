@@ -1,3 +1,5 @@
+## Introduction to CI::reporter
+
 CI::Reporter is an add-on to Ruby testing frameworks like Test::Unit
 or RSpec that allows you to generate XML reports of your test
 runs. The resulting files can be read by a continuous integration
