@@ -5,8 +5,7 @@ system that understands Ant's JUnit report XML format, thus allowing
 your CI system to track test/spec successes and failures.
 
 [![Gem Version](https://badge.fury.io/rb/ci_reporter.svg)](http://badge.fury.io/rb/ci_reporter)
-[![Build Status](/ci-reporter/ci_reporter/actions/workflows/ci.yaml/badge.svg)](ci-reporter/ci_reporter/actions/workflows/ci.yaml)
-[![Dependency Status](https://gemnasium.com/ci-reporter/ci_reporter.svg)](https://gemnasium.com/ci-reporter/ci_reporter)
+[![Build Status](https://github.com/ci-reporter/ci_reporter/actions/workflows/ci.yaml/badge.svg)](https://github.com/ci-reporter/ci_reporter/actions/workflows/ci.yaml)
 [![Code Climate](https://codeclimate.com/github/ci-reporter/ci_reporter.png)](https://codeclimate.com/github/ci-reporter/ci_reporter)
 
 ## Usage
