@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.extra_rdoc_files = ["History.txt", "LICENSE.txt", "README.md"]
 
   spec.add_dependency "builder", ">= 2.1.2"
+  spec.add_dependency "rexml"
 
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rdoc", "~> 4.0"
