@@ -5,6 +5,7 @@
 - Testing on Ruby 2.6 - HEAD, JRuby 9.x latest, JRuby HEAD
 - CI changed to GitHub Actions
 - Tracking branch changed to `main`
+- GH #160: Add monotonic time (Michal Cichra)
 - GH #148: fix deprecation issues (Akira Matsuda)
 - GH #149: fix for RSpec 3.1.2 (Akira Matsuda)
 
