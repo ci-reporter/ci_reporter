@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - name: Log into Rubygems
+        run: |
+          mkdir -p ~/.local/share/gem
+          echo ":rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" > ~/.local/share/gem
+      - name: Release
+        run: |
+          set -e
+          PKG="$(echo *.gemspec | sed 's/.gemspec//')"
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          bundle exec rake build
+          GEM="pkg/$PKG-$VERSION.gem"
+          if [ -f "$GEM" ]; then
+            gem push $GEM
+            echo "Release $VERSION done."
+          else
+            echo "Build did not create a $VERSION release gem."
+            echo "Please check the version in the gemspec and try again."
+            cat *.gemspec | grep '\.version'
+            exit 1
+          fi
