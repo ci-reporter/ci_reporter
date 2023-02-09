@@ -1,3 +1,17 @@
+== 2.1.0 (2023/02/09)
+
+=== Changed
+
+- Testing on Ruby 2.6 - HEAD, JRuby 9.x latest, JRuby HEAD
+- CI changed to GitHub Actions
+- Tracking branch changed to `main`
+- GH #148: fix deprecation issues (Akira Matsuda)
+- GH #149: fix for RSpec 3.1.2 (Akira Matsuda)
+
+=== Removed
+
+- Testing on versions of Ruby < 2.6
+
 == 2.0.0 (2014-07-24)
 
 === Changed
