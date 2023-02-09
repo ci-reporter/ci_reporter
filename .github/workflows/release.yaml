@@ -11,14 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
           bundler-cache: true
+
       - name: Log into Rubygems
         run: |
           mkdir -p ~/.local/share/gem
           echo ":rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" > ~/.local/share/gem/credentials
+          chmod 600 ~/.local/share/gem/credentials
+
       - name: Release
         run: |
           set -e
