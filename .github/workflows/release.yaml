@@ -18,7 +18,7 @@ jobs:
       - name: Log into Rubygems
         run: |
           mkdir -p ~/.local/share/gem
-          echo ":rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" > ~/.local/share/gem
+          echo ":rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" > ~/.local/share/gem/credentials
       - name: Release
         run: |
           set -e
